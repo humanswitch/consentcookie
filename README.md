@@ -1,6 +1,6 @@
 # ConsentCookie
 
-Open source AVG solution for websites.
+Open source AVG solution for websites. More info: [www.consentcookie.nl](https://www.consentcookie.nl)
 
 ## Getting Started
 
