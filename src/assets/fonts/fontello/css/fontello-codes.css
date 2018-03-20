@@ -1,0 +1,10 @@
+
+.cc-user:before { content: '\e81d'; } /* '' */
+.cc-ok:before { content: '\e827'; } /* '' */
+.cc-angle-up:before { content: '\f106'; } /* '' */
+.cc-angle-down:before { content: '\f107'; } /* '' */
+.cc-spinner:before { content: '\f110'; } /* '' */
+.cc-help:before { content: '\f128'; } /* '' */
+.cc-play-circled:before { content: '\f144'; } /* '' */
+.cc-toggle-on:before { content: '\f205'; } /* '' */
+.cc-pause-circle:before { content: '\f28b'; } /* '' */

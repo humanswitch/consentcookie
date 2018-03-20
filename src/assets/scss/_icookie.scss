@@ -1,0 +1,131 @@
+/*!
+ * Copyright 2018 Asknow Solutions B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+/* Imports */
+@import 'general-variables';
+
+// Font animations
+.cc-animate-pulse {
+  animation: cc-spin 1s infinite steps(8);
+  display: inline-block;
+}
+
+@keyframes cc-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+// Animation keyframes
+@keyframes icSlideInRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@-webkit-keyframes icSlideOutRight {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes icSlideOutRight {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+// ConsentCookie reset using class definition to not force using the id
+.ConsentCookie * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: Helvetica, sans-serif;
+  vertical-align: baseline;
+  -webkit-font-smoothing: antialiased;
+
+}
+
+// ConsentCookie generic css class helpers
+#ConsentCookie {
+  z-index: 1073741823;
+}
+
+#ConsentCookie .clearfix:after {
+  content: ".";
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+#ConsentCookie .inline-fix:before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+#ConsentCookie .inline-fix .v-centered {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+// ConsentCookie general styling
+#ConsentCookie a {
+  color: $ic-brand-color;
+}
+
+#ConsentCookie .notification {
+  padding: 5px 10px;
+  border-left: 3px solid #ef5350;
+  margin: 10px 15px 10px 15px;
+}
+
+// CSS Animations
+#ConsentCookie .icAnimated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+#ConsentCookie .icSlideInRight {
+  animation-name: icSlideInRight;
+}
+
+#ConsentCookie .icSlideOutRight {
+  animation-name: icSlideOutRight;
+}

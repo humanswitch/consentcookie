@@ -1,0 +1,94 @@
+/*!
+ * Copyright 2018 Asknow Solutions B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+/******************************************************************************************
+/*** Colour reference chart ***************************************************************
+/*************************** comment *********** colour ***********************************
+
+default white               dw                  #FFFFFF
+default black               db                  #000000
+
+default darker red          ddr                 #F05F5A
+default red                 dr                  #F15F5A
+default pink                dp                  #F8AFAC
+default grey                dg                  #E6E7E0
+default blue                db                  #23B0E8
+
+border grey                 bg                  #E7E8E1
+grey selected               sgs                 #F3F3F1
+*******************************************************************************************/
+
+// Legacy
+$hs-color-white: #FFFFFF;
+$hs-color-black: #000000;
+$hs-color-dark-red: #F05F5A;
+$hs-color-red: #F15F5A;
+$hs-color-pink: #F8AFAC;
+$hs-color-grey: #E6E7E0;
+$hs-color-blue: #23B0E8;
+
+$hs-color-border-grey: #E7E8E1;
+$hs-color-selected-grey: #F3F3F1;
+$hs-color-hover-grey: rgba(0, 0, 0, 0.3);
+
+// Updated
+$ic-color-white: #FFFFFF;
+$ic-color-black: #000000;
+$ic-color-grey: #d9d9d9;
+$ic-color-dark-grey: #7f7f7f;
+
+$ic-color-done-true: #4CAF50;
+
+$ic-brand-color: rgba(252, 109, 109, 1);
+$ic-brand-color-faded: rgba(252, 109, 109, 0.4);
+
+$ic-overlay-white-transparant: rgba(255, 255, 255, 0.4);
+$ic-overlay-black-transparant: rgba(0, 0, 0, 0.4);
+
+// Generals
+$ic-drop-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.15);
+
+// Components
+$ic-content-padding: 20px;
+
+// Buttons
+$ic-button-default-font-color: $ic-color-white;
+$ic-button-default-background-color: $ic-brand-color;
+$ic-button-default-box-shadow: 0 0 1px #b8bbbf;
+
+$ic-button-default-plain-color: $ic-brand-color;
+
+$ic-box-border: 1px solid $ic-color-grey;
+$ic-box-border-radius: 5px;
+
+@mixin default-content-border {
+  border: 1px solid $hs-color-border-grey;
+  border-radius: 5px;
+}
+
+@mixin default-state-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@mixin default-clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
