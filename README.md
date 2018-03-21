@@ -4,7 +4,7 @@ Open source AVG solution for websites. More info: [www.consentcookie.nl](https:/
 
 ## ConsentCookie on your website
 
-Download the script [here](https://www.consentcookie.nl/consentcookie/latest/consentcookie.min.js).
+Download the script [here](https://www.consentcookie.nl/consentcookie/latest/consentcookie.min.js) or [build your own (custom) ConsentCookie](#build-your-own-consentCookie)
 
 Include the script on your website:
 ```html
@@ -71,11 +71,11 @@ if(ConsentCookie.get("ga").flag === 1){
 
 | Method                         	| Params            	| Description                                    	| Docs          	|
 |--------------------------------	|-------------------	|------------------------------------------------	|---------------	|
-| `ConsentCookie.init`           	| `config`          	| Initialize ConsentCookie with the given config 	| [link](#ConsentCookie.init) 	|
-| `ConsentCookie.on`             	| `event, callback` 	| Listen for the event with the given callback   	| [link](#ConsentCookie.on) 	|
-| `ConsentCookie.off`            	| `event, callback` 	| Remove event listener(s) for the given event   	| [link](#ConsentCookie.off) 	|
-| `ConsentCookie.get`            	| `id`              	| Get the consent for the given id               	| [link](#ConsentCookie.get) 	|
-| `ConsentCookie.registerPlugin` 	| `plugin`          	| Register a ConsentCookie plugin                	| [link](#ConsentCookie.registerPlugin) 	|
+| `ConsentCookie.init`           	| `config`          	| Initialize ConsentCookie with the given config 	| [link](#consentcookieinit) 	|
+| `ConsentCookie.on`             	| `event, callback` 	| Listen for the event with the given callback   	| [link](#consentcookieon) 	|
+| `ConsentCookie.off`            	| `event, callback` 	| Remove event listener(s) for the given event   	| [link](#consentcookieoff) 	|
+| `ConsentCookie.get`            	| `id`              	| Get the consent for the given id               	| [link](#consentcookieget) 	|
+| `ConsentCookie.registerPlugin` 	| `plugin`          	| Register a ConsentCookie plugin                	| [link](#consentcookieregisterPlugin) 	|
 
 ##### ConsentCookie.init
 
@@ -136,7 +136,7 @@ Name                          | Description
 
 Depending on the event type additional properties can be available in the payload object.
 
-#### [ConsentCookie.off](#cc.off)
+#### ConsentCookie.off
 You can remove all event listeners of an event by giving the name of the specific event:
 ```javascript
 ConsentCookie.off("consent");
@@ -155,7 +155,7 @@ ConsentCookie.on("consent",specificListener);
 ConsentCookie.off("consent",specificListener);
 ```
 
-#### [ConsentCookie.get](#cc.get)
+#### ConsentCookie.get
 You can get the current state of a consent by giving the id of the consent:
 ```javascript
 ConsentCookie.get("id");
@@ -168,11 +168,11 @@ Name                          | Description
 `id`                         | The id of the consent connection
 `flag`                    | The flag related to the state of the consent. 0=disabled 1=enabled
 
-#### [ConsentCookie.registerPlugin](#cc.registerPlugin)
+#### ConsentCookie.registerPlugin
 
 To add addition functionality to ConsentCookie, you can register a plugin a each unique connection.
 
-## [Build your own ConsentCookie](#build-your-own)
+## Build your own ConsentCookie
 
 ### Prerequisites
 
