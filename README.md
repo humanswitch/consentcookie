@@ -4,7 +4,7 @@ Open source AVG solution for websites. More info: [www.consentcookie.nl](https:/
 
 ## ConsentCookie on your website
 
-Download the script [here](https://www.consentcookie.nl/consentcookie/latest/consentcookie.min.js) or [build your own (custom) ConsentCookie](#build-your-own-consentCookie)
+Download the script [here](https://www.consentcookie.nl/consentcookie/latest/consentcookie.min.js) or [build your own (custom) ConsentCookie](#build-your-own-consentcookie)
 
 Include the script on your website:
 ```html
@@ -75,7 +75,7 @@ if(ConsentCookie.get("ga").flag === 1){
 | `ConsentCookie.on`             	| `event, callback` 	| Listen for the event with the given callback   	| [link](#consentcookieon) 	|
 | `ConsentCookie.off`            	| `event, callback` 	| Remove event listener(s) for the given event   	| [link](#consentcookieoff) 	|
 | `ConsentCookie.get`            	| `id`              	| Get the consent for the given id               	| [link](#consentcookieget) 	|
-| `ConsentCookie.registerPlugin` 	| `plugin`          	| Register a ConsentCookie plugin                	| [link](#consentcookieregisterPlugin) 	|
+| `ConsentCookie.registerPlugin` 	| `plugin`          	| Register a ConsentCookie plugin                	| [link](#consentcookieregisterplugin) 	|
 
 ##### ConsentCookie.init
 
