@@ -49,9 +49,10 @@ function init($config) {
       'ConsentCookie already initialized. Visit: ' + DEFAULT_INFO_LINK + ' for more information.');
   }
 
-  initBaseView();
-  initVue($config);
-  return true;
+  return onReady(() => {
+    initBaseView();
+    initVue($config);
+  });
 }
 
 function initBaseView() {
@@ -82,6 +83,14 @@ function initVue($config) {
   }).$mount('#ConsentCookie');
 }
 
+function onReady($fn) {
+  if (document.readyState === 'interactive') {
+    $fn();
+  } else {
+    document.addEventListener('DOMContentLoaded', $fn);
+  }
+}
+
 function off($event, $callback) {
   if (!mainInstance) {
     return utils.logErrorOrThrowException('Unable to unregister event. ConsentCookie is not yet initialized.');
@@ -96,7 +105,7 @@ function on($event, $callback) {
   return mainInstance.$events.$on($event, $callback);
 }
 
-function get($id){
+function get($id) {
   return mainInstance.$services.consent.get($id);
 }
 
