@@ -45,7 +45,7 @@ if(ConsentCookie.get("id").flag === 1){
 </script>
 ```
 
-#### Google Analytics example
+### Google Analytics example
 ```html
 <script>
 // Check if the user accepted the Google Analytics consent
@@ -65,9 +65,9 @@ if(ConsentCookie.get("ga").flag === 1){
 </script>
 ```
 
-### Basic Usage
+## Basic Usage
 
-#### API
+### API
 
 | Method                         	| Params            	| Description                                    	| Docs          	|
 |--------------------------------	|-------------------	|------------------------------------------------	|---------------	|
@@ -170,7 +170,11 @@ Name                          | Description
 
 #### ConsentCookie.registerPlugin
 
-To add addition functionality to ConsentCookie, you can register a plugin a each unique connection.
+To add addition functionality to ConsentCookie, you can register a plugin for each unique connection.
+
+### Plugins
+
+
 
 ## Build your own ConsentCookie
 
