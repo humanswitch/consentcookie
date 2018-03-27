@@ -123,7 +123,7 @@ function load() {
     const curConsent = consents.get($connectionId);
     const initState = getInitState($connectionConfig.initstate);
 
-    if (null == curConsent) {
+    if (curConsent === null) {
       update($connectionId, initState);
     } else {
       if (DEFAULT_STATE_CONSENT_DISABLED === initState) {
