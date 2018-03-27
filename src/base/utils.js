@@ -31,7 +31,7 @@ function getObjectValue($object, $nameSpace, $default) {
     object = object[nameSpaceArray[i]];
 
     if (!object) {
-      return object;
+      return object || defaultVal;
     }
   }
   return object;

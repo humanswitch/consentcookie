@@ -18,24 +18,25 @@
 // Dependencies
 const _ = require('underscore');
 
-const connectionsDef = require('assets/json/trackers.json');
+
+const DEFAULT_APPS_ENDPOINT = 'https://www.consentcookie.nl/consentcookie/latest/consentcookie.json';
+const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
 
 let vue;
 let connections;
-let connectionsMap;
+let activeConnections;
 
 function init(vueServices) {
   vue = vueServices.getVueInstance();
-  loadConnections();
 }
 
 function loadConnections() {
-  connections = connectionsDef;
-  connectionsMap = {};
-
-  _.each(connections, ($connection) => {
-    connectionsMap[$connection.id] = $connection;
-  });
+  if (!connections) {
+    const connectionsUrl = vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_ENDPOINT, DEFAULT_APPS_ENDPOINT);
+    connections = vue.$http.get(connectionsUrl)
+      .then($connection => ($connection.status === 200 ? $connection.body : []));
+  }
+  return connections;
 }
 
 function getPlugin($connection) {
@@ -43,16 +44,25 @@ function getPlugin($connection) {
 }
 
 function getActive() {
-  const consents = vue.$services.consent.get();
-  const activeConnections = [];
+  if (!activeConnections) {
+    activeConnections = loadConnections().then(($connections) => {
+      const consents = vue.$services.consent.get();
+      const active = [];
+      const map = _.reduce($connections, ($memo, $connection) => {
+        $memo[$connection.id] = $connection;
+        return $memo;
+      }, {});
 
-  _.each(consents.consents, ($consent) => {
-    const connection = connectionsMap[$consent.id];
+      _.each(consents.consents, ($consent) => {
+        const connection = map[$consent.id];
 
-    if (connection) {
-      activeConnections.push(connection);
-    }
-  });
+        if (connection) {
+          active.push(connection);
+        }
+      });
+      return active;
+    });
+  }
   return activeConnections;
 }
 
