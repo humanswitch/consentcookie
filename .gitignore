@@ -64,3 +64,6 @@ typings/
 .env
 
 # End of https://www.gitignore.io/api/node
+
+# IntelliJ / WebStorm IDE project files
+.idea
