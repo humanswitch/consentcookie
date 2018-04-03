@@ -18,8 +18,9 @@
 // Dependencies
 const _ = require('underscore');
 
-const DEFAULT_KEYSPACE_CONF_RESOURCE_URL = 'resource.url';
-const DEFAULT_RESOURCE_URL = 'https://www.consentcookie.nl/consentcookie/latest/consentcookie.json';
+
+const DEFAULT_APPS_ENDPOINT = 'https://www.consentcookie.nl/consentcookie/latest/consentcookie.json';
+const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
 
 let vue;
 let connections;
@@ -31,7 +32,7 @@ function init(vueServices) {
 
 function loadConnections() {
   if (!connections) {
-    const connectionsUrl = vue.$services.config.get(DEFAULT_KEYSPACE_CONF_RESOURCE_URL, DEFAULT_RESOURCE_URL);
+    const connectionsUrl = vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_ENDPOINT, DEFAULT_APPS_ENDPOINT);
     connections = vue.$http.get(connectionsUrl)
       .then($connection => ($connection.status === 200 ? $connection.body : []));
   }

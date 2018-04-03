@@ -38,18 +38,21 @@
 <body>
 <script type="application/javascript">
   ConsentCookie.init({
-    'connections': {
-      'cc': {
-        'initstate': 'disabled'
-      },
-      'iq': {
-        'initstate': 'optout'
-      },
-      'ga': {
-        'initstate': 'disabled'
-      },
-      'gtm': {
-        'initstate': 'disabled'
+    'apps': {
+      "endpoint": "",
+      "consent": {
+        'cc': {
+          'initstate': 'disabled'
+        },
+        'iq': {
+          'initstate': 'optout'
+        },
+        'ga': {
+          'initstate': 'disabled'
+        },
+        'gtm': {
+          'initstate': 'disabled'
+        }
       }
     },
     'moreinfolink': 'https://www.humanswitch.io/over/privacy/'
