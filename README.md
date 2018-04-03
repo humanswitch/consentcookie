@@ -87,7 +87,7 @@ Name                          | Description
 `moreinfolink`                | The link that is shown on the bottom of the connections view
 `connections`                 | The connections that ConsentCookie manages given as an object where each property key is the id of the connection and the property value the config of the connection
 
-```
+```javascript
 ConsentCookie.init({
     'connections': {
       // connection 1
@@ -174,7 +174,147 @@ To add addition functionality to ConsentCookie, you can register a plugin for ea
 
 ### Plugins
 
+ConsentCookie plugins provide the option to extend ConsentCookie functionality for specific connections.
+Each connection can load a (custom) plugin. Default plugins are provided by the default ConsentCookie tracker list.
 
+Plugins are Javascript files following a spefic convention and should be publicly availbled by a url.
+They are initially loaded when opening the Connections view, for each connection if configured for that specific connection.
+
+##### Example
+```javascript
+(function ($global) {
+
+function Plugin() {}
+
+Plugin.prototype.register = function ($context) {
+this.context = $context;
+};
+
+Plugin.prototype.getId = function () {};
+
+Plugin.prototype.getProfileId = function () {};
+
+Plugin.prototype.getProfileIds = function () {};
+
+Plugin.prototype.getProfile = function () {};
+
+Plugin.prototype.getProfileInfo = function () {};
+
+Plugin.prototype.deleteProfile = function () {};
+
+if (!$global || !$global.ConsentCookie || typeof $global.ConsentCookie.registerPlugin !== 'function') {
+throw new Error('ConsentCookie not available. Unable to register plugin: ' + DEFAULT_ID);
+}
+
+$global.ConsentCookie.registerPlugin(new Plugin());
+
+})(window);
+
+```
+
+#### Registering a plugin in the ConsentCookie client
+
+To make the plugin available in ConsentCookie it needs to register itself by calling ```ConsentCookie.registerPlugin```.
+Calling this function, will load the plugin and call ```Plugin.register``` providing a context object that can be used within the plugin.
+
+```javascript
+$global.ConsentCookie.registerPlugin(new Plugin());
+```
+
+Called by ConsentCookie when registerPlugin is executed:
+```javascript
+Plugin.prototype.register = function ($context) {
+  this.context = $context;
+};
+```
+
+##### Plugin Context
+
+The plugin context is a Javascript object with the following API:
+
+| Method | Params | Description | Example |
+| --- | --- | --- | --- |
+| getLib | $name | Returns the available library by its name | context.getLib("http")
+
+The following libraries are available:
+
+| Name | Description | API info |
+|--------|--------------------------------------------------------------------------------------------|-----------------------------------------|
+| http | library for making http requests within the plugin. Currently vue-resources is referenced. | https://github.com/pagekit/vue-resource |
+| cookie | library for handling browser cookies. Currently js-cookie is referenced | https://github.com/js-cookie/js-cookie |
+| _ | library for different Javascript helpers. Currently underscore is referenced | http://underscorejs.org/ |
+
+##### Plugin default interface
+
+ConsentCookie will call the following functions of the plugin when implemented.
+
+| Method | Description | Return type
+| --- | --- | --- |
+| getId | Should return the id of the connection of the plugin | String
+| getProfileId | Should return the id of the profile the connection manages | String
+| getProfileIds | Should return an array of all profile id`s the connection manages | Array<String>
+| getProfile | Should return the profile managed by the connection as a Javascript object | Promise
+| getProfileInfo | Should return an object that represents the profile and is shown within ConsentCookie | Promise
+| deleteProfile | Should delete the profile managed by the connection | Promise
+
+##### Plugin.getProfileInfo
+
+This function is used by ConsentCookie to show a summary of the profile the connection is managing.
+ConsentCookie uses a default template for showing this info.
+The template consists of a header and content panel.
+
+When ConsentCookie calls getProfileInfo it expects a promise that resolves in an object with the following properties:
+
+Name | Description
+----------------------------- | -----------------
+`header` | a String with valid HTML that is shown as the header
+`content` | a String with valid HTML that is shown as content
+
+```javascript
+{
+	"header": "<div>I am a header</div>",
+	"content": "<div>I am content</div>"
+}
+```
+
+##### Plugin listening for events
+
+A plugin can also listen for changes by using the ConsentCookie event framework.
+
+```javascript
+// Plugin code that runs when loading the plugin
+(function ($global) {
+
+	// Register event listener when plugin is loaded
+	$global.ConsentCookie.on('connection', function ($payload) {
+
+		// Listen for connection changes
+
+		// Do stuff
+	});
+
+})(window);
+```
+
+##### Custom plugin
+
+By default all used plugins are defined in the [ConsentCookie tracker list](src/assets/json/trackers.json).
+When you want to use a custom plugin for a specific connection your can override the default url with a custom one.
+
+To override the default url, add the property ```plugin``` to the connection config of which you want to load the custom plugin.
+
+```javascript
+ConsentCookie.init({
+    'connections': {
+      // Google Analytics with custom plugin
+      'ga': {
+        'initstate': 'disabled',
+        'plugin':'https://yourdomain.com/the/location/of/the/plugin.js'
+      }
+    },
+    'moreinfolink': 'https://www.link-to-your-info.com'
+  });
+```
 
 ## Build your own ConsentCookie
 
