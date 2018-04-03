@@ -18,7 +18,7 @@
 <template>
   <div id="icView">
     <div class="icViewWrapper">
-      <transition enter-active-class="icAnimated icSlideInRight" leave-active-class="icAnimated icSlideOutRight">
+      <transition enter-active-class="icAnimated icSlideIn" leave-active-class="icAnimated icSlideOut">
         <div v-show="isShown" :style="viewHolderCss" class="viewHolder">
           <ic-view-header :height="headerHeight" :style="{minWidth:'350px'}"/>
           <ic-view-content :style="viewContentCss" :class="phoneLandscape">
@@ -147,9 +147,6 @@
 
   @import '../../assets/scss/general-variables';
 
-  /* Take in account the overflow hidden on the right side */
-  $menu-drop-shadow: -5px 5px 10px 0px rgba(136, 136, 136, 0.15);
-
   #icView {
     position: relative;
 
@@ -160,7 +157,7 @@
       padding: 0px 0px 15px 15px;
       overflow: hidden;
 
-      .phone & {
+      .cc-phone & {
         padding: 0px 5px 5px 5px;
 
         .phoneLandscape {
@@ -168,10 +165,24 @@
         }
       }
 
+      #ConsentCookie.cc-left & {
+        right: auto;
+        left: 0px;
+        padding: 0px 15px 15px 0px;
+      }
+
+      #ConsentCookie.cc-left.cc-phone & {
+        padding: 0px 5px 5px 5px;
+      }
+
       .viewHolder {
         border-radius: $ic-box-border-radius;
-        box-shadow: $menu-drop-shadow;
+        box-shadow: -5px 5px 10px 0px rgba(136, 136, 136, 0.15);
         overflow: hidden;
+
+        #ConsentCookie.cc-left & {
+          box-shadow: -5px 0px 10px 5px rgba(136, 136, 136, 0.15);
+        }
       }
     }
   }

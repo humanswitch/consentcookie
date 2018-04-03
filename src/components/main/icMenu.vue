@@ -18,7 +18,7 @@
 <template>
   <div id="icMenu" class="clearfix">
     <div class="ic-menu-bar">
-      <transition enter-active-class="icAnimated icSlideInRight" leave-active-class="icAnimated icSlideOutRight">
+      <transition enter-active-class="icAnimated icSlideIn" leave-active-class="icAnimated icSlideOut">
         <div v-show="isOpen" class="ic-menu-items clearfix">
           <ic-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem"/>
         </div>
@@ -117,7 +117,7 @@
     position: relative;
     height: $menu-button-size + px;
 
-    .phone & {
+    .cc-phone & {
       margin: 5px;
     }
 
@@ -134,6 +134,11 @@
       border-radius: $menu-button-radius;
       box-shadow: $menu-button-shadow;
       transition: transform 0.8s ease-in-out;
+
+      #ConsentCookie.cc-left & {
+        right: auto;
+        left: 0px;
+      }
 
       img {
         position: absolute;
@@ -183,6 +188,11 @@
       &.closed {
         transform: rotateZ(-360deg);
 
+        #ConsentCookie.cc-left & {
+          transform: rotateZ(360deg);
+        }
+
+
         img.closed {
           opacity: 1;
         }
@@ -197,11 +207,21 @@
       margin-right: ($menu-button-size / 2) + px;
       overflow: hidden;
 
+      #ConsentCookie.cc-left & {
+        margin-right: 0px;
+        margin-left: ($menu-button-size / 2) + px;
+      }
+
       .ic-menu-items {
         height: $menu-button-size + px;
         padding: 5px ($menu-button-size / 2) + px 5px 5px;
         border-radius: $menu-button-size + px 0px 0px $menu-button-size + px;
         background: $ic-brand-color;
+
+        #ConsentCookie.cc-left & {
+          padding: 5px 5px 5px ($menu-button-size / 2) + px;
+          border-radius: 0px $menu-button-size + px $menu-button-size + px 0px;
+        }
       }
     }
   }

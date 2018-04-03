@@ -64,8 +64,16 @@
     text-align: center;
     box-sizing: border-box;
 
-    .phone & {
+    #ConsentCookie.cc-left & {
+      margin: 0px 0px 0px 20px;
+    }
+
+    .cc-phone & {
       margin: 0px 10px 0px 0px;
+    }
+
+    #ConsentCookie.cc-left.cc-phone & {
+      margin: 0px 0px 0px 10px;
     }
 
     &:hover {
