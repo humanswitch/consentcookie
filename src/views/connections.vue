@@ -41,9 +41,13 @@
     },
     data() {
       return {
-        connections: this.$services.connections.getActive(),
         moreInfo: this.$services.config.get('moreinfolink'),
       };
+    },
+    asyncComputed: {
+      connections() {
+        return this.$services.connections.getActive();
+      },
     },
     beforeMount() {
       this.$store.commit('updateView', { title: viewTitle });
