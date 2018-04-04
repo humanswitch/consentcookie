@@ -26,7 +26,6 @@
 
   // Defaults
   const DEFAULT_CONFIG_DESIGN_LAYOUT_POSITION_LEFT_VAL = 'left';
-  const DEFAULT_CONFIG_KEY_DESIGN_LAYOUT_POSITION = 'design.layout.position';
 
   // Components
   const icMenu = require('../components/main/icMenu.vue');
@@ -50,7 +49,7 @@
         return this.$store.state.view.isPortrait;
       },
       isLeft() {
-        return DEFAULT_CONFIG_DESIGN_LAYOUT_POSITION_LEFT_VAL === this.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_LAYOUT_POSITION);
+        return DEFAULT_CONFIG_DESIGN_LAYOUT_POSITION_LEFT_VAL === this.$services.view.getPosition();
       },
     },
     beforeMount() {

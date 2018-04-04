@@ -16,9 +16,9 @@
   -->
 
 <template>
-  <div :style="componentCss" class="ic-view-header clearfix">
+  <div :style="componentCss" class="ic-view-header clearfix" v-theme="{background:'primary'}">
     <div class="wrapper">
-      <div class="title">{{ title }}</div>
+      <div class="title" v-theme="{color:'secondary'}">{{ title }}</div>
     </div>
   </div>
 </template>

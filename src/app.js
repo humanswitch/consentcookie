@@ -36,7 +36,7 @@ const vueResources = require('vue-resource');
 const vueEvents = require('vue-events').default; // ES6 plugin workaround
 const vueAsyncComputed = require('vue-async-computed');
 
-// Helper
+// Helpers
 const utils = require('base/utils');
 
 let mainInstance;
@@ -70,6 +70,8 @@ function initVue($config) {
   vue.use(vueResources);
   vue.use(vueEvents);
   vue.use(vueAsyncComputed);
+
+  vue.directive('theme', require('directives/ccTheme.js'));
 
   vue.component('ic-switch', require('components/general/icSwitch.vue'));
   vue.component('ic-toggle-icon', require('components/general/icToggleIcon.vue'));
