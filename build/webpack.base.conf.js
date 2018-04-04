@@ -54,6 +54,7 @@ module.exports = {
       'views': path.resolve(__dirname, '../src/views'),
       'services': path.resolve(__dirname, '../src/services'),
       'plugins': path.resolve(__dirname, '../src/plugins'),
+      'directives': path.resolve(__dirname, '../src/directives'),
     }
   },
   resolveLoader: {
@@ -91,10 +92,25 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|ttf|eot|svg)(\?.*)?$/,
+        include: [path.join(projectRoot, 'src/assets/fonts')],
         loader: process.env.NODE_ENV === 'production' ? 'base64-font-loader' : 'url',
         query: {
           limit: 1000000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+        }
+      },
+      {
+        test: /\.svg$/,
+        include: [path.join(projectRoot, 'src/assets/img')],
+        loader: 'vue-svg-loader', // `vue-svg` for webpack 1.x
+        options: {
+          // optional [svgo](https://github.com/svg/svgo) options
+          svgo: {
+            plugins: [
+              {removeDoctype: true},
+              {removeComments: true}
+            ]
+          }
         }
       },
     ]

@@ -19,15 +19,15 @@
   <div id="icMenu" class="clearfix">
     <div class="ic-menu-bar">
       <transition enter-active-class="icAnimated icSlideIn" leave-active-class="icAnimated icSlideOut">
-        <div v-show="isOpen" class="ic-menu-items clearfix">
-          <ic-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem"/>
+        <div v-show="isOpen" class="ic-menu-items clearfix" v-theme="{background:'primary'}">
+          <ic-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem" v-theme="{background:'primary'}"/>
         </div>
       </transition>
     </div>
     <div :class="['ic-menu-button',{disabled:isDisabled,open:isOpen,closed:!isOpen}]" :title="menuTooltip"
-         @click="toggleOpen">
-      <img class="closed" src="../../assets/img/hs_logo_red.svg">
-      <img class="open" src="../../assets/img/menu-close.svg">
+         @click="toggleOpen" v-theme="{background:'secondary'}">
+      <icSvgLogo class="closed" v-theme="{stroke:'primary',fill:'primary'}"/>
+      <icSvgClose class="open" v-theme="{stroke:'primary',fill:'primary'}"/>
     </div>
   </div>
 </template>
@@ -41,6 +41,9 @@
 
   // Components
   const icMenuItem = require('components/main/icMenuItem.vue');
+
+  const icSvgLogo = require('../../assets/img/logo.svg');
+  const icSvgClose = require('../../assets/img/close.svg');
 
   const menuItems = [{
     icon: 'toggle-on',
@@ -58,6 +61,8 @@
     name: 'icMenu',
     components: {
       icMenuItem,
+      icSvgLogo,
+      icSvgClose,
     },
     data() {
       return {
@@ -140,10 +145,11 @@
         left: 0px;
       }
 
-      img {
+      svg {
         position: absolute;
         text-align: center;
         transition: opacity 0.8s ease-in-out;
+        fill: $ic-brand-color;
 
         &.open {
           /* offset due to border and spacing logo height vs button height*/
@@ -153,14 +159,13 @@
           width: $menu-logo-width;
         }
 
-        &.closed{
+        &.closed {
           /* offset due to border and spacing logo height vs button height*/
           top: -1px;
           left: -1px;
           width: $menu-button-width;
           height: $menu-button-height;
           line-height: $menu-button-height;
-          fill: $ic-brand-color;
         }
       }
 
@@ -175,11 +180,11 @@
       &.open {
         transform: rotateZ(0deg);
 
-        img.closed {
+        .closed {
           opacity: 0;
         }
 
-        img.open {
+        .open {
           opacity: 1;
         }
 
@@ -192,12 +197,11 @@
           transform: rotateZ(360deg);
         }
 
-
-        img.closed {
+        .closed {
           opacity: 1;
         }
 
-        img.open {
+        .open {
           opacity: 0;
         }
       }
