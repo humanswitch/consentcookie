@@ -17,9 +17,10 @@
 <template>
   <label :class="['ic-switch',{'disabled':disabled}]">
     <input v-model="currentValue" :disabled="disabled" type="checkbox" @change="$emit('change', currentValue)">
-    <span>
+    <span v-theme="{background:'tertiary'}">
       <div class="state on">Aan</div>
-      <div class="state off">Uit</div>
+      <div class="state off" v-theme="{color:'tertiary'}">Uit</div>
+      <div class="switch" v-theme="{borderColor:'tertiary'}"/>
     </span>
   </label>
 </template>
@@ -81,15 +82,15 @@
     &.disabled {
 
       > input[type="checkbox"]:checked + span {
-        background-color: $ic-color-dark-grey;
+        background-color: $ic-color-dark-grey !important;
 
         &:before {
           background: $ic-color-white;
         }
 
-        &:after {
+        .switch{
           background-color: $switch-color-off;
-          border-color: $ic-color-dark-grey;
+          border-color: $ic-color-dark-grey !important;
         }
 
         .state {
@@ -134,7 +135,8 @@
         border-radius: $switch-height + px;
         transition: background 0.4s;
       }
-      &:after {
+
+      .switch {
         @include switch-child();
         top: 5px;
         left: 5px;
@@ -173,10 +175,10 @@
       background-color: $switch-color-on;
 
       &:before {
-        background-color: $switch-color-on;;
+        background-color: inherit;
       }
 
-      &:after {
+      .switch{
         margin-left: ($switch-width / 2) + $switch-on-margin-offset + px;
         background-color: $switch-color-off;
         border: $switch-border-width + px solid $switch-color-off;;

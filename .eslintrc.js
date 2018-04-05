@@ -75,7 +75,8 @@ module.exports = {
         'state', // for vuex state
         '$state', // for vuex state ($ param notation)
         'acc', // for reduce accumulators
-        'e' // for e.returnvalue
+        'e', // for e.returnvalue,
+        '$memo' // for underscore reduce
       ]
     }],
     // allow optionalDependencies

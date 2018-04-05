@@ -16,9 +16,10 @@
   -->
 
 <template>
-  <router-link :to="data.path" :title="data.info" class="ic-menu-item" tag="div">
-    <div class="fill"/>
-    <i :class="'cc-' + data.icon" :style="data.iconSize ? 'font-size:' + data.iconSize + 'px;' : ''" aria-hidden="true"/>
+  <router-link :to="data.path" :title="data.info" class="ic-menu-item" tag="div" v-theme="{borderColor:'secondary'}">
+    <div class="fill" v-theme="{background:'secondary'}"/>
+    <i :class="['cc-' + data.icon,'active']" :style="{styleObj}" aria-hidden="true" v-theme="{color:'primary'}"/>
+    <i :class="['cc-' + data.icon]" :style="{styleObj}" aria-hidden="true" v-theme="{color:'secondary'}"/>
   </router-link>
 </template>
 
@@ -36,6 +37,13 @@
         },
         required: true,
       },
+    },
+    data() {
+      return {
+        styleObj: {
+          fontSize: this.data.iconSize + 'px;',
+        },
+      };
     },
   };
 </script>
@@ -64,8 +72,16 @@
     text-align: center;
     box-sizing: border-box;
 
-    .phone & {
+    #ConsentCookie.cc-left & {
+      margin: 0px 0px 0px 20px;
+    }
+
+    .cc-phone & {
       margin: 0px 10px 0px 0px;
+    }
+
+    #ConsentCookie.cc-left.cc-phone & {
+      margin: 0px 0px 0px 10px;
     }
 
     &:hover {
@@ -87,12 +103,16 @@
       opacity: 0;
       transition: all 0.2s ease;
       transform: scale(0);
-      background: $ic-color-white;
+      background: none;
     }
 
     i {
       font-size: 24px;
       color: $ic-color-white;
+    }
+
+    i.active{
+      display: none;
     }
   }
 
@@ -106,7 +126,12 @@
       }
 
       i {
-        color: $ic-brand-color
+        color: $ic-brand-color;
+        display:none;
+      }
+
+      i.active{
+        display: inline;
       }
     }
   }
