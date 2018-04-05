@@ -39,7 +39,8 @@
     "infolink": {
       "connection": "https://www.humanswitch.io",
       "profile": "https://www.humanswitch.io"
-    }
+    },
+    "plugin":"https://www.consentcookie.nl/consentcookie/plugins/iqnomy/plugin.js"
   },
   {
     "id": "ga",
