@@ -1,0 +1,86 @@
+[
+  {
+    "id": "cc",
+    "name": "ConsentCookie",
+    "description": {
+      "connection": "<strong>ConsentCookie</strong> is een dienst voor het beheren en bewaken van uw privacy op deze website.",
+      "profile": "<strong>ConsentCookie</strong> is een dienst voor het beheren en bewaken van uw privacy op deze website."
+    },
+    "icon": "https://www.humanswitch.io/wp-content/uploads/2015/08/favicon-152.png",
+    "properties": [
+      {
+        "id": "functional",
+        "type": "cookie",
+        "enabled": true
+      }
+    ],
+    "fixed": false,
+    "infolink": {
+      "connection": "https://www.consentcookie.nl",
+      "profile": "https://www.consentcookie.nl"
+    }
+  },
+  {
+    "id": "iq",
+    "name": "IQNOMY",
+    "description": {
+      "connection": "<strong>IQNOMY</strong> is een SaaS service van HumanSwitch gebruikt op deze website voor (anoniem) realtime profiling, website analytics en personalisatie",
+      "profile": "<strong>IQNOMY</strong> is een SaaS service van HumanSwitch gebruikt op deze website voor (anoniem) realtime profiling, website analytics en personalisatie"
+    },
+    "icon": "https://www.humanswitch.io/wp-content/uploads/2015/08/favicon-152.png",
+    "properties": [
+      {
+        "id": "tracker",
+        "type": "cookie",
+        "enabled": true
+      }
+    ],
+    "fixed": false,
+    "infolink": {
+      "connection": "https://www.humanswitch.io",
+      "profile": "https://www.humanswitch.io"
+    }
+  },
+  {
+    "id": "ga",
+    "name": "Google Analytics",
+    "description": {
+      "connection": "<strong>Google Analytics</strong> is een gratis website analytics service beschikbaar gesteld door Google. Google analytics volgt, analyseert en rapporteert het gebruikt van de website.",
+      "profile": "<strong>Google Analytics</strong> is een gratis website analytics service beschikbaar gesteld door Google. Google analytics volgt, analyseert en rapporteert het gebruikt van de website."
+    },
+    "icon": "data:image/png;base64,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",
+    "properties": [
+      {
+        "id": "tracker",
+        "type": "cookie",
+        "enabled": true
+      }
+    ],
+    "fixed": false,
+    "infolink": {
+      "connection": "https://support.google.com/accounts/answer/6227261",
+      "profile": "https://support.google.com/accounts/answer/6227261"
+    }
+  },
+  {
+    "id": "gtm",
+    "name": "Google Tag Manager",
+    "description": {
+      "connection": "<strong>Google Tag Manager</strong> is een tag management service geschikbaar gesteld door Google. Google Tag Manager beheert Javascript en HTML tags die gebruikt worden voor tracking en analyses van websites.",
+      "profile": "<strong>Google Tag Manager</strong> is een tag management service geschikbaar gesteld door Google. Google Tag Manager beheert Javascript en HTML tags die gebruikt worden voor tracking en analyses van websites."
+    },
+    "icon": "https://www.humanswitch.io/wp-content/uploads/2018/03/google-tag-manager-450x450.jpg",
+    "properties": [
+      {
+        "id": "tracker",
+        "type": "cookie",
+        "enabled": true
+      }
+    ],
+    "fixed": false,
+    "infolink": {
+      "connection": "https://support.google.com/accounts/answer/6227261",
+      "profile": "https://support.google.com/accounts/answer/6227261"
+    }
+  }
+]
