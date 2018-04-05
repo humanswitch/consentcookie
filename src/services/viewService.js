@@ -20,6 +20,12 @@ const DEFAULT_EVENT_WINDOW_RESIZE = 'windowResize';
 const DEFAULT_EVENT_CONTENT_OPENED = 'contentOpened';
 const DEFAULT_MAX_PHONE_WIDTH_PORTRAIT = 480;
 const DEFAULT_MAX_PHONE_HEIGHT_LANDSCAPE = 480;
+
+const DEFAULT_CONFIG_KEY_DESIGN_LAYOUT_POSITION = 'design.layout.position';
+const DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_PRIMARY = 'design.colorscheme.primary';
+const DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_SECONDARY = 'design.colorscheme.secondary';
+const DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_TERTIARY = 'design.colorscheme.tertiary';
+
 const window = global || null;
 
 let vue;
@@ -35,7 +41,6 @@ function init($vueServices) {
 function initInitialViewState() {
   updateViewState();
 }
-
 
 function initRouteListener() {
   vue.$router.afterEach(($to) => {
@@ -74,14 +79,6 @@ function initResizeListener() {
   });
 }
 
-function getWindowHeight() {
-  return window ? window.outerHeight : null;
-}
-
-function getWindowWidth() {
-  return window ? window.outerWidth : null;
-}
-
 function updateViewState() {
   // Update the view state
   const width = getWindowWidth();
@@ -106,6 +103,30 @@ function updateViewState() {
   }
 }
 
+function getWindowHeight() {
+  return window ? window.outerHeight : null;
+}
+
+function getWindowWidth() {
+  return window ? window.outerWidth : null;
+}
+
+function getPosition() {
+  return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_LAYOUT_POSITION, null);
+}
+
+function getColorPrimary() {
+  return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_PRIMARY, null);
+}
+
+function getColorSecondary() {
+  return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_SECONDARY, null);
+}
+
+function getColorTertiary() {
+  return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_TERTIARY, null);
+}
+
 function isPhoneMode($width, $height) {
   if (typeof $width !== 'number' || typeof $height !== 'number') {
     return false;
@@ -120,18 +141,6 @@ function isPortraitMode($width, $height) {
     return false;
   }
   return $height > $width;
-}
-
-function notifyViewChanged($update) {
-  vue.$store.commit('updateView', $update);
-}
-
-function onOpen($fn) {
-  vue.$on(DEFAULT_EVENT_CONTENT_OPENED, $fn);
-}
-
-function onResize($fn) {
-  vue.$on(DEFAULT_EVENT_WINDOW_RESIZE, $fn);
 }
 
 function show($showContent, $showMenu) {
@@ -169,40 +178,37 @@ function toggleMenu() {
   */
 }
 
-module.exports = {
+function onOpen($fn) {
+  vue.$on(DEFAULT_EVENT_CONTENT_OPENED, $fn);
+}
 
+function onResize($fn) {
+  vue.$on(DEFAULT_EVENT_WINDOW_RESIZE, $fn);
+}
+
+function notifyViewChanged($update) {
+  vue.$store.commit('updateView', $update);
+}
+
+module.exports = {
   init,
   getWindowHeight,
   getWindowWidth,
-  open: () => {
-    show(true, true);
-  },
-  openMenu: () => {
-    show(null, true);
-  },
-  openContent: () => {
-    show(true, null);
-  },
-  close: () => {
-    show(false, false);
-  },
-  enable: () => {
-    enable(true, true);
-  },
-  enableMenu: () => {
-    enable(null, true);
-  },
-  enableContent: () => {
-    enable(true, null);
-  },
-  disable: () => {
-    enable(false, false);
-  },
-  disableMenu: () => {
-    enable(null, false);
-  },
+  getPosition,
+  getColorPrimary,
+  getColorSecondary,
+  getColorTertiary,
+  open: () => show(true, true),
+  openMenu: () => show(null, true),
+  openContent: () => show(true, null),
+  close: () => show(false, false),
+  enable: () => enable(true, true),
+  enableMenu: () => enable(null, true),
+  enableContent: () => enable(true, null),
+  disable: () => enable(false, false),
+  disableMenu: () => enable(null, false),
   toggleMenu,
-  onResize,
   onOpen,
+  onResize,
   notifyViewChanged,
 };

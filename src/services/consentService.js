@@ -38,6 +38,8 @@ const DEFAULT_CONSENT_STATE_LABEL_DISABLED = 'disabled';
 
 const DEFAULT_CONSENT_STATE = DEFAULT_STATE_CONSENT_DISABLED;
 
+const DEFAULT_CONFIG_KEY_APPS_CONSENT = 'apps.consent';
+
 class Consents {
 
   constructor($consents) {
@@ -114,7 +116,7 @@ function init(vueServices) {
 }
 
 function load() {
-  const connectionsConfig = _.clone(vue.$services.config.get('connections'));
+  const connectionsConfig = _.clone(vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_CONSENT));
   const consentCookie = jsCookie.get(DEFAULT_CONSENTCOOKIE_NAME);
 
   consents = Consents.parse(consentCookie);
@@ -123,17 +125,15 @@ function load() {
     const curConsent = consents.get($connectionId);
     const initState = getInitState($connectionConfig.initstate);
 
-    if (null == curConsent) {
+    if (curConsent === null) {
       update($connectionId, initState);
-    } else {
-      if (DEFAULT_STATE_CONSENT_DISABLED === initState) {
-        // New settings is, no optin or optout. Override setting
-        update($connectionId, initState);
-      } else if (DEFAULT_STATE_CONSENT_DISABLED !== initState
+    } else if (DEFAULT_STATE_CONSENT_DISABLED === initState) {
+      // New settings is, no optin or optout. Override setting
+      update($connectionId, initState);
+    } else if (DEFAULT_STATE_CONSENT_DISABLED !== initState
         && curConsent.flag === DEFAULT_STATE_CONSENT_DISABLED) {
-        // New setting is optin or optout and old was mandatory
-        update($connectionId, initState);
-      }
+      // New setting is optin or optout and old was mandatory
+      update($connectionId, initState);
     }
   });
 }

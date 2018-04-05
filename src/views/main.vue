@@ -16,13 +16,16 @@
   -->
 
 <template>
-  <div id="ConsentCookie" :class="['ConsentCookie',{'phone':isPhone,'portrait':isPortrait}]">
+  <div id="ConsentCookie" :class="['ConsentCookie',isLeft ? 'cc-left' : 'cc-right',{'cc-phone':isPhone,'cc-portrait':isPortrait}]">
     <ic-view/>
     <ic-menu/>
   </div>
 </template>
 
 <script>
+
+  // Defaults
+  const DEFAULT_CONFIG_DESIGN_LAYOUT_POSITION_LEFT_VAL = 'left';
 
   // Components
   const icMenu = require('../components/main/icMenu.vue');
@@ -44,6 +47,9 @@
       },
       isPortrait() {
         return this.$store.state.view.isPortrait;
+      },
+      isLeft() {
+        return DEFAULT_CONFIG_DESIGN_LAYOUT_POSITION_LEFT_VAL === this.$services.view.getPosition();
       },
     },
     beforeMount() {
@@ -71,8 +77,18 @@
     right: 40px;
   }
 
-  #ConsentCookie.phone {
-    bottom: 0px;
+  #ConsentCookie.cc-left {
+    right: auto;
+    left: 40px;
+  }
+
+  #ConsentCookie.cc-phone {
+    bottom: 2px;
     right: 0px;
+  }
+
+  #ConsentCookie.cc-left.cc-phone {
+    right: auto;
+    left: 0px;
   }
 </style>

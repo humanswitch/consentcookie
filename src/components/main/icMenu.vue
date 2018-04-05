@@ -18,16 +18,16 @@
 <template>
   <div id="icMenu" class="clearfix">
     <div class="ic-menu-bar">
-      <transition enter-active-class="icAnimated icSlideInRight" leave-active-class="icAnimated icSlideOutRight">
-        <div v-show="isOpen" class="ic-menu-items clearfix">
-          <ic-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem"/>
+      <transition enter-active-class="icAnimated icSlideIn" leave-active-class="icAnimated icSlideOut">
+        <div v-show="isOpen" class="ic-menu-items clearfix" v-theme="{background:'primary'}">
+          <ic-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem" v-theme="{background:'primary'}"/>
         </div>
       </transition>
     </div>
     <div :class="['ic-menu-button',{disabled:isDisabled,open:isOpen,closed:!isOpen}]" :title="menuTooltip"
-         @click="toggleOpen">
-      <img class="closed" src="../../assets/img/hs_logo_red.svg">
-      <img class="open" src="../../assets/img/menu-close.svg">
+         @click="toggleOpen" v-theme="{background:'secondary'}">
+      <icSvgLogo class="closed" v-theme="{stroke:'primary',fill:'primary'}"/>
+      <icSvgClose class="open" v-theme="{stroke:'primary',fill:'primary'}"/>
     </div>
   </div>
 </template>
@@ -41,6 +41,9 @@
 
   // Components
   const icMenuItem = require('components/main/icMenuItem.vue');
+
+  const icSvgLogo = require('../../assets/img/logo.svg');
+  const icSvgClose = require('../../assets/img/close.svg');
 
   const menuItems = [{
     icon: 'toggle-on',
@@ -58,6 +61,8 @@
     name: 'icMenu',
     components: {
       icMenuItem,
+      icSvgLogo,
+      icSvgClose,
     },
     data() {
       return {
@@ -117,7 +122,7 @@
     position: relative;
     height: $menu-button-size + px;
 
-    .phone & {
+    .cc-phone & {
       margin: 5px;
     }
 
@@ -135,10 +140,16 @@
       box-shadow: $menu-button-shadow;
       transition: transform 0.8s ease-in-out;
 
-      img {
+      #ConsentCookie.cc-left & {
+        right: auto;
+        left: 0px;
+      }
+
+      svg {
         position: absolute;
         text-align: center;
         transition: opacity 0.8s ease-in-out;
+        fill: $ic-brand-color;
 
         &.open {
           /* offset due to border and spacing logo height vs button height*/
@@ -148,14 +159,13 @@
           width: $menu-logo-width;
         }
 
-        &.closed{
+        &.closed {
           /* offset due to border and spacing logo height vs button height*/
           top: -1px;
           left: -1px;
           width: $menu-button-width;
           height: $menu-button-height;
           line-height: $menu-button-height;
-          fill: $ic-brand-color;
         }
       }
 
@@ -170,11 +180,11 @@
       &.open {
         transform: rotateZ(0deg);
 
-        img.closed {
+        .closed {
           opacity: 0;
         }
 
-        img.open {
+        .open {
           opacity: 1;
         }
 
@@ -183,11 +193,15 @@
       &.closed {
         transform: rotateZ(-360deg);
 
-        img.closed {
+        #ConsentCookie.cc-left & {
+          transform: rotateZ(360deg);
+        }
+
+        .closed {
           opacity: 1;
         }
 
-        img.open {
+        .open {
           opacity: 0;
         }
       }
@@ -197,11 +211,21 @@
       margin-right: ($menu-button-size / 2) + px;
       overflow: hidden;
 
+      #ConsentCookie.cc-left & {
+        margin-right: 0px;
+        margin-left: ($menu-button-size / 2) + px;
+      }
+
       .ic-menu-items {
         height: $menu-button-size + px;
         padding: 5px ($menu-button-size / 2) + px 5px 5px;
         border-radius: $menu-button-size + px 0px 0px $menu-button-size + px;
         background: $ic-brand-color;
+
+        #ConsentCookie.cc-left & {
+          padding: 5px 5px 5px ($menu-button-size / 2) + px;
+          border-radius: 0px $menu-button-size + px $menu-button-size + px 0px;
+        }
       }
     }
   }

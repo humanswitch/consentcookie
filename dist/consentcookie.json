@@ -18,8 +18,7 @@
     "infolink": {
       "connection": "https://www.consentcookie.nl",
       "profile": "https://www.consentcookie.nl"
-    },
-    "plugin": ""
+    }
   },
   {
     "id": "iq",
@@ -41,7 +40,7 @@
       "connection": "https://www.humanswitch.io",
       "profile": "https://www.humanswitch.io"
     },
-    "plugin": "https://www.consentcookie.nl/consentcookie/plugins/connections/brands/iqnomy/plugin.js"
+    "plugin":"https://www.consentcookie.nl/consentcookie/plugins/iqnomy/plugin.js"
   },
   {
     "id": "ga",
@@ -62,8 +61,7 @@
     "infolink": {
       "connection": "https://support.google.com/accounts/answer/6227261",
       "profile": "https://support.google.com/accounts/answer/6227261"
-    },
-    "plugin": ""
+    }
   },
   {
     "id": "gtm",
@@ -84,7 +82,6 @@
     "infolink": {
       "connection": "https://support.google.com/accounts/answer/6227261",
       "profile": "https://support.google.com/accounts/answer/6227261"
-    },
-    "plugin": ""
+    }
   }
 ]
