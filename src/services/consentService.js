@@ -30,13 +30,13 @@ const DEFAULT_CONSENTCOOKIE_VAL_REJECTED = 0;
 
 const DEFAULT_STATE_CONSENT_OPTIN = 0;
 const DEFAULT_STATE_CONSENT_OPTOUT = 1;
-const DEFAULT_STATE_CONSENT_DISABLED = -1;
+const DEFAULT_STATE_CONSENT_ALWAYSON = -1;
 
 const DEFAULT_CONSENT_STATE_LABEL_OPTIN = 'optin';
 const DEFAULT_CONSENT_STATE_LABEL_OPTOUT = 'optout';
-const DEFAULT_CONSENT_STATE_LABEL_DISABLED = 'disabled';
+const DEFAULT_CONSENT_STATE_LABEL_ALWAYSON = 'alwayson';
 
-const DEFAULT_CONSENT_STATE = DEFAULT_STATE_CONSENT_DISABLED;
+const DEFAULT_CONSENT_STATE = DEFAULT_STATE_CONSENT_ALWAYSON;
 
 const DEFAULT_CONFIG_KEY_APPS_CONSENT = 'apps.consent';
 
@@ -127,11 +127,11 @@ function load() {
 
     if (curConsent === null) {
       update($connectionId, initState);
-    } else if (DEFAULT_STATE_CONSENT_DISABLED === initState) {
+    } else if (DEFAULT_STATE_CONSENT_ALWAYSON === initState) {
       // New settings is, no optin or optout. Override setting
       update($connectionId, initState);
-    } else if (DEFAULT_STATE_CONSENT_DISABLED !== initState
-        && curConsent.flag === DEFAULT_STATE_CONSENT_DISABLED) {
+    } else if (DEFAULT_STATE_CONSENT_ALWAYSON !== initState
+      && curConsent.flag === DEFAULT_STATE_CONSENT_ALWAYSON) {
       // New setting is optin or optout and old was mandatory
       update($connectionId, initState);
     }
@@ -145,8 +145,8 @@ function getInitState($stateName) {
   if (DEFAULT_CONSENT_STATE_LABEL_OPTOUT === $stateName) {
     return DEFAULT_STATE_CONSENT_OPTOUT;
   }
-  if (DEFAULT_CONSENT_STATE_LABEL_DISABLED === $stateName) {
-    return DEFAULT_STATE_CONSENT_DISABLED;
+  if (DEFAULT_CONSENT_STATE_LABEL_ALWAYSON === $stateName) {
+    return DEFAULT_STATE_CONSENT_ALWAYSON;
   }
   return DEFAULT_CONSENT_STATE;
 }
@@ -218,4 +218,3 @@ module.exports = {
   accept,
   reject,
 };
-
