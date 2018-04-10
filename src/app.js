@@ -129,11 +129,13 @@ module.exports = (function () {
     error.stack = null; // We don`t need the stack. Its only confusing
     throw error;
   }
+
   return {
     init,
     on,
     off,
     get,
     registerPlugin,
+    ver:VERSION,
   };
 }());
