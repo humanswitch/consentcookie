@@ -17,6 +17,7 @@
 
 // see http://vuejs-templates.github.io/webpack for documentation.
 const path = require('path');
+const packageConfig = require('../package.json');
 
 // Used for handling commandline arguments
 const commandLineArgs = require('command-line-args');
@@ -74,6 +75,7 @@ console.log(`Building with build flags: ${JSON.stringify({
 module.exports = {
   build: {
     env: require('./prod.env'), // eslint-disable-line global-require
+    ver: JSON.stringify(packageConfig.version),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsRootRelease: path.resolve(__dirname, '../dist'),
