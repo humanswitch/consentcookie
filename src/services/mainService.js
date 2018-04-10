@@ -19,7 +19,10 @@
  * The main applications service. One to rule them all!
  */
 const DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL = 'ccw';
-const DEFAULT_CONFIG_CONSENTWALL_ENABLED = 'consent.enabled';
+const DEFAULT_CONFIG_CONSENTWALL_ENABLED = 'general.consentwall.enabled';
+const DEFAULT_CONFIG_CONSENTWALL_TIMEOUT = 'general.consentwall.timeout';
+
+const DEFAULT_CONFIG_TIMEOUT_CONSENTWALL = 300; // ms
 
 let vueInstance;
 
@@ -36,7 +39,7 @@ function showConsentWall() {
   setTimeout(() => {
     vueInstance.$router.push({ path: '/consent' });
     vueInstance.$services.view.openContent();
-  }, getConfig().info.timeout);
+  }, vueInstance.$services.config.get(DEFAULT_CONFIG_CONSENTWALL_TIMEOUT, DEFAULT_CONFIG_TIMEOUT_CONSENTWALL));
 }
 
 function acceptConsentWall() {
@@ -50,7 +53,8 @@ function isConsentWallEnabled() {
 }
 
 function isConsentWallAccepted() {
-  return !(isConsentWallEnabled()) || (vueInstance.$services.consent.getFlag(DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL) === 1);
+  return !(isConsentWallEnabled()) ||
+    (vueInstance.$services.consent.getFlag(DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL) === 1);
 }
 
 module.exports = {
