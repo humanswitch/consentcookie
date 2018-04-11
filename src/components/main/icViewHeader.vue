@@ -16,7 +16,7 @@
   -->
 
 <template>
-  <div :style="componentCss" class="ic-view-header" v-theme="{background:'primary'}">
+  <div :style="componentCss" class="ic-view-header clearfix" v-theme="{background:'primary'}">
     <div class="wrapper">
       <div class="title" v-theme="{color:'secondary'}">{{ title }}</div>
     </div>
@@ -64,8 +64,6 @@
     color: #FFFFFF;
     border-radius: 5px 5px 0px 0px;
     overflow: hidden;
-
-    @include default-clearfix();
 
     @media screen and (max-height: 360px) {
       padding: 5px 20px;

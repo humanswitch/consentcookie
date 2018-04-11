@@ -38,26 +38,20 @@
 <body>
 <script type="application/javascript">
   ConsentCookie.init({
-    'general': {
-      'consentwall': {
-        'enabled': true,
-        'timeout': 1000,
-      }
-    },
     'apps': {
       'endpoint': '',
       'consent': {
         'cc': {
-          'initstate': 'optin'
+          'initstate': 'disabled'
         },
         'iq': {
-          'initstate': 'optin'
+          'initstate': 'optout'
         },
         'ga': {
-          'initstate': 'optin'
+          'initstate': 'disabled'
         },
         'gtm': {
-          'initstate': 'optin'
+          'initstate': 'disabled'
         }
       }
     },
@@ -74,14 +68,8 @@
     'resources': {
       'nl': {
         'info': {
-          'title': '',
-          'text': ''
-        },
-        'consent': {
-          'title': '',
-          'text': '',
-          'button': '',
-          'infolink': '',
+          "title":"",
+          "text":""
         }
       }
     }

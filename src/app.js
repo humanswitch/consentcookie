@@ -50,7 +50,10 @@ function init($config) {
       'ConsentCookie already initialized. Visit: ' + DEFAULT_INFO_LINK + ' for more information.');
   }
 
-  return initVue($config);
+  return onReady(() => {
+    initBaseView();
+    initVue($config);
+  });
 }
 
 function initBaseView() {
@@ -81,12 +84,7 @@ function initVue($config) {
     propsData: {
       config: $config,
     },
-  });
-
-  return onReady(() => {
-    initBaseView();
-    mainInstance.$mount('#ConsentCookie');
-  });
+  }).$mount('#ConsentCookie');
 }
 
 function onReady($fn) {
@@ -129,13 +127,11 @@ module.exports = (function () {
     error.stack = null; // We don`t need the stack. Its only confusing
     throw error;
   }
-
   return {
     init,
     on,
     off,
     get,
     registerPlugin,
-    ver:VERSION,
   };
 }());
