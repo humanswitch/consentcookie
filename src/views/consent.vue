@@ -41,10 +41,10 @@
   const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_LINK = 'resources.nl.consent.infolink';
 
   const DEFAULT_CONSENTWALL_BLOCKPAGE = false;
-  const DEFAULT_CONSENTWALL_CONSENT_TITLE = 'Gebruik van onze diensten';
-  const DEFAULT_CONSENTWALL_CONSENT_TEXT = 'Wanneer jij je aanmeldt voor een van onze diensten vragen we jou om persoonsgegevens te verstrekken. Deze gegevens worden gebruikt om de dienst uit te kunnen voeren. De gegevens worden opgeslagen op eigen beveiligde servers van HumanSwitch of die van een derde partij.';
-  const DEFAULT_CONSENTWALL_CONSENT_BUTTONTEXT = 'Accepteren';
-  const DEFAULT_CONSENTWALL_CONSENT_INFOLINK = 'https://www.humanswitch.io/privacy/';
+  const DEFAULT_CONSENTWALL_CONSENT_TITLE = 'ConsentCookie';
+  const DEFAULT_CONSENTWALL_CONSENT_TEXT = '<div>Deze website maakt gebruik van <a style="color:black;" href="https://www.consentcookie.nl/"><u>ConsentCookie</u></a> om je cookies en privacy toestemmingen op deze website te beheren.</div>';
+  const DEFAULT_CONSENTWALL_CONSENT_BUTTONTEXT = 'Ok!';
+  const DEFAULT_CONSENTWALL_CONSENT_INFOLINK = 'https://www.consentcookie.nl/';
 
   // Public functions
   module.exports = {
