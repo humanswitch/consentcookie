@@ -39,7 +39,6 @@ spinner.start();
 
 const assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory);
 
-rm('-rf', assetsPath);
 mkdir('-p', assetsPath);
 
 webpack(webpackConfig, function (err, stats) {
