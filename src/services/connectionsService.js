@@ -44,24 +44,23 @@ function getPlugin($connection) {
 
 function getActive() {
   if (!activeConnections) {
-    activeConnections = loadConnections()
-      .then(($connections) => {
-        const consentConfig = vue.$services.config.get('apps.consent');
-        const active = [];
-        const map = _.reduce($connections, ($memo, $connection) => {
-          $memo[$connection.id] = $connection;
-          return $memo;
-        }, {});
+    activeConnections = loadConnections().then(($connections) => {
+      const consents = vue.$services.consent.get();
+      const active = [];
+      const map = _.reduce($connections, ($memo, $connection) => {
+        $memo[$connection.id] = $connection;
+        return $memo;
+      }, {});
 
-        _.each(consentConfig, ($consent, $id) => {
-          const connection = map[$id];
+      _.each(consents.consents, ($consent) => {
+        const connection = map[$consent.id];
 
-          if (connection) {
-            active.push(connection);
-          }
-        });
-        return active;
+        if (connection) {
+          active.push(connection);
+        }
       });
+      return active;
+    });
   }
   return activeConnections;
 }

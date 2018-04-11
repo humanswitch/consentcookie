@@ -18,56 +18,35 @@
 <template>
   <div id="consent">
     <ic-content-box>
-      <div class="icText" v-html="consentText"/>
+      <div class="icTitle">{{ consentTitle }}</div>
+      <div class="icText">{{ consentText }}</div>
       <div class="contentActions">
-        <ic-button class="" size="large" @click="accept" v-theme="{background:'primary',color:'secondary'}">{{ consentButtonText }}</ic-button>
-        <a :href="consentInfoLink" class="info-link" target="_blank">Meer informatie</a>
+        <ic-button size="large" @click="accept">Accepteren</ic-button>
+        <a :href="consentLink" class="info-link" target="_blank">Meer informatie</a>
       </div>
     </ic-content-box>
   </div>
 </template>
 <script>
 
-  // Components
-  const icContentBox = require('components/general/icContentBox.vue');
-  const icButton = require('components/general/icButton.vue');
+  // Dependencies
 
   // Defaults
-  const DEFAULT_CONFIG_KEY_CONSENTWALL_BLOCKPAGE = 'general.consent.blockpage';
-
-  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TITLE = 'resources.nl.consent.title';
-  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TEXT = 'resources.nl.consent.text';
-  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_BUTTONTEXT = 'resources.nl.consent.button';
-  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_LINK = 'resources.nl.consent.infolink';
-
-  const DEFAULT_CONSENTWALL_BLOCKPAGE = false;
-  const DEFAULT_CONSENTWALL_CONSENT_TITLE = 'ConsentCookie';
-  const DEFAULT_CONSENTWALL_CONSENT_TEXT = '<div>Deze website maakt gebruik van <a style="color:black;" href="https://www.consentcookie.nl/"><u>ConsentCookie</u></a> om je cookies en privacy toestemmingen op deze website te beheren.</div>';
-  const DEFAULT_CONSENTWALL_CONSENT_BUTTONTEXT = 'Ok!';
-  const DEFAULT_CONSENTWALL_CONSENT_INFOLINK = 'https://www.consentcookie.nl/';
+  const viewTitle = 'Welkom bij ConsentCookie';
 
   // Public functions
   module.exports = {
     name: 'consentView',
-    components: {
-      icContentBox,
-      icButton,
-    },
+    components: {},
     data() {
-      return {};
+      return {
+        consentTitle: '',
+        consentText: '',
+      };
     },
     computed: {
-      consentText() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TEXT, DEFAULT_CONSENTWALL_CONSENT_TEXT);
-      },
-      consentButtonText() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_BUTTONTEXT, DEFAULT_CONSENTWALL_CONSENT_BUTTONTEXT);
-      },
-      consentInfoLink() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_LINK, DEFAULT_CONSENTWALL_CONSENT_INFOLINK);
-      },
-      blockPage() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_CONSENTWALL_BLOCKPAGE, DEFAULT_CONSENTWALL_BLOCKPAGE);
+      consentLink() {
+        return this.$store.state.application.config.consent.info.link;
       },
     },
     methods: {
@@ -78,8 +57,11 @@
     ready() {
 
     },
+    created() {
+      this.$set(this, 'consentTitle', this.$services.config.get('consent.title', 'null'));
+      this.$set(this, 'consentText', this.$services.config.get('consent.text', 'null'));
+    },
     beforeMount() {
-      const viewTitle = this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TITLE, DEFAULT_CONSENTWALL_CONSENT_TITLE);
       this.$store.commit('updateView', { title: viewTitle });
     },
   };
