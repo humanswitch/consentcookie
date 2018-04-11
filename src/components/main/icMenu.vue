@@ -16,11 +16,12 @@
   -->
 
 <template>
-  <div id="icMenu" class="clearfix">
+  <div id="icMenu">
     <div class="ic-menu-bar">
       <transition enter-active-class="icAnimated icSlideIn" leave-active-class="icAnimated icSlideOut">
-        <div v-show="isOpen" class="ic-menu-items clearfix" v-theme="{background:'primary'}">
-          <ic-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem" v-theme="{background:'primary'}"/>
+        <div v-show="isOpen" class="ic-menu-items" v-theme="{background:'primary'}">
+          <ic-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem"
+                        v-theme="{background:'primary'}"/>
         </div>
       </transition>
     </div>
@@ -122,6 +123,8 @@
     position: relative;
     height: $menu-button-size + px;
 
+    @include default-clearfix();
+
     .cc-phone & {
       margin: 5px;
     }
@@ -221,6 +224,8 @@
         padding: 5px ($menu-button-size / 2) + px 5px 5px;
         border-radius: $menu-button-size + px 0px 0px $menu-button-size + px;
         background: $ic-brand-color;
+
+        @include default-clearfix();
 
         #ConsentCookie.cc-left & {
           padding: 5px 5px 5px ($menu-button-size / 2) + px;
