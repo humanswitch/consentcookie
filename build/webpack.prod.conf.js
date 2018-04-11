@@ -37,8 +37,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.release ? config.build.assetsRootRelease : config.build.assetsRoot,
-    filename: config.build.release ? utils.assetsPath('js/[name].min.js') : utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: config.build.release ? utils.assetsPath('js/[id].js') : utils.assetsPath('js/[id].[chunkhash].js')
+    filename: config.build.release ? utils.assetsPath('[name].min.js') : utils.assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: config.build.release ? utils.assetsPath('[id].js') : utils.assetsPath('js/[id].[chunkhash].js')
   },
   vue: {
     loaders: utils.cssLoaders({
