@@ -17,10 +17,8 @@
 
 <template>
   <div class="ic-connection-summary">
-    <ic-toggle-img :img="connection.icon" :size="40"
-                   v-model="showInfo" />
-    <ic-toggle-icon :icon="'cc-user'" v-model="showProfile"
-                    :disabled="noProfile" :size="20"/>
+    <ic-toggle-img :img="connection.icon" :size="40" v-model="showInfo" />
+    <ic-toggle-icon :icon="'cc-user'" v-model="showProfile" :disabled="noProfile" :size="20" v-theme="{color:'primary'}"/>
     <ic-switch v-model="accepted" :disabled="disabled"/>
   </div>
 </template>

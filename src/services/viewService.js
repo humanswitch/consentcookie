@@ -24,7 +24,6 @@ const DEFAULT_MAX_PHONE_HEIGHT_LANDSCAPE = 480;
 const DEFAULT_CONFIG_KEY_DESIGN_LAYOUT_POSITION = 'design.layout.position';
 const DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_PRIMARY = 'design.colorscheme.primary';
 const DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_SECONDARY = 'design.colorscheme.secondary';
-const DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_TERTIARY = 'design.colorscheme.tertiary';
 
 const window = global || null;
 
@@ -123,10 +122,6 @@ function getColorSecondary() {
   return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_SECONDARY, null);
 }
 
-function getColorTertiary() {
-  return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_TERTIARY, null);
-}
-
 function isPhoneMode($width, $height) {
   if (typeof $width !== 'number' || typeof $height !== 'number') {
     return false;
@@ -197,7 +192,6 @@ module.exports = {
   getPosition,
   getColorPrimary,
   getColorSecondary,
-  getColorTertiary,
   open: () => show(true, true),
   openMenu: () => show(null, true),
   openContent: () => show(true, null),
