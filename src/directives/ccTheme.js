@@ -36,12 +36,6 @@ module.exports = {
     if (secondaryColor) {
       setTheme($el, $binding.value, 'secondary', secondaryColor);
     }
-
-    const tertiaryColor = vue.$services.view.getColorTertiary();
-
-    if (tertiaryColor) {
-      setTheme($el, $binding.value, 'tertiary', tertiaryColor);
-    }
   },
   unbind() {
     vue = null;

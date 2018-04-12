@@ -17,10 +17,10 @@
 <template>
   <label :class="['ic-switch',{'disabled':disabled}]">
     <input v-model="currentValue" :disabled="disabled" type="checkbox" @change="$emit('change', currentValue)">
-    <span v-theme="{background:'tertiary'}">
+    <span v-theme="{background:'primary'}">
       <div class="state on">Aan</div>
-      <div class="state off" v-theme="{color:'tertiary'}">Uit</div>
-      <div class="switch" v-theme="{borderColor:'tertiary'}"/>
+      <div class="state off" v-theme="{color:'primary'}">Uit</div>
+      <div class="switch" v-theme="{borderColor:'primary'}"/>
     </span>
   </label>
 </template>

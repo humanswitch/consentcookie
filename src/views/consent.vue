@@ -42,7 +42,7 @@
 
   const DEFAULT_CONSENTWALL_BLOCKPAGE = false;
   const DEFAULT_CONSENTWALL_CONSENT_TITLE = 'ConsentCookie';
-  const DEFAULT_CONSENTWALL_CONSENT_TEXT = '<div>Deze website maakt gebruik van <a style="color:black;" href="https://www.consentcookie.nl/"><u>ConsentCookie</u></a> om je cookies en privacy toestemmingen op deze website te beheren.</div>';
+  const DEFAULT_CONSENTWALL_CONSENT_TEXT = '<div>Deze website maakt gebruik van <a href="https://www.consentcookie.nl/"><u>ConsentCookie</u></a> om je cookies en privacy toestemmingen op deze website te beheren.</div>';
   const DEFAULT_CONSENTWALL_CONSENT_BUTTONTEXT = 'Ok!';
   const DEFAULT_CONSENTWALL_CONSENT_INFOLINK = 'https://www.consentcookie.nl/';
 
@@ -102,7 +102,7 @@
       .info-link {
         display: block;
         margin-top: 15px;
-        color: $ic-color-black;
+        color: $ic-link-color;
         font-size: 12px;
         font-style: italic;
         text-decoration: underline;
