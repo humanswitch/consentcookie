@@ -17,9 +17,9 @@
 
 <template>
   <div class="ic-connection-actions actions">
-    <button v-if="connectionPlugin" @click="deleteProfile()"><span v-if="!isDeleting">Verwijder</span><i
+    <button v-theme="{color:'primary',borderColor:'primary'}" v-if="connectionPlugin" @click="deleteProfile()"><span v-if="!isDeleting">Verwijder</span><i
       v-if="isDeleting" class="cc-spinner cc-animate-pulse"/></button>
-    <button v-if="connectionPlugin" @click="downloadProfile()"><span v-if="!isDownloading">Download</span><i
+    <button v-theme="{color:'primary',borderColor:'primary'}" v-if="connectionPlugin" @click="downloadProfile()"><span v-if="!isDownloading">Download</span><i
       v-if="isDownloading" class="cc-spinner cc-animate-pulse"/></button>
   </div>
 </template>
