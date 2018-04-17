@@ -17,7 +17,7 @@
 
 <template>
   <button :disabled="disabled" :type="nativeType" :class="'ic-button' + clazz" @click="handleClick">
-    <label class="ic-button-text">
+    <label class="ic-button-text" v-theme="{color:'secondary'}">
       <slot/>
     </label>
   </button>

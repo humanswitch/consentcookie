@@ -34,6 +34,17 @@
   // Defaults
   const viewTitle = 'Welkom bij ConsentCookie';
 
+  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TITLE = 'resources.nl.consent.title';
+  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TEXT = 'resources.nl.consent.text';
+  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_BUTTONTEXT = 'resources.nl.consent.button';
+  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_LINK = 'resources.nl.consent.infolink';
+
+  const DEFAULT_CONSENTWALL_BLOCKPAGE = false;
+  const DEFAULT_CONSENTWALL_CONSENT_TITLE = 'ConsentCookie';
+  const DEFAULT_CONSENTWALL_CONSENT_TEXT = '<div>Deze website maakt gebruik van <a href="https://www.consentcookie.nl/"><u>ConsentCookie</u></a> om je cookies en privacy toestemmingen op deze website te beheren.</div>';
+  const DEFAULT_CONSENTWALL_CONSENT_BUTTONTEXT = 'Ok!';
+  const DEFAULT_CONSENTWALL_CONSENT_INFOLINK = 'https://www.consentcookie.nl/';
+
   // Public functions
   module.exports = {
     name: 'consentView',
@@ -84,7 +95,7 @@
       .info-link {
         display: block;
         margin-top: 15px;
-        color: $ic-color-black;
+        color: $ic-link-color;
         font-size: 12px;
         font-style: italic;
         text-decoration: underline;

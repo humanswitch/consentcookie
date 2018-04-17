@@ -27,10 +27,6 @@ function init(vueServices) {
   vueInstance = vueServices.getVueInstance();
 }
 
-function getConfig() {
-  return vueInstance.$store.state.application.config.consent;
-}
-
 function showConsentWall() {
   // Show consent after 300ms
   setTimeout(() => {

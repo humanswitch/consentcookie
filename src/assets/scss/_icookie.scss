@@ -111,10 +111,9 @@
   height: 100%;
 }
 
-#ConsentCookie .inline-fix .v-centered {
-  display: inline-block;
-  vertical-align: middle;
-}
+  a {
+    color: $ic-link-color;
+  }
 
 // ConsentCookie general styling
 #ConsentCookie a {

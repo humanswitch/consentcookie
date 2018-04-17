@@ -52,7 +52,7 @@
   }, {
     icon: 'help',
     iconSize: '30',
-    path: '/howto',
+    path: '/about',
     info: 'Over ConsentCookie',
   }];
 

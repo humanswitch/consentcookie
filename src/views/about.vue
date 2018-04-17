@@ -18,8 +18,8 @@
 <template>
   <div class="howto">
     <ic-content-box>
-      <div class="icText" v-show="info" v-html="info"/>
-      <div v-show="!info">
+      <div class="icText" v-show="about" v-html="about"/>
+      <div v-show="!about">
         <div class="icText intro">
           Baas over eigen data, dat vinden wij heel normaal. Niet alleen vanwege de AVG, maar omdat wij geloven in
           transparantie en fatsoen. Daarom gebruiken wij ConsentCookie.
@@ -47,8 +47,8 @@
   const icVideo = require('components/general/icVideo.vue');
 
   // Defaults
-  const DEFAULT_CONFIG_KEY_RESOURCES_NL_INFO_TITLE = 'resources.nl.info.title';
-  const DEFAULT_CONFIG_KEY_RESOURCES_NL_INFO_TEXT = 'resources.nl.info.text';
+  const DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TITLE = 'resources.nl.about.title';
+  const DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TEXT = 'resources.nl.about.text';
 
   const DEFAULT_VIEW_TITLE = 'Over ConsentCookie';
 
@@ -61,10 +61,10 @@
     },
     computed: {
       title() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_NL_INFO_TITLE, DEFAULT_VIEW_TITLE);
+        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TITLE, DEFAULT_VIEW_TITLE);
       },
-      info() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_NL_INFO_TEXT);
+      about() {
+        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TEXT);
       },
     },
     methods: {},
