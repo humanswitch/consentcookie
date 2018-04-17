@@ -17,7 +17,7 @@
 
 <template>
   <button :disabled="disabled" :type="nativeType" :class="'ic-button' + clazz" @click="handleClick">
-    <label class="ic-button-text">
+    <label class="ic-button-text" v-theme="{color:'secondary'}">
       <slot/>
     </label>
   </button>
@@ -102,19 +102,28 @@
     position: relative;
     text-align: center;
     cursor: pointer;
+
     &:after {
-      background-color: #000000;
-      content: " ";
-      opacity: 0;
+      content: "";
+      display: none;
       position: absolute;
       top: 0;
-      right: 0;
-      bottom: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
     }
-    &:not(.is-disabled):active::after {
-      opacity: .4;
+
+    // States
+    &:not(.is-disabled):active:after,
+    &:not(.is-disabled):hover:active:after {
+      display: block;
+      background: rgba(0, 0, 0, 0.2);
     }
+    &:not(.is-disabled):hover:after {
+      display: block;
+      background: rgba(255, 255, 255, 0.1)
+    }
+
     &.default {
       color: $ic-button-default-font-color;
       background-color: $ic-button-default-background-color;

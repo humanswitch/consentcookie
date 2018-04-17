@@ -16,8 +16,7 @@
   -->
 
 <template>
-  <i :class="['ic-toggle-icon',icon,state,{'disabled':disabled}]" :style="styleObject"
-     @click="toggle"/>
+  <i :class="['ic-toggle-icon',icon,state,{'disabled':disabled}]" :style="styleObject" @click="toggle"/>
 </template>
 
 <script>
@@ -76,10 +75,7 @@
 
     transition: color 0.4s;
     cursor: pointer;
-
-    &.on {
-      color: $icon-color-on
-    }
+    color: $icon-color-on;
 
     &.off {
       color: $icon-color-off

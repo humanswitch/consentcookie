@@ -93,7 +93,7 @@ class VueServices {
 
     const servicesToInit = [];
 
-    _.each(services, function ($service) {
+    _.each(services, ($service) => {
       if (!$service) {
         console.warn('Unable to init the service. No service defined.');
       } else if (typeof $service.name !== 'string' || typeof $service.service !== 'object') {
@@ -101,7 +101,7 @@ class VueServices {
           '. Make sure it is of the proper format {name:\'\',service:{}}.');
       } else if (typeof $service.service.init !== 'function') {
         console.warn('Unable to init the service: ' + $service.name + '. Service is missing init function. ');
-      } else if (this[$service.name]) {
+      } else if (servicesToInit[$service.name]) {
         console.warn('Unable to init the service: ' + ($service.name || 'null') + '.'
           + ' Its already been init. Make sure your not loading twice the same service');
       } else {
