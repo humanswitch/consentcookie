@@ -115,8 +115,8 @@ function configRouter(vue) {
       path: DEFAULT_PATH_CONSENT,
       component: require('views/consent.vue'),
     }, {
-      path: '/howto',
-      component: require('views/howto.vue'),
+      path: '/about',
+      component: require('views/about.vue'),
     }, {
       path: '/connections',
       component: require('views/connections.vue'),
