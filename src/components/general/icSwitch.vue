@@ -76,7 +76,7 @@
     width: $switch-width + px;
     height: $switch-height + px;
     padding: 0px !important;
-    display: table-cell !important;
+    display: table-cell;
     vertical-align: middle;
 
     &.disabled {
@@ -110,7 +110,6 @@
       position: relative;
       cursor: pointer;
       outline: none;
-      -ms-user-select: none;
       user-select: none;
       padding: 2px;
       width: 100%;

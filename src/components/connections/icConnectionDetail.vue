@@ -20,7 +20,7 @@
     <transition>
       <div v-if="showDetails" class="wrapper">
         <div class="divider">
-          <div :class="['pointer',{'center':showProfile},{'left':showInfo}]">
+          <div :class="['pointer',{'right':showProfile},{'left':showInfo}]">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20"
                  height="10">
               <polyline stroke-linejoin="miter" points="0,10 10,0 20,10" stroke-width="1"/>
@@ -127,12 +127,12 @@
 
         .pointer.left {
           display: block;
-          left: 20px;
+          left: 8px;
         }
 
-        .pointer.center {
+        .pointer.right {
           display: block;
-          left: 50%;
+          left:208px;
         }
       }
 
