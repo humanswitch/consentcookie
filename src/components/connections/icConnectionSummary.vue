@@ -17,8 +17,10 @@
 
 <template>
   <div class="ic-connection-summary">
-    <ic-toggle-img :img="connection.icon" :size="40" v-model="showInfo" />
-    <ic-toggle-icon :icon="'cc-user'" v-model="showProfile" :disabled="noProfile" :size="20" v-theme="{color:'primary'}"/>
+    <ic-toggle v-model="showInfo" class="ic-toggle-text">
+      <ic-img :img="connection.icon" :size="15" :unit="'px'"/><span>{{ connection.name }}</span>
+    </ic-toggle>
+    <ic-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showProfile" :disabled="noProfile" :size="20"/>
     <ic-switch v-model="accepted" :disabled="disabled"/>
   </div>
 </template>
@@ -26,11 +28,15 @@
 <script>
 
   const icToggleImg = require('components/general/icToggleImg.vue');
+  const icImg = require('components/general/icImg.vue');
+  const icToggle = require('components/general/icToggle.vue');
 
   module.exports = {
     name: 'ic-connection-summary',
     components: {
       icToggleImg,
+      icImg,
+      icToggle,
     },
     props: {
       connection: {
@@ -99,21 +105,28 @@
 
   .ic-connection-summary {
 
+    display: flex;
+    align-items: center;
     position: relative;
-    text-align: center;
+    text-align: left;
     height: 60px;
 
-    .ic-toggle-img {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      margin: 10px;
-      cursor: pointer;
+    @include default-clearfix();
+
+    .ic-toggle-text {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      font-size: 13px;
+      font-weight: 600;
+      margin-left: 10px;
+
+      span {
+        margin-left: 5px;
+      }
     }
 
     .ic-toggle-icon {
-      height: 60px;
-      line-height: 60px;
       cursor: pointer;
 
       &.off {
@@ -126,11 +139,9 @@
     }
 
     .ic-switch {
-      position: absolute;
-      top: 0px;
-      bottom: 0px;
-      right: 0px;
       margin: 15px 10px;
+      display: inline-block;
+      float: right;
     }
   }
 </style>
