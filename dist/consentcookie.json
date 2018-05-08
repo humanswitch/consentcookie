@@ -61,7 +61,8 @@
     "infolink": {
       "connection": "https://support.google.com/accounts/answer/6227261",
       "profile": "https://support.google.com/accounts/answer/6227261"
-    }
+    },
+    "plugin":"https://www.consentcookie.nl/consentcookie/plugins/google-analytics/plugin.js"
   },
   {
     "id": "gtm",
