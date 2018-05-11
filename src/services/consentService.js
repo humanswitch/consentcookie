@@ -163,7 +163,7 @@ function update($id, $flag) {
   }
   save();
 
-  vue.$events.$emit('connection', {
+  vue.$events.$emit('consent', {
     id: $id,
     state: getState($flag),
   });

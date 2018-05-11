@@ -90,7 +90,7 @@ function initVue($config) {
 }
 
 function onReady($fn) {
-  if (document.readyState === 'interactive') {
+  if (document.readyState === 'interactive' || document.readyState === 'complete') {
     $fn();
   } else {
     document.addEventListener('DOMContentLoaded', $fn);

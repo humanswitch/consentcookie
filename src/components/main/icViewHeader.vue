@@ -17,8 +17,8 @@
 
 <template>
   <div :style="componentCss" class="ic-view-header" v-theme="{background:'primary'}">
-    <div class="wrapper">
-      <div class="title" v-theme="{color:'secondary'}">{{ title }}</div>
+    <div>
+      <div class="cc-title" v-theme="{color:'secondary'}">{{ title }}</div>
     </div>
   </div>
 </template>
@@ -72,7 +72,7 @@
       height: auto !important;
     }
 
-    .title {
+    .cc-title {
       float: left;
       font-size: 16px;
       letter-spacing: 1px;
