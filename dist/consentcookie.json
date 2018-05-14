@@ -40,7 +40,7 @@
       "connection": "https://www.humanswitch.io",
       "profile": "https://www.humanswitch.io"
     },
-    "plugin":"https://www.consentcookie.nl/consentcookie/plugins/iqnomy/plugin.js"
+    "plugin": "https://cdn.humanswitch.services/cc/consentcookie/plugins/iqnomy/plugin.js"
   },
   {
     "id": "ga",
@@ -62,7 +62,7 @@
       "connection": "https://support.google.com/accounts/answer/6227261",
       "profile": "https://support.google.com/accounts/answer/6227261"
     },
-    "plugin":"https://www.consentcookie.nl/consentcookie/plugins/google-analytics/plugin.js"
+    "plugin": "https://cdn.humanswitch.services/cc/consentcookie/plugins/google-analytics/plugin.js"
   },
   {
     "id": "gtm",

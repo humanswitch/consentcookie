@@ -18,7 +18,7 @@
 // Dependencies
 const _ = require('underscore');
 
-const DEFAULT_APPS_ENDPOINT = 'https://www.consentcookie.nl/consentcookie/latest/consentcookie.json';
+const DEFAULT_APPS_ENDPOINT = 'https://cdn.humanswitch.services/cc/consentcookie/consentcookie.json';
 const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
 
 let vue;
