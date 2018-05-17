@@ -4,7 +4,7 @@ Open source AVG solution for websites. More info: [www.consentcookie.nl](https:/
 
 ## ConsentCookie on your website
 
-Download the script [here](https://www.consentcookie.nl/consentcookie/latest/consentcookie.min.js) or [build your own (custom) ConsentCookie](#build-your-own-consentcookie)
+Download the script [here](https://cdn.humanswitch.services/cc/consentcookie/consentcookie.min.js) or [build your own (custom) ConsentCookie](#build-your-own-consentcookie)
 
 Include the script on your website:
 ```html
