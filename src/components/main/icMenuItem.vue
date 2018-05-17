@@ -109,6 +109,10 @@
     i {
       font-size: 24px;
       color: $ic-color-white;
+
+      &:before{
+        line-height: inherit;
+      }
     }
 
     i.active{
