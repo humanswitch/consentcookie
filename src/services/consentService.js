@@ -27,10 +27,11 @@ const DEFAULT_CONSENTCOOKIE_NAME = 'consentcookie';
 const DEFAULT_CONSENTCOOKIE_TTL = (20 * 365); // Default expire time, 20 years from now in days
 const DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED = 1;
 const DEFAULT_CONSENTCOOKIE_VAL_REJECTED = 0;
+const DEFAULT_CONSENTCOOKIE_VAL_ALWAYSON = -1;
 
-const DEFAULT_STATE_CONSENT_OPTIN = 0;
-const DEFAULT_STATE_CONSENT_OPTOUT = 1;
-const DEFAULT_STATE_CONSENT_ALWAYSON = -1;
+const DEFAULT_STATE_CONSENT_OPTIN = DEFAULT_CONSENTCOOKIE_VAL_REJECTED;
+const DEFAULT_STATE_CONSENT_OPTOUT = DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED;
+const DEFAULT_STATE_CONSENT_ALWAYSON = DEFAULT_CONSENTCOOKIE_VAL_ALWAYSON;
 
 const DEFAULT_CONSENT_STATE_LABEL_OPTIN = 'optin';
 const DEFAULT_CONSENT_STATE_LABEL_OPTOUT = 'optout';
@@ -47,11 +48,13 @@ class Consents {
   }
 
   get($id) {
-    return this.consents[$id] ? this.consents[$id] : null;
+    return this.consents[$id] ? this.consents[$id] : new Consent($id, null, false);
   }
 
   add($consent) {
-    this.consents[$consent.id] = $consent;
+    if ($consent instanceof Consent) {
+      this.consents[$consent.id] = $consent;
+    }
   }
 
   serialize() {
@@ -59,29 +62,20 @@ class Consents {
     return serialized.join(DEFAULT_CONSENTS_SEPERATOR);
   }
 
-  static parse($val) {
+  static create($ccApps, $ccCookieMap) {
     const consents = new Consents();
 
-    if (typeof $val !== 'string') {
+    if (!(_.isObject($ccApps))) {
       return consents;
     }
 
-    const $parsed = $val.split(DEFAULT_CONSENTS_SEPERATOR);
-
-    if (_.isEmpty($parsed)) {
-      return consents;
-    }
-
-    _.each($parsed, ($parsedPart) => {
-      const consent = Consent.parse($parsedPart);
-      if (consent) {
-        consents.add(consent);
+    _.each($ccApps, ($ccAppVal, $ccAppId) => {
+      if (_.isString($ccAppId) && _.isObject($ccAppVal)) {
+        consents.add(Consent.create($ccAppId, $ccAppVal, $ccCookieMap));
       }
     });
-
     return consents;
   }
-
 }
 
 class Consent {
@@ -95,17 +89,28 @@ class Consent {
     return this.id + DEFAULT_CONSENT_SEPERATOR + this.flag;
   }
 
-  static parse($val) {
-    if (!(_.isString($val))) {
-      return null;
-    }
-    const parsed = $val.split(DEFAULT_CONSENT_SEPERATOR);
-    if (_.isString(parsed[0]) && !(_.isNaN(Number(parsed[1])))) {
-      return new Consent(parsed[0], Number(parsed[1]));
-    }
-    return null;
+  isAccepted() {
+    return this.flag === DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED;
   }
 
+  isRejected() {
+    return this.flag === DEFAULT_CONSENTCOOKIE_VAL_REJECTED;
+  }
+
+  isAlwaysOn() {
+    return this.flag === DEFAULT_CONSENTCOOKIE_VAL_ALWAYSON;
+  }
+
+  isEnabled() {
+    return this.isAccepted() || this.isAlwaysOn();
+  }
+
+  static create($ccAppId, $ccAppVal, $ccCookieMap) {
+    if (!(_.isString($ccAppId)) && !(_.isObject($ccAppVal))) {
+      return null;
+    }
+    return new Consent($ccAppId, getConsentValue($ccAppId, $ccAppVal, $ccCookieMap));
+  }
 }
 
 let vue;
@@ -115,27 +120,44 @@ function init(vueServices) {
   vue = vueServices.getVueInstance();
 }
 
-function load() {
-  const connectionsConfig = _.clone(vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_CONSENT));
-  const consentCookie = jsCookie.get(DEFAULT_CONSENTCOOKIE_NAME);
-
-  consents = Consents.parse(consentCookie);
-
-  _.each(connectionsConfig, ($connectionConfig, $connectionId) => {
-    const curConsent = consents.get($connectionId);
-    const initState = getInitState($connectionConfig.initstate);
-
-    if (curConsent === null) {
-      update($connectionId, initState);
-    } else if (DEFAULT_STATE_CONSENT_ALWAYSON === initState) {
-      // New settings is, no optin or optout. Override setting
-      update($connectionId, initState);
-    } else if (DEFAULT_STATE_CONSENT_ALWAYSON !== initState
-      && curConsent.flag === DEFAULT_STATE_CONSENT_ALWAYSON) {
-      // New setting is optin or optout and old was mandatory
-      update($connectionId, initState);
+function getCCCookieMap() {
+  const ccCookie = jsCookie.get(DEFAULT_CONSENTCOOKIE_NAME) || '';
+  const map = _.reduce(ccCookie.split(DEFAULT_CONSENTS_SEPERATOR), ($memo, $ccCookieVal) => {
+    if (!(_.isString($ccCookieVal))) {
+      return $memo;
     }
-  });
+
+    const parsed = $ccCookieVal.split(DEFAULT_CONSENT_SEPERATOR);
+    if (_.isString(parsed[0]) && !(_.isNaN(Number(parsed[1])))) {
+      $memo[parsed[0]] = Number(parsed[1]);
+    }
+    return $memo;
+  }, {});
+  return map;
+}
+
+function getConsentValue($ccAppId, $ccAppVal, $ccCookieVal) {
+  const $ccAppInitState = getInitState($ccAppVal.initstate);
+  let $ccCookieConsentVal = $ccCookieVal[$ccAppId];
+
+  if(typeof $ccCookieConsentVal === 'undefined' || $ccCookieConsentVal == null){
+    $ccCookieConsentVal = $ccAppInitState;
+  } else if (DEFAULT_STATE_CONSENT_ALWAYSON === $ccAppInitState) {
+    // New settings is, no optin or optout. Override setting
+    $ccCookieConsentVal = $ccAppInitState;
+  } else if (DEFAULT_STATE_CONSENT_ALWAYSON !== $ccAppInitState
+    && $ccCookieConsentVal === DEFAULT_STATE_CONSENT_ALWAYSON) {
+    // New setting is optin or optout and old was mandatory
+    $ccCookieConsentVal = $ccAppInitState;
+  }
+  return $ccCookieConsentVal;
+}
+
+function load() {
+  const ccCookieMap = getCCCookieMap();
+  const ccApps = _.clone(vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_CONSENT));
+  consents = Consents.create(ccApps, ccCookieMap);
+  save();
 }
 
 function getInitState($stateName) {
