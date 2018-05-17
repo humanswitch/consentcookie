@@ -41,14 +41,17 @@ const DEFAULT_CONSENT_STATE = DEFAULT_STATE_CONSENT_ALWAYSON;
 
 const DEFAULT_CONFIG_KEY_APPS_CONSENT = 'apps.consent';
 
+const DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL = 'ccw';
+
 class Consents {
 
-  constructor($consents) {
-    this.consents = $consents || {};
+  constructor($ccCookies) {
+    this.consents = {};
+    this.cookies = $ccCookies;
   }
 
   get($id) {
-    return this.consents[$id] ? this.consents[$id] : new Consent($id, null, false);
+    return this.consents[$id] ? this.consents[$id] : null;
   }
 
   add($consent) {
@@ -58,12 +61,19 @@ class Consents {
   }
 
   serialize() {
-    const serialized = _.map(_.values(this.consents), $consent => $consent.serialize());
+    const toSerialize = _.clone(this.consents);
+    // Add all `stale` consents so that we aren`t overriding values
+    _.each(this.cookies, ($ccAppValue, $ccAppId) => {
+      if (!toSerialize[$ccAppId]) {
+        toSerialize[$ccAppId] = new Consent($ccAppId, $ccAppValue);
+      }
+    });
+    const serialized = _.map(_.values(toSerialize), $consent => $consent.serialize());
     return serialized.join(DEFAULT_CONSENTS_SEPERATOR);
   }
 
   static create($ccApps, $ccCookieMap) {
-    const consents = new Consents();
+    const consents = new Consents($ccCookieMap);
 
     if (!(_.isObject($ccApps))) {
       return consents;
@@ -120,6 +130,23 @@ function init(vueServices) {
   vue = vueServices.getVueInstance();
 }
 
+function getConsentValue($ccAppId, $ccAppVal, $ccCookieVal) {
+  const $ccAppInitState = getInitState($ccAppVal.initstate);
+  let $ccCookieConsentVal = $ccCookieVal[$ccAppId];
+
+  if (typeof $ccCookieConsentVal === 'undefined' || $ccCookieConsentVal == null) {
+    $ccCookieConsentVal = $ccAppInitState;
+  } else if (DEFAULT_STATE_CONSENT_ALWAYSON === $ccAppInitState) {
+    // New settings is, no optin or optout. Override setting
+    $ccCookieConsentVal = $ccAppInitState;
+  } else if (DEFAULT_STATE_CONSENT_ALWAYSON !== $ccAppInitState
+    && $ccCookieConsentVal === DEFAULT_STATE_CONSENT_ALWAYSON) {
+    // New setting is optin or optout and old was mandatory
+    $ccCookieConsentVal = $ccAppInitState;
+  }
+  return $ccCookieConsentVal;
+}
+
 function getCCCookieMap() {
   const ccCookie = jsCookie.get(DEFAULT_CONSENTCOOKIE_NAME) || '';
   const map = _.reduce(ccCookie.split(DEFAULT_CONSENTS_SEPERATOR), ($memo, $ccCookieVal) => {
@@ -136,26 +163,17 @@ function getCCCookieMap() {
   return map;
 }
 
-function getConsentValue($ccAppId, $ccAppVal, $ccCookieVal) {
-  const $ccAppInitState = getInitState($ccAppVal.initstate);
-  let $ccCookieConsentVal = $ccCookieVal[$ccAppId];
-
-  if(typeof $ccCookieConsentVal === 'undefined' || $ccCookieConsentVal == null){
-    $ccCookieConsentVal = $ccAppInitState;
-  } else if (DEFAULT_STATE_CONSENT_ALWAYSON === $ccAppInitState) {
-    // New settings is, no optin or optout. Override setting
-    $ccCookieConsentVal = $ccAppInitState;
-  } else if (DEFAULT_STATE_CONSENT_ALWAYSON !== $ccAppInitState
-    && $ccCookieConsentVal === DEFAULT_STATE_CONSENT_ALWAYSON) {
-    // New setting is optin or optout and old was mandatory
-    $ccCookieConsentVal = $ccAppInitState;
+function getCCApps() {
+  const configuredApps = _.clone(vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_CONSENT));
+  if (vue.$services.main.isConsentWallEnabled()) {
+    configuredApps[DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL] = { initstate: DEFAULT_CONSENT_STATE_LABEL_OPTIN };
   }
-  return $ccCookieConsentVal;
+  return configuredApps;
 }
 
 function load() {
   const ccCookieMap = getCCCookieMap();
-  const ccApps = _.clone(vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_CONSENT));
+  const ccApps = getCCApps();
   consents = Consents.create(ccApps, ccCookieMap);
   save();
 }
