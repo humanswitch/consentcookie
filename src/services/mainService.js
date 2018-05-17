@@ -58,4 +58,5 @@ module.exports = {
   showConsentWall,
   acceptConsentWall,
   isConsentWallAccepted,
+  isConsentWallEnabled,
 };
