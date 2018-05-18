@@ -101,7 +101,7 @@ function off($event, $callback) {
   if (!mainInstance) {
     return utils.logErrorOrThrowException('Unable to unregister event. ConsentCookie is not yet initialized.');
   }
-  return mainInstance.off($event, $callback);
+  return mainInstance.$events.$off($event, $callback);
 }
 
 function on($event, $callback) {
