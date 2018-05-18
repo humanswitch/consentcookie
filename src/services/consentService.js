@@ -185,7 +185,6 @@ function getCCApps() {
   return configuredApps;
 }
 
-
 function getInitState($stateName) {
   if (DEFAULT_CONSENT_STATE_LABEL_OPTIN === $stateName) {
     return DEFAULT_STATE_CONSENT_OPTIN;

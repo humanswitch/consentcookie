@@ -17,9 +17,11 @@
 
 <template>
   <div class="ic-connection-actions actions">
-    <button v-theme="{color:'primary',borderColor:'primary'}" v-if="connectionPlugin" @click="deleteProfile()"><span v-if="!isDeleting">Verwijder</span><i
+    <button v-theme="{color:'primary',borderColor:'primary'}" v-if="connectionPlugin" @click="deleteProfile()"><span
+      v-if="!isDeleting">Verwijder</span><i
       v-if="isDeleting" class="cc-spinner cc-animate-pulse"/></button>
-    <button v-theme="{color:'primary',borderColor:'primary'}" v-if="connectionPlugin" @click="downloadProfile()"><span v-if="!isDownloading">Download</span><i
+    <button v-theme="{color:'primary',borderColor:'primary'}" v-if="connectionPlugin" @click="downloadProfile()"><span
+      v-if="!isDownloading">Download</span><i
       v-if="isDownloading" class="cc-spinner cc-animate-pulse"/></button>
   </div>
 </template>
@@ -95,13 +97,9 @@
     },
     mounted() {
       const self = this;
-      this.$services.connections.getPlugin(this.connection)
+      this.$services.applications.getPlugin(this.connection)
         .then(($plugin) => {
-          if ($plugin && !($plugin instanceof Error)) {
-            this.connectionPlugin = $plugin;
-          }
-        }, ($error) => {
-          this.connectionPlugin = null;
+          this.connectionPlugin = $plugin;
         });
     },
   };

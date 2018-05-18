@@ -46,7 +46,7 @@
     },
     asyncComputed: {
       connections() {
-        return this.$services.connections.getActive();
+        return this.$services.applications.getActive();
       },
     },
     beforeMount() {

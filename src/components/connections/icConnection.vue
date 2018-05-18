@@ -53,13 +53,9 @@
     created() {
       const self = this;
 
-      this.$services.connections.getPlugin(this.connection)
-        .then(($plugin) => {
-          if ($plugin && !($plugin instanceof Error)) {
-            self.state.hasProfile = true;
-          }
-        }, ($error) => {
-          self.state.hasProfile = false;
+      this.$services.applications.hasPlugin(this.connection)
+        .then(($hasPlugin) => {
+          self.state.hasProfile = $hasPlugin;
         });
     },
   };

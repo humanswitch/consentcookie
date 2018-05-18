@@ -18,9 +18,11 @@
 <template>
   <div class="ic-connection-summary">
     <ic-toggle v-model="showInfo" class="ic-toggle-text">
-      <ic-img :img="connection.icon" :size="15" :unit="'px'"/><span>{{ connection.name }}</span>
+      <ic-img :img="connection.icon" :size="15" :unit="'px'"/>
+      <span>{{ connection.name }}</span>
     </ic-toggle>
-    <ic-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showProfile" :disabled="noProfile" :size="20"/>
+    <ic-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showProfile" :disabled="noProfile"
+                    :size="20"/>
     <ic-switch v-model="accepted" :disabled="disabled"/>
   </div>
 </template>
@@ -78,19 +80,15 @@
       },
       accepted: {
         get() {
-          const state = this.$services.consent.getConsent(this.connection.id);
-          return state.flag === -1 || state.flag === 1;
+          return this.$services.applications.isAccepted(this.connection)
+            || this.$services.applications.isAlwaysOn(this.connection);
         },
         set($newVal) {
-          if ($newVal === true) {
-            this.$services.consent.accept(this.connection.id);
-          } else {
-            this.$services.consent.reject(this.connection.id);
-          }
+          this.$services.applications.setAccepted(this.connection, $newVal === true);
         },
       },
       disabled() {
-        return this.$services.consent.getConsent(this.connection.id).flag === -1;
+        return this.$services.applications.isAlwaysOn(this.connection);
       },
     },
     data() {
