@@ -207,7 +207,9 @@ function load() {
   const ccCookieMap = getCCCookieMap();
   const ccApps = getCCApps();
   consents = Consents.create(ccApps, ccCookieMap);
-  save();
+  if (vue.$services.main.isConsentWallAccepted()) {
+    save();
+  }
 }
 
 function update($id, $flag) {
@@ -267,6 +269,7 @@ function getState($flag) {
 module.exports = {
   init,
   load,
+  save,
   update,
   getConsent,
   getConsents,

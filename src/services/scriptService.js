@@ -119,7 +119,7 @@ function enableAlwaysOnScripts() {
 
 function enableEnabledScripts() {
   enableAlwaysOnScripts();
-  if (vue.$services.main.isConsentWallEnabled() && vue.$services.main.isConsentWallAccepted()) {
+  if (vue.$services.main.isConsentWallAccepted()) {
     enableOptOutScripts();
   }
 }

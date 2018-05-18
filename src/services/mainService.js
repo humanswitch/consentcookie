@@ -39,6 +39,7 @@ function showConsentWall() {
 }
 
 function acceptConsentWall() {
+  vue.$services.consent.save();
   vue.$services.consent.accept(DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL);
   vue.$services.script.enableOptOutScripts();
   vue.$services.view.close();
