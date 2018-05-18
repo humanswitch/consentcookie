@@ -59,10 +59,10 @@
 
     i {
       margin-right: 5px;
-      color: $ic-color-dark-grey;
+      color: $cc-color-dark-grey;
 
       &.enabled {
-        color: $ic-color-done-true;
+        color: $cc-color-done-true;
       }
     }
   }

@@ -71,8 +71,8 @@ function initVue($config) {
 
   vue.directive('theme', require('directives/ccTheme.js'));
 
-  vue.component('ic-switch', require('components/general/icSwitch.vue'));
-  vue.component('ic-toggle-icon', require('components/general/icToggleIcon.vue'));
+  vue.component('cc-switch', require('components/general/ccSwitch.vue'));
+  vue.component('cc-toggle-icon', require('components/general/ccToggleIcon.vue'));
 
   const MainComponent = vue.extend(require('./views/main.vue'));
   mainInstance = new MainComponent({

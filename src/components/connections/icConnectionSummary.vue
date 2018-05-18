@@ -17,28 +17,28 @@
 
 <template>
   <div class="ic-connection-summary">
-    <ic-toggle v-model="showInfo" class="ic-toggle-text">
-      <ic-img :img="connection.icon" :size="15" :unit="'px'"/>
+    <cc-toggle v-model="showInfo" class="ic-toggle-text">
+      <cc-img :img="connection.icon" :size="15" :unit="'px'"/>
       <span>{{ connection.name }}</span>
-    </ic-toggle>
-    <ic-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showProfile" :disabled="noProfile"
+    </cc-toggle>
+    <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showProfile" :disabled="noProfile"
                     :size="20"/>
-    <ic-switch v-model="accepted" :disabled="disabled"/>
+    <cc-switch v-model="accepted" :disabled="disabled"/>
   </div>
 </template>
 
 <script>
 
-  const icToggleImg = require('components/general/icToggleImg.vue');
-  const icImg = require('components/general/icImg.vue');
-  const icToggle = require('components/general/icToggle.vue');
+  const ccToggleImg = require('components/general/ccToggleImg.vue');
+  const ccImg = require('components/general/ccImg.vue');
+  const ccToggle = require('components/general/ccToggle.vue');
 
   module.exports = {
     name: 'ic-connection-summary',
     components: {
-      icToggleImg,
-      icImg,
-      icToggle,
+      ccToggleImg,
+      ccImg,
+      ccToggle,
     },
     props: {
       connection: {
@@ -124,19 +124,19 @@
       }
     }
 
-    .ic-toggle-icon {
+    .cc-toggle-icon {
       cursor: pointer;
 
-      &.off {
-        color: $ic-brand-color;
+      &.cc-off {
+        color: $cc-brand-color;
       }
 
-      &.disabled {
+      &.cc-disabled {
         display: none;
       }
     }
 
-    .ic-switch {
+    .cc-switch {
       margin: 15px 10px;
       display: inline-block;
       float: right;

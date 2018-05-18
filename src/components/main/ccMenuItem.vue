@@ -16,9 +16,9 @@
   -->
 
 <template>
-  <router-link :to="data.path" :title="data.info" class="ic-menu-item" tag="div" v-theme="{borderColor:'secondary'}">
-    <div class="fill" v-theme="{background:'secondary'}"/>
-    <i :class="['cc-' + data.icon,'active']" :style="{styleObj}" aria-hidden="true" v-theme="{color:'primary'}"/>
+  <router-link :to="data.path" :title="data.info" class="cc-menu-item" tag="div" v-theme="{borderColor:'secondary'}">
+    <div class="cc-fill" v-theme="{background:'secondary'}"/>
+    <i :class="['cc-' + data.icon,'cc-active']" :style="{styleObj}" aria-hidden="true" v-theme="{color:'primary'}"/>
     <i :class="['cc-' + data.icon]" :style="{styleObj}" aria-hidden="true" v-theme="{color:'secondary'}"/>
   </router-link>
 </template>
@@ -27,8 +27,7 @@
 
   /* VUE */
   module.exports = {
-    name: 'icMenuItem',
-    components: {},
+    name: 'ccMenuItem',
     props: {
       data: {
         type: Object,
@@ -58,8 +57,8 @@
   $menu-item-height: $menu-item-width;
   $menu-item-radius: $menu-item-width;
 
-  .ic-menu-item,
-  .no-content .ic-menu-item.active {
+  .cc-menu-item,
+  .cc-no-content .cc-menu-item.cc-active {
 
     position: relative;
     cursor: pointer;
@@ -68,7 +67,7 @@
     width: $menu-item-width;
     border-radius: $menu-item-radius;
     margin: 0px 20px 0px 0px;
-    border: 2px solid $ic-color-white;
+    border: 2px solid $cc-color-white;
     text-align: center;
     box-sizing: border-box;
 
@@ -85,7 +84,7 @@
     }
 
     &:hover {
-      background: $ic-overlay-white-transparant
+      background: $cc-overlay-white-transparant
     }
 
     > * {
@@ -99,7 +98,7 @@
       border-radius: $menu-item-radius;
     }
 
-    .fill {
+    .cc-fill {
       opacity: 0;
       transition: all 0.2s ease;
       transform: scale(0);
@@ -108,33 +107,33 @@
 
     i {
       font-size: 24px;
-      color: $ic-color-white;
+      color: $cc-color-white;
 
       &:before{
         line-height: inherit;
       }
     }
 
-    i.active{
+    i.cc-active {
       display: none;
     }
   }
 
-  .ic-menu-item {
-    &.active {
+  .cc-menu-item {
+    &.cc-active {
 
-      .fill {
+      .cc-fill {
         transform: scale(1);
         opacity: 1;
-        background: $ic-color-white;
+        background: $cc-color-white;
       }
 
       i {
-        color: $ic-brand-color;
-        display:none;
+        color: $cc-brand-color;
+        display: none;
       }
 
-      i.active{
+      i.cc-active {
         display: inline;
       }
     }

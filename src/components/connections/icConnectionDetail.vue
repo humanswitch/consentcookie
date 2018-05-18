@@ -48,8 +48,6 @@
 
 <script>
 
-  const icToggleBox = require('components/general/icToggleBox.vue');
-
   const icConnectionProperty = require('./icConnectionProperty.vue');
   const icConnectionProfile = require('components/connections/icConnectionProfile.vue');
   const icConnectionActions = require('components/connections/icConnectionActions.vue');
@@ -58,7 +56,6 @@
   module.exports = {
     name: 'ic-connection-summary',
     components: {
-      icToggleBox,
       icConnectionProperty,
       icConnectionProfile,
       icConnectionActions,
@@ -107,7 +104,7 @@
         width: 100%;
         padding: 0px 10px;
         height: 1px;
-        background: $hs-color-border-grey;
+        background: $cc-color-grey;
         margin-bottom: 10px;
 
         .pointer {
@@ -120,8 +117,8 @@
             position: absolute;
             margin-top: -9px;
             margin-left: -10px;
-            stroke: $hs-color-border-grey;
-            fill: $hs-color-white;
+            stroke: $cc-color-grey;
+            fill: $cc-color-white;
           }
         }
 

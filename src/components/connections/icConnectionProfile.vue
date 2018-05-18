@@ -21,12 +21,12 @@
       <div v-if="isLoading" class="loading">Profiel wordt opgehaald <i
         class="cc-spinner animate-spin cc-animate-pulse"/>
       </div>
-      <ic-toggle-box v-if="hasProfile && !isLoading">
+      <cc-toggle-box v-if="hasProfile && !isLoading">
         <div slot="header" class="cc-box-header" v-html="profileInfo.header"/>
         <div slot="content" class="cc-box-content">
           <div v-html="profileInfo.content"/>
         </div>
-      </ic-toggle-box>
+      </cc-toggle-box>
       <div v-if="!hasProfile && !isLoading" class="no-profile">Geen profiel beschikbaar</div>
     </div>
     <ic-connection-actions v-if="hasProfile && !isLoading" :connection="connection" :state="state"/>
@@ -36,8 +36,7 @@
 <script>
 
   // Libraries
-  const underscore = require('underscore');
-  const icToggleBox = require('components/general/icToggleBox.vue');
+  const ccToggleBox = require('components/general/ccToggleBox.vue');
   const icConnectionActions = require('components/connections/icConnectionActions.vue');
 
   function loadProfile() {
@@ -62,7 +61,7 @@
   module.exports = {
     name: 'ic-connection-profile',
     components: {
-      icToggleBox,
+      ccToggleBox,
       icConnectionActions,
     },
     props: {
@@ -116,7 +115,7 @@
   .ic-connection-profile {
 
     margin: 15px 0px;
-    border: $ic-box-border;
+    border: $cc-box-border;
 
     .loading,
     .no-profile {

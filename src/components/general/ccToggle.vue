@@ -14,36 +14,49 @@
   - limitations under the License.
   -
   -->
-
 <template>
-  <div id="icContent">
-    <consent-view/>
-    <ic-view/>
-  </div>
+  <span :class="['cc-toggle',{'cc-toggle-enabled':toggleValue,'cc-toggle-disabled':!toggleValue}]" @click="toggle()"><slot/></span>
 </template>
 
 <script>
-
-  const icView = require('components/main/icView.vue');
-  const consentView = require('views/consent.vue');
-
   module.exports = {
-    name: 'icContent',
-    components: {
-      icView,
-      consentView,
+    name: 'cc-toggle',
+    props: {
+      value: {
+        type: Boolean,
+        default: null,
+      },
+      default: Boolean,
+      disabled: Boolean,
     },
     data() {
       return {};
+    },
+    computed: {
+      toggleValue: {
+        set($newVal) {
+          this.$emit('input', $newVal);
+        },
+        get() {
+          return this.value !== null ? (this.value === true) : (this.default === true);
+        },
+      },
+    },
+    methods: {
+      toggle() {
+        if (this.disabled === true) {
+          return;
+        }
+        this.toggleValue = !this.toggleValue;
+      },
     },
   };
 </script>
 
 <style lang="scss" scoped>
 
-  @import '../../assets/scss/general-variables';
-
-  #icContent {
-    position: relative;
+  .cc-toggle {
+    cursor: pointer;
   }
+
 </style>

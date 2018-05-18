@@ -14,49 +14,44 @@
   - limitations under the License.
   -
   -->
+
 <template>
-  <span :class="['ic-toggle',{'toggle-enabled':toggleValue,'toggle-disabled':!toggleValue}]" @click="toggle()"><slot/></span>
+  <img :style="{width:imgWidth,height:imgHeight}" :src="img" class="cc-img">
 </template>
 
 <script>
   module.exports = {
-    name: 'ic-toggle',
+    name: 'cc-img',
     props: {
-      value: {
-        type: Boolean,
+      size: {
+        type: Number,
+        require: false,
         default: null,
       },
-      default: Boolean,
-      disabled: Boolean,
-    },
-    data() {
-      return {};
-    },
-    computed: {
-      toggleValue: {
-        set($newVal) {
-          this.$emit('input', $newVal);
-        },
-        get() {
-          return this.value !== null ? (this.value === true) : (this.default === true);
-        },
+      width: {
+        type: Number,
+        require: false,
+      },
+      height: {
+        type: Number,
+        require: false,
+      },
+      unit: {
+        type: String,
+        default: 'px',
+      },
+      img: {
+        type: String,
+        require: true,
       },
     },
-    methods: {
-      toggle() {
-        if (this.disabled === true) {
-          return;
-        }
-        this.toggleValue = !this.toggleValue;
+    computed: {
+      imgWidth() {
+        return (this.size != null ? this.size : this.width) + this.unit;
+      },
+      imgHeight() {
+        return (this.size != null ? this.size : this.height) + this.unit;
       },
     },
   };
 </script>
-
-<style lang="scss" scoped>
-
-  .ic-toggle {
-    cursor: pointer;
-  }
-
-</style>

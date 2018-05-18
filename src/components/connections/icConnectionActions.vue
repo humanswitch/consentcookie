@@ -31,15 +31,9 @@
   // Libraries
   const utils = require('base/utils.js');
 
-  // Components
-  const icToggleBox = require('components/general/icToggleBox.vue');
-
   // Vue module
   module.exports = {
     name: 'ic-connection-profile-actions',
-    components: {
-      icToggleBox,
-    },
     props: {
       connection: {
         type: Object,
@@ -120,9 +114,9 @@
       box-sizing: border-box;
       padding: 5px 10px;
       background: none;
-      border: 1px solid $ic-brand-color;
+      border: 1px solid $cc-brand-color;
       border-radius: 3px;
-      color: $ic-brand-color;
+      color: $cc-brand-color;
     }
     button:last-child {
       float: right;
