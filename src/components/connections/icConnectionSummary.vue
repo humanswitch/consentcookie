@@ -78,7 +78,7 @@
       },
       accepted: {
         get() {
-          const state = this.$services.consent.get(this.connection.id);
+          const state = this.$services.consent.getConsent(this.connection.id);
           return state.flag === -1 || state.flag === 1;
         },
         set($newVal) {
@@ -90,7 +90,7 @@
         },
       },
       disabled() {
-        return this.$services.consent.get(this.connection.id).flag === -1;
+        return this.$services.consent.getConsent(this.connection.id).flag === -1;
       },
     },
     data() {

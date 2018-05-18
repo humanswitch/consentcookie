@@ -46,24 +46,38 @@ const DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL = 'ccw';
 class Consents {
 
   constructor($ccCookies) {
-    this.consents = {};
-    this.cookies = $ccCookies;
+
+    const consents = {};
+
+    this.getCookieValues = function () {
+      return _.clone($ccCookies);
+    };
+    this.get = function ($id) {
+      return _.isString($id) ? consents[$id] : _.values(consents);
+    };
+    this.getConsentMap = function () {
+      return consents;
+    };
   }
 
-  get($id) {
-    return this.consents[$id] ? this.consents[$id] : null;
+  getAccepted() {
+    return _.filter(this.get(), ($consent => $consent.isAccepted()));
+  }
+
+  getAlwaysOn() {
+    return _.filter(this.get(), ($consent => $consent.isAlwaysOn()));
   }
 
   add($consent) {
     if ($consent instanceof Consent) {
-      this.consents[$consent.id] = $consent;
+      this.getConsentMap()[$consent.id] = $consent;
     }
   }
 
   serialize() {
-    const toSerialize = _.clone(this.consents);
+    const toSerialize = _.clone(this.getConsentMap());
     // Add all `stale` consents so that we aren`t overriding values
-    _.each(this.cookies, ($ccAppValue, $ccAppId) => {
+    _.each(this.getCookieValues(), ($ccAppValue, $ccAppId) => {
       if (!toSerialize[$ccAppId]) {
         toSerialize[$ccAppId] = new Consent($ccAppId, $ccAppValue);
       }
@@ -171,12 +185,6 @@ function getCCApps() {
   return configuredApps;
 }
 
-function load() {
-  const ccCookieMap = getCCCookieMap();
-  const ccApps = getCCApps();
-  consents = Consents.create(ccApps, ccCookieMap);
-  save();
-}
 
 function getInitState($stateName) {
   if (DEFAULT_CONSENT_STATE_LABEL_OPTIN === $stateName) {
@@ -195,6 +203,13 @@ function save() {
   jsCookie.set(DEFAULT_CONSENTCOOKIE_NAME, consents.serialize(), { expires: DEFAULT_CONSENTCOOKIE_TTL });
 }
 
+function load() {
+  const ccCookieMap = getCCCookieMap();
+  const ccApps = getCCApps();
+  consents = Consents.create(ccApps, ccCookieMap);
+  save();
+}
+
 function update($id, $flag) {
   if (consents.get($id)) {
     consents.get($id).flag = $flag;
@@ -209,15 +224,16 @@ function update($id, $flag) {
   });
 }
 
-function get($id) {
-  if (!$id) {
-    return consents;
-  }
-  return consents.get($id);
+function getConsent($id) {
+  return consents.get($id) || new Consent($id, null);
+}
+
+function getConsents() {
+  return consents;
 }
 
 function getFlag($id) {
-  return consents.get($id) ? consents.get($id).flag : null;
+  return consents.get($id).flag;
 }
 
 function isAccepted($id) {
@@ -230,6 +246,7 @@ function isRejected($id) {
 
 function accept($id) {
   update($id, DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED);
+  vue.$services.script.enableScripts($id);
 }
 
 function reject($id) {
@@ -251,7 +268,8 @@ module.exports = {
   init,
   load,
   update,
-  get,
+  getConsent,
+  getConsents,
   getFlag,
   isAccepted,
   isRejected,

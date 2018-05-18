@@ -64,8 +64,46 @@ function logErrorOrThrowException($message) {
   }
 }
 
+function getElementsByTagName($tagname, $filter, $global) {
+  const found = [];
+  const global = $global || window;
+
+  if (!global || !global.document || !global.document.getElementsByTagName || typeof $tagname !== 'string') {
+    return found;
+  }
+  const elements = global.document.getElementsByTagName($tagname);
+
+  if (!elements || elements.length === 0) {
+    return found;
+  }
+  if (typeof $filter !== 'function') {
+    return Array.prototype.slice.call(elements);
+  }
+
+  for (let n = 0; n < elements.length; n++) {
+    if ($filter(elements[n])) {
+      found.push(elements[n]);
+    }
+  }
+  return found;
+}
+
+/**
+ *
+ * @return {string}
+ */
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 module.exports = {
   download,
   getObjectValue,
   logErrorOrThrowException,
+  getElementsByTagName,
+  uuidv4,
 };
