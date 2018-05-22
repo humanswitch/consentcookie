@@ -48,8 +48,8 @@
 
   const menuItems = [{
     icon: 'toggle-on',
-    path: '/connections',
-    info: 'Connecties',
+    path: '/applications',
+    info: 'Jouw instellingen',
   }, {
     icon: 'help',
     iconSize: '30',

@@ -111,21 +111,21 @@ function loadPlugin($id, $path) {
   });
 }
 
-function getPlugin($connection) {
+function getPlugin($application) {
   return new Promise(($resolve, $reject) => {
-    if (!(_.isObject($connection))) {
-      return $reject(new Error('No plugin available. Invalid connection'));
+    if (!(_.isObject($application))) {
+      return $reject(new Error('No plugin available. Invalid application'));
     }
-    if (!(_.isString($connection.id))) {
+    if (!(_.isString($application.id))) {
       return $reject(new Error('No plugin available. Missing id.'));
     }
-    if (!(_.isString($connection.plugin))) {
+    if (!(_.isString($application.plugin))) {
       return $reject(new Error('No plugin available. Missing path.'));
     }
-    if (pluginCache[$connection.id]) {
-      return $resolve(pluginCache[$connection.id]);
+    if (pluginCache[$application.id]) {
+      return $resolve(pluginCache[$application.id]);
     }
-    return loadPlugin($connection.id, $connection.plugin)
+    return loadPlugin($application.id, $application.plugin)
       .then($plugin => $resolve($plugin), $error => $reject($error));
   });
 }

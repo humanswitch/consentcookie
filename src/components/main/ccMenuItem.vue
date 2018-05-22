@@ -120,7 +120,7 @@
   }
 
   .cc-menu-item {
-    &.cc-active {
+    &.active {
 
       .cc-fill {
         transform: scale(1);

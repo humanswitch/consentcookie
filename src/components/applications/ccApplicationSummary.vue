@@ -16,32 +16,33 @@
   -->
 
 <template>
-  <div class="ic-connection-summary">
-    <cc-toggle v-model="showInfo" class="ic-toggle-text">
-      <cc-img :img="connection.icon" :size="15" :unit="'px'"/>
-      <span>{{ connection.name }}</span>
+  <div class="cc-application-summary">
+    <cc-toggle v-model="showInfo" class="cc-toggle-text">
+      <cc-img :img="application.icon" :size="15" :unit="'px'"/>
+      <span>{{ application.name }}</span>
     </cc-toggle>
-    <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showProfile" :disabled="noProfile"
-                    :size="20"/>
+    <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
     <cc-switch v-model="accepted" :disabled="disabled"/>
   </div>
 </template>
 
 <script>
 
-  const ccToggleImg = require('components/general/ccToggleImg.vue');
   const ccImg = require('components/general/ccImg.vue');
   const ccToggle = require('components/general/ccToggle.vue');
+  const ccToggleIcon = require('components/general/ccToggleIcon.vue');
+  const ccSwitch = require('components/general/ccSwitch.vue');
 
   module.exports = {
-    name: 'ic-connection-summary',
+    name: 'cc-application-summary',
     components: {
-      ccToggleImg,
       ccImg,
       ccToggle,
+      ccToggleIcon,
+      ccSwitch,
     },
     props: {
-      connection: {
+      application: {
         type: Object,
         required: true,
       },
@@ -50,49 +51,37 @@
         required: true,
       },
     },
+    data() {
+      return {};
+    },
     computed: {
-      noProfile() {
-        return !(this.state.hasProfile === true);
-      },
       showInfo: {
         get() {
           return this.state.showInfo;
         },
         set($newVal) {
           this.state.showInfo = $newVal;
-
-          if ($newVal === true) {
-            this.state.showProfile = false;
-          }
-        },
-      },
-      showProfile: {
-        get() {
-          return this.state.showProfile;
-        },
-        set($newVal) {
-          this.state.showProfile = $newVal;
-
-          if ($newVal === true) {
-            this.state.showInfo = false;
-          }
-        },
+        }
       },
       accepted: {
         get() {
-          return this.$services.applications.isAccepted(this.connection)
-            || this.$services.applications.isAlwaysOn(this.connection);
+          return this.$services.applications.isAccepted(this.application);
         },
         set($newVal) {
-          this.$services.applications.setAccepted(this.connection, $newVal === true);
+          this.$services.applications.setAccepted(this.application, $newVal);
         },
       },
       disabled() {
-        return this.$services.applications.isAlwaysOn(this.connection);
+        return this.$services.applications.isAlwaysOn(this.application);
       },
     },
-    data() {
-      return {};
+    asyncComputed: {
+      hasPlugin: {
+        get() {
+          return this.$services.applications.hasPlugin(this.application);
+        },
+        default: false,
+      },
     },
   };
 </script>
@@ -101,7 +90,7 @@
 
   @import '../../assets/scss/general-variables';
 
-  .ic-connection-summary {
+  .cc-application-summary {
 
     display: flex;
     align-items: center;
@@ -111,7 +100,7 @@
 
     @include default-clearfix();
 
-    .ic-toggle-text {
+    .cc-toggle-text {
       display: flex;
       align-items: center;
       flex: 1;

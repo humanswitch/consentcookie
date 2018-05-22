@@ -16,36 +16,36 @@
   -->
 
 <template>
-  <li class="ic-connection-property">
-    <i :class="['cc-ok',{'enabled':isChecked}]"/><span>{{ info }}</span>
-  </li>
+  <div class="cc-application">
+    <cc-application-summary :application="application" :state="state" @update="state"/>
+    <cc-application-detail :application="application" :state="state"/>
+  </div>
 </template>
 
 <script>
+  // Components
+  const ccApplicationSummary = require('components/applications/ccApplicationSummary.vue');
+  const ccApplicationDetail = require('components/applications/ccApplicationDetail.vue');
+
+  // Public functions
   module.exports = {
-    name: 'ic-connection-property',
-    components: {},
+    name: 'cc-application',
+    components: {
+      ccApplicationSummary,
+      ccApplicationDetail,
+    },
     props: {
-      property: {
+      application: {
         type: Object,
         required: true,
       },
     },
-    computed: {
-      info() {
-        return this.property.id + ' - ' + this.property.type;
-      },
-      isChecked() {
-        return this.property.enabled;
-      },
-    },
     data() {
       return {
-
+        state: {
+          showInfo: false,
+        },
       };
-    },
-    methods: {
-
     },
   };
 </script>
@@ -54,16 +54,10 @@
 
   @import '../../assets/scss/general-variables';
 
-  .ic-connection-property {
-    list-style: none;
+  .cc-application {
 
-    i {
-      margin-right: 5px;
-      color: $cc-color-dark-grey;
-
-      &.enabled {
-        color: $cc-color-done-true;
-      }
-    }
+    @include default-content-border();
+    margin: 10px;
   }
+
 </style>

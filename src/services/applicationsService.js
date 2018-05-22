@@ -24,6 +24,7 @@ const utils = require('base/utils');
 
 const DEFAULT_APPS_ENDPOINT = 'https://cdn.humanswitch.services/cc/consentcookie/consentcookie.json';
 const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
+const DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK = 'general.gdpr.contact';
 
 let vue;
 let applications;
@@ -134,7 +135,6 @@ function getPlugin($application) {
         }
         return $reject($reject);
       }, ($error) => {
-        utils.logErrorOrThrowException($error);
         return $reject($error);
       });
   });
@@ -179,6 +179,14 @@ function downloadApplicationProfile($application) {
   });
 }
 
+function getGDPRLink($application) {
+  const gdprContactLink = vue.$services.config.get(DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK);
+  if (!gdprContactLink) {
+    return null;
+  }
+  return gdprContactLink + '?ccId=' + $application.id;
+}
+
 module.exports = {
   init,
   hasPlugin,
@@ -195,4 +203,5 @@ module.exports = {
   enabledApplication,
   disableApplication,
   downloadApplicationProfile,
+  getGDPRLink,
 };
