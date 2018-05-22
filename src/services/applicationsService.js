@@ -23,6 +23,8 @@ const jsCookie = require('js-cookie');
 const utils = require('base/utils');
 
 const DEFAULT_APPS_ENDPOINT = 'https://cdn.humanswitch.services/cc/consentcookie/consentcookie.json';
+const DEFAULT_URL_PARAM_APPLICATION_ID = "ccid";
+
 const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
 const DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK = 'general.gdpr.contact';
 
@@ -184,7 +186,7 @@ function getGDPRLink($application) {
   if (!gdprContactLink) {
     return null;
   }
-  return gdprContactLink + '?ccId=' + $application.id;
+  return gdprContactLink + '?' + DEFAULT_URL_PARAM_APPLICATION_ID +'=' + $application.id;
 }
 
 module.exports = {
