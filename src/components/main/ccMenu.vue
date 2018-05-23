@@ -16,19 +16,19 @@
   -->
 
 <template>
-  <div id="icMenu">
-    <div class="ic-menu-bar">
-      <transition enter-active-class="icAnimated icSlideIn" leave-active-class="icAnimated icSlideOut">
-        <div v-show="isOpen" class="ic-menu-items" v-theme="{background:'primary'}">
-          <ic-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem"
+  <div class="cc-menu">
+    <div class="cc-menu-bar">
+      <transition enter-active-class="ccAnimated ccSlideIn" leave-active-class="ccAnimated ccSlideOut">
+        <div v-show="isOpen" class="cc-menu-items" v-theme="{background:'primary'}">
+          <cc-menu-item v-for="menuItem in menuItems" :key="menuItem.path" :data="menuItem"
                         v-theme="{background:'primary'}"/>
         </div>
       </transition>
     </div>
-    <div :class="['ic-menu-button',{disabled:isDisabled,open:isOpen,closed:!isOpen}]" :title="menuTooltip"
+    <div :class="['cc-menu-button',{'cc-disabled':isDisabled,'cc-open':isOpen,'cc-closed':!isOpen}]" :title="menuTooltip"
          @click="toggleOpen" v-theme="{background:'secondary'}">
-      <icSvgLogo class="closed" v-theme="{stroke:'primary',fill:'primary'}"/>
-      <icSvgClose class="open" v-theme="{stroke:'primary',fill:'primary'}"/>
+      <ccSvgLogo class="cc-closed" v-theme="{stroke:'primary',fill:'primary'}"/>
+      <ccSvgClose class="cc-open" v-theme="{stroke:'primary',fill:'primary'}"/>
     </div>
   </div>
 </template>
@@ -41,15 +41,15 @@
   const DEFAULT_TOOLTIP_CLOSE = 'ConsentCookie sluiten';
 
   // Components
-  const icMenuItem = require('components/main/icMenuItem.vue');
+  const ccMenuItem = require('components/main/ccMenuItem.vue');
 
-  const icSvgLogo = require('../../assets/img/logo.svg');
-  const icSvgClose = require('../../assets/img/close.svg');
+  const ccSvgLogo = require('../../assets/img/logo.svg');
+  const ccSvgClose = require('../../assets/img/close.svg');
 
   const menuItems = [{
     icon: 'toggle-on',
-    path: '/connections',
-    info: 'Connecties',
+    path: '/applications',
+    info: 'Jouw instellingen',
   }, {
     icon: 'help',
     iconSize: '30',
@@ -59,11 +59,11 @@
 
   /* VUE */
   module.exports = {
-    name: 'icMenu',
+    name: 'ccMenu',
     components: {
-      icMenuItem,
-      icSvgLogo,
-      icSvgClose,
+      ccMenuItem,
+      ccSvgLogo,
+      ccSvgClose,
     },
     data() {
       return {
@@ -117,7 +117,7 @@
   $menu-logo-height: $menu-logo-size + px;
   $menu-logo-width: $menu-logo-size + px;
 
-  #icMenu {
+  .cc-menu {
 
     display: block;
     position: relative;
@@ -129,16 +129,16 @@
       margin: 5px;
     }
 
-    .ic-menu-button {
+    .cc-menu-button {
       position: absolute;
       right: 0px;
       bottom: 0px;
       line-height: $menu-button-height;
       height: $menu-button-height;
       width: $menu-button-width;
-      background: $ic-color-white;
+      background: $cc-color-white;
       cursor: pointer;
-      border: $ic-box-border;
+      border: $cc-box-border;
       border-radius: $menu-button-radius;
       box-shadow: $menu-button-shadow;
       transition: transform 0.8s ease-in-out;
@@ -152,9 +152,9 @@
         position: absolute;
         text-align: center;
         transition: opacity 0.8s ease-in-out;
-        fill: $ic-brand-color;
+        fill: $cc-brand-color;
 
-        &.open {
+        &.cc-open {
           /* offset due to border and spacing logo height vs button height*/
           top: 2px;
           left: 2px;
@@ -162,7 +162,7 @@
           width: $menu-logo-width;
         }
 
-        &.closed {
+        &.cc-closed {
           /* offset due to border and spacing logo height vs button height*/
           top: -1px;
           left: -1px;
@@ -176,41 +176,40 @@
         margin: 0px;
       }
 
-      &.disabled {
+      &.cc-disabled {
         @include default-state-disabled;
       }
 
-      &.open {
+      &.cc-open {
         transform: rotateZ(0deg);
 
-        .closed {
+        .cc-closed {
           opacity: 0;
         }
 
-        .open {
+        .cc-open {
           opacity: 1;
         }
-
       }
 
-      &.closed {
+      &.cc-closed {
         transform: rotateZ(-360deg);
 
         #ConsentCookie.cc-left & {
           transform: rotateZ(360deg);
         }
 
-        .closed {
+        .cc-closed {
           opacity: 1;
         }
 
-        .open {
+        .cc-open {
           opacity: 0;
         }
       }
     }
 
-    .ic-menu-bar {
+    .cc-menu-bar {
       margin-right: ($menu-button-size / 2) + px;
       overflow: hidden;
 
@@ -219,11 +218,11 @@
         margin-left: ($menu-button-size / 2) + px;
       }
 
-      .ic-menu-items {
+      .cc-menu-items {
         height: $menu-button-size + px;
         padding: 5px ($menu-button-size / 2) + px 5px 5px;
         border-radius: $menu-button-size + px 0px 0px $menu-button-size + px;
-        background: $ic-brand-color;
+        background: $cc-brand-color;
 
         @include default-clearfix();
 

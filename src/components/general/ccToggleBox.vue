@@ -16,12 +16,12 @@
   -->
 
 <template>
-  <div :class="['ic-toggle-box',{'box-border':border}]">
-    <div class="box-header">
-      <slot class="content" name="header"/>
+  <div :class="['cc-toggle-box',{'cc-box-border':border}]">
+    <div class="cc-box-header">
+      <slot class="cc-content" name="header"/>
       <i :class="[{'cc-angle-down':!isOpen},{'cc-angle-up':isOpen}]" @click="toggle()"/>
     </div>
-    <div v-show="isOpen" class="box-content">
+    <div v-show="isOpen" class="cc-box-content">
       <slot name="content"/>
     </div>
   </div>
@@ -29,7 +29,7 @@
 
 <script>
   module.exports = {
-    name: 'ic-toggle-box',
+    name: 'cc-toggle-box',
     props: {
       border: Boolean,
     },
@@ -51,13 +51,13 @@
 
   @import '../../assets/scss/general-variables';
 
-  .ic-toggle-box {
+  .cc-toggle-box {
 
-    &.box-border {
+    &.cc-box-border {
       @include default-content-border();
     }
 
-    .box-header {
+    .cc-box-header {
 
       @include default-clearfix();
 

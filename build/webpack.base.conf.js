@@ -55,6 +55,7 @@ module.exports = {
       'services': path.resolve(__dirname, '../src/services'),
       'plugins': path.resolve(__dirname, '../src/plugins'),
       'directives': path.resolve(__dirname, '../src/directives'),
+      'mixins': path.resolve(__dirname, '../src/mixins'),
     }
   },
   resolveLoader: {

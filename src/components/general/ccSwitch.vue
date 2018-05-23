@@ -15,12 +15,12 @@
   -
   -->
 <template>
-  <label :class="['ic-switch',{'disabled':disabled}]">
+  <label :class="['cc-switch',{'cc-disabled':disabled}]">
     <input v-model="currentValue" :disabled="disabled" type="checkbox" @change="$emit('change', currentValue)">
     <span v-theme="{background:'primary'}">
-      <div class="state on">Aan</div>
-      <div class="state off" v-theme="{color:'primary'}">Uit</div>
-      <div class="switch" v-theme="{borderColor:'primary'}"/>
+      <div class="cc-state cc-on">Aan</div>
+      <div class="cc-state cc-off" v-theme="{color:'primary'}">Uit</div>
+      <div class="cc-switch-toggle" v-theme="{borderColor:'primary'}"/>
     </span>
   </label>
 </template>
@@ -29,17 +29,17 @@
   /**
    *  Based on: https://github.com/ElemeFE/mint-ui/tree/master/packages/switch
    *
-   *  ic-switch
+   *  cc-switch
    *
    * @param {boolean} [value] -
    * @param {slot} -
    *
    * @example
-   * <ic-switch v-model="value"></ic-switch>
+   * <cc-switch v-model="value"></cc-switch>
    */
 
   module.exports = {
-    name: 'ic-switch',
+    name: 'cc-switch',
     props: {
       value: Boolean,
       disabled: Boolean,
@@ -65,13 +65,13 @@
   $switch-height: 30;
   $switch-border-width: 1;
   $switch-on-margin-offset: -2;
-  $switch-color-on: $ic-brand-color;
-  $switch-color-off: $ic-color-white;
+  $switch-color-on: $cc-brand-color;
+  $switch-color-off: $cc-color-white;
   $switch-state-fontsize: 10;
   $switch-state-offset: 10;
   $switch-state-center-offset: 2;
 
-  .ic-switch {
+  .cc-switch {
     position: relative;
     width: $switch-width + px;
     height: $switch-height + px;
@@ -79,22 +79,22 @@
     display: table-cell;
     vertical-align: middle;
 
-    &.disabled {
+    &.cc-disabled {
 
       > input[type="checkbox"]:checked + span {
-        background-color: $ic-color-dark-grey !important;
+        background-color: $cc-color-dark-grey !important;
 
         &:before {
-          background: $ic-color-white;
+          background: $cc-color-white;
         }
 
-        .switch{
+        .cc-switch-toggle {
           background-color: $switch-color-off;
-          border-color: $ic-color-dark-grey !important;
+          border-color: $cc-color-dark-grey !important;
         }
 
-        .state {
-          color: $ic-color-dark-grey;
+        .cc-state {
+          color: $cc-color-dark-grey;
         }
       }
     }
@@ -135,7 +135,7 @@
         transition: background 0.4s;
       }
 
-      .switch {
+      .cc-switch-toggle {
         @include switch-child();
         top: 5px;
         left: 5px;
@@ -147,7 +147,7 @@
         transition: margin 0.4s, background 0.4s;
       }
 
-      .state {
+      .cc-state {
         @include switch-child();
         top: 0;
         bottom: 0;
@@ -155,13 +155,13 @@
         line-height: ($switch-height + $switch-state-center-offset) + px;
         text-transform: uppercase;
 
-        &.on {
+        &.cc-on {
           font-size: $switch-state-fontsize + px;
           left: $switch-state-offset + px;
           color: $switch-color-off;
         }
 
-        &.off {
+        &.cc-off {
           font-size: $switch-state-fontsize + px;
           right: $switch-state-offset + px;
           color: $switch-color-on;
@@ -177,7 +177,7 @@
         background-color: inherit;
       }
 
-      .switch{
+      .cc-switch-toggle {
         margin-left: ($switch-width / 2) + $switch-on-margin-offset + px;
         background-color: $switch-color-off;
         border: $switch-border-width + px solid $switch-color-off;;

@@ -14,13 +14,24 @@
   - limitations under the License.
   -
   -->
+
 <template>
-  <span :class="['ic-toggle',{'toggle-enabled':toggleValue,'toggle-disabled':!toggleValue}]" @click="toggle()"><slot/></span>
+  <span class="cc-toggle-img" @click="toggle">
+    <cc-img :img="img" :width="width" :height="height"
+            :size="size" :unit="unit"/></span>
 </template>
 
 <script>
+
+  // Components
+  const ccImg = require('components/general/ccImg.vue');
+
   module.exports = {
-    name: 'ic-toggle',
+    name: 'cc-toggle-img',
+    components: {
+      ccImg,
+    },
+    extends: ccImg,
     props: {
       value: {
         type: Boolean,
@@ -52,11 +63,3 @@
     },
   };
 </script>
-
-<style lang="scss" scoped>
-
-  .ic-toggle {
-    cursor: pointer;
-  }
-
-</style>

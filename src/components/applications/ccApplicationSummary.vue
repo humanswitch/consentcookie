@@ -16,30 +16,33 @@
   -->
 
 <template>
-  <div class="ic-connection-summary">
-    <ic-toggle v-model="showInfo" class="ic-toggle-text">
-      <ic-img :img="connection.icon" :size="15" :unit="'px'"/><span>{{ connection.name }}</span>
-    </ic-toggle>
-    <ic-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showProfile" :disabled="noProfile" :size="20"/>
-    <ic-switch v-model="accepted" :disabled="disabled"/>
+  <div class="cc-application-summary">
+    <cc-toggle v-model="showInfo" class="cc-toggle-text">
+      <cc-img :img="application.icon" :size="15" :unit="'px'"/>
+      <span>{{ application.name }}</span>
+    </cc-toggle>
+    <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
+    <cc-switch v-model="accepted" :disabled="disabled"/>
   </div>
 </template>
 
 <script>
 
-  const icToggleImg = require('components/general/icToggleImg.vue');
-  const icImg = require('components/general/icImg.vue');
-  const icToggle = require('components/general/icToggle.vue');
+  const ccImg = require('components/general/ccImg.vue');
+  const ccToggle = require('components/general/ccToggle.vue');
+  const ccToggleIcon = require('components/general/ccToggleIcon.vue');
+  const ccSwitch = require('components/general/ccSwitch.vue');
 
   module.exports = {
-    name: 'ic-connection-summary',
+    name: 'cc-application-summary',
     components: {
-      icToggleImg,
-      icImg,
-      icToggle,
+      ccImg,
+      ccToggle,
+      ccToggleIcon,
+      ccSwitch,
     },
     props: {
-      connection: {
+      application: {
         type: Object,
         required: true,
       },
@@ -48,53 +51,37 @@
         required: true,
       },
     },
+    data() {
+      return {};
+    },
     computed: {
-      noProfile() {
-        return !(this.state.hasProfile === true);
-      },
       showInfo: {
         get() {
           return this.state.showInfo;
         },
         set($newVal) {
           this.state.showInfo = $newVal;
-
-          if ($newVal === true) {
-            this.state.showProfile = false;
-          }
-        },
-      },
-      showProfile: {
-        get() {
-          return this.state.showProfile;
-        },
-        set($newVal) {
-          this.state.showProfile = $newVal;
-
-          if ($newVal === true) {
-            this.state.showInfo = false;
-          }
-        },
+        }
       },
       accepted: {
         get() {
-          const state = this.$services.consent.get(this.connection.id);
-          return state.flag === -1 || state.flag === 1;
+          return this.$services.applications.isAccepted(this.application);
         },
         set($newVal) {
-          if ($newVal === true) {
-            this.$services.consent.accept(this.connection.id);
-          } else {
-            this.$services.consent.reject(this.connection.id);
-          }
+          this.$services.applications.setAccepted(this.application, $newVal);
         },
       },
       disabled() {
-        return this.$services.consent.get(this.connection.id).flag === -1;
+        return this.$services.applications.isAlwaysOn(this.application);
       },
     },
-    data() {
-      return {};
+    asyncComputed: {
+      hasPlugin: {
+        get() {
+          return this.$services.applications.hasPlugin(this.application);
+        },
+        default: false,
+      },
     },
   };
 </script>
@@ -103,7 +90,7 @@
 
   @import '../../assets/scss/general-variables';
 
-  .ic-connection-summary {
+  .cc-application-summary {
 
     display: flex;
     align-items: center;
@@ -113,7 +100,7 @@
 
     @include default-clearfix();
 
-    .ic-toggle-text {
+    .cc-toggle-text {
       display: flex;
       align-items: center;
       flex: 1;
@@ -126,19 +113,19 @@
       }
     }
 
-    .ic-toggle-icon {
+    .cc-toggle-icon {
       cursor: pointer;
 
-      &.off {
-        color: $ic-brand-color;
+      &.cc-off {
+        color: $cc-brand-color;
       }
 
-      &.disabled {
+      &.cc-disabled {
         display: none;
       }
     }
 
-    .ic-switch {
+    .cc-switch {
       margin: 15px 10px;
       display: inline-block;
       float: right;
