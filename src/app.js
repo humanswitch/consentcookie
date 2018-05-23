@@ -38,6 +38,7 @@ const vueAsyncComputed = require('vue-async-computed');
 
 // Helpers
 const utils = require('base/utils');
+const _ = require('mixins/underscore');
 
 let mainInstance;
 
@@ -70,8 +71,8 @@ function initVue($config) {
 
   vue.directive('theme', require('directives/ccTheme.js'));
 
-  vue.component('ic-switch', require('components/general/icSwitch.vue'));
-  vue.component('ic-toggle-icon', require('components/general/icToggleIcon.vue'));
+  vue.component('cc-switch', require('components/general/ccSwitch.vue'));
+  vue.component('cc-toggle-icon', require('components/general/ccToggleIcon.vue'));
 
   const MainComponent = vue.extend(require('./views/main.vue'));
   mainInstance = new MainComponent({
@@ -81,6 +82,9 @@ function initVue($config) {
     propsData: {
       config: $config,
     },
+    created() {
+      bootstrapApp.call(this);
+    }
   });
 
   return onReady(() => {
@@ -97,6 +101,17 @@ function onReady($fn) {
   }
 }
 
+function bootstrapApp() {
+  this.$services.config.load(this.config);
+  this.$services.consent.load();
+  this.$services.script.enableEnabledScripts();
+  enableScriptsOnReady.call(this);
+}
+
+function enableScriptsOnReady() {
+  onReady(() => this.$services.script.enableEnabledScripts());
+}
+
 function off($event, $callback) {
   if (!mainInstance) {
     return utils.logErrorOrThrowException('Unable to unregister event. ConsentCookie is not yet initialized.');
@@ -111,9 +126,34 @@ function on($event, $callback) {
   return mainInstance.$events.$on($event, $callback);
 }
 
+/**
+ * @deprecated
+ *
+ * @param $id
+ * @return {*}
+ */
 function get($id) {
-  return mainInstance.$services.consent.get($id);
+  if (!$id) {
+    return getConsents();
+  }
+  return getConsent($id);
 }
+
+function getConsent($id) {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('Unable to get Consent. ConsentCookie is not yet initialized.');
+  }
+
+  return mainInstance.$services.consent.getConsent($id);
+}
+
+function getConsents() {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('Unable to get Consents. ConsentCookie is not yet initialized.');
+  }
+  return mainInstance.$services.consent.getConsents();
+}
+
 
 function registerPlugin($plugin) {
   if (!mainInstance) {
@@ -135,7 +175,9 @@ module.exports = (function () {
     on,
     off,
     get,
+    getConsent,
+    getConsents,
     registerPlugin,
-    ver:VERSION,
+    ver: VERSION,
   };
 }());

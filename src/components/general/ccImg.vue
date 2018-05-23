@@ -16,12 +16,12 @@
   -->
 
 <template>
-  <img :style="{width:imgWidth,height:imgHeight}" :src="img" class="ic-img">
+  <img :style="{width:imgWidth,height:imgHeight}" :src="img" class="cc-img">
 </template>
 
 <script>
   module.exports = {
-    name: 'ic-img',
+    name: 'cc-img',
     props: {
       size: {
         type: Number,

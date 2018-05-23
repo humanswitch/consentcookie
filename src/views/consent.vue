@@ -16,21 +16,21 @@
   -->
 
 <template>
-  <div id="consent">
-    <ic-content-box>
-      <div class="icText" v-html="consentText"/>
-      <div class="contentActions">
-        <ic-button class="" size="large" @click="accept" v-theme="{background:'primary',color:'secondary'}">{{ consentButtonText }}</ic-button>
-        <a :href="consentInfoLink" class="info-link" target="_blank">Meer informatie</a>
+  <div class="cc-consent">
+    <cc-content-box>
+      <div class="ccText" v-html="consentText"/>
+      <div class="cc-consentActions">
+        <cc-button size="large" @click="accept" v-theme="{background:'primary',color:'secondary'}">{{ consentButtonText }}</cc-button>
+        <a :href="consentInfoLink" class="cc-info-link" target="_blank">Meer informatie</a>
       </div>
-    </ic-content-box>
+    </cc-content-box>
   </div>
 </template>
 <script>
 
   // Components
-  const icContentBox = require('components/general/icContentBox.vue');
-  const icButton = require('components/general/icButton.vue');
+  const ccContentBox = require('components/general/ccContentBox.vue');
+  const ccButton = require('components/general/ccButton.vue');
 
   // Defaults
   const DEFAULT_CONFIG_KEY_CONSENTWALL_BLOCKPAGE = 'general.consent.blockpage';
@@ -50,8 +50,8 @@
   module.exports = {
     name: 'consentView',
     components: {
-      icContentBox,
-      icButton,
+      ccContentBox,
+      ccButton,
     },
     data() {
       return {};
@@ -85,24 +85,21 @@
   };
 
 </script>
-
-
 <style lang="scss" scoped>
 
   @import '../assets/scss/general-variables';
 
-  #consent {
-
+  .cc-consent {
     padding: 5px 5px;
 
-    .contentActions {
+    .cc-consentActions {
       text-align: center;
       padding: 20px 0px;
 
-      .info-link {
+      .cc-info-link {
         display: block;
         margin-top: 15px;
-        color: $ic-link-color;
+        color: $cc-link-color;
         font-size: 12px;
         font-style: italic;
         text-decoration: underline;

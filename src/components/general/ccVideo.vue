@@ -16,10 +16,10 @@
   -->
 
 <template>
-  <div class="icVideo">
+  <div class="cc-video">
     <video :src="videoUrl" width="100%" height="100%"
            @ended="onEnded" preload/>
-    <div :class="['inline-fix','ic-video-toggle',{begin:isEnded,playing:isPlaying,paused:isPaused,hover:isHover}]" @click="toggleVideo" @mouseleave="resetHover">
+    <div :class="['cc-video-toggle',{'cc-begin':isEnded,'cc-playing':isPlaying,'cc-paused':isPaused,'cc-hover':isHover}]" @click="toggleVideo" @mouseleave="resetHover">
       <i :class="['v-centered',{'cc-pause-circle':(isPlaying && !isEnded),'cc-play-circle':!isPlaying || (isPlaying && isEnded)}]" aria-hidden="true"/>
     </div>
   </div>
@@ -30,7 +30,7 @@
   let videoHoverFixTimer;
 
   module.exports = {
-    name: 'icVideo',
+    name: 'ccVideo',
     props: {
       videoUrl: String,
     },
@@ -87,13 +87,15 @@
 
   @import '../../assets/scss/general-variables';
 
-  .icVideo {
+  .cc-video {
 
     position: relative;
     width: 100%;
     height: 100%;
 
-    .ic-video-toggle {
+    @include default-vertical-center-helper();
+
+    .cc-video-toggle {
       transition: all 0.2s;
       background: none;
       position: absolute;
@@ -104,7 +106,7 @@
       top: 0;
       bottom: 0;
 
-      &.inline-fix {
+      &.cc-inline-fix {
         font: 0/0 a;
       }
 
@@ -113,18 +115,18 @@
         font-size: 40px;
       }
 
-      &.hover:hover {
+      &.cc-hover:hover {
         background: rgba(255, 255, 255, 0.7);
       }
 
-      &.begin {
+      &.cc-begin {
 
         i {
           display: inline-block !important;
         }
       }
 
-      &.playing.hover:hover, &.paused.hover:hover {
+      &.cc-playing.cc-hover:hover, &.cc-paused.cc-hover:hover {
         i {
           display: inline-block !important;
         }

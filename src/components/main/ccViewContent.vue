@@ -16,9 +16,9 @@
   -->
 
 <template>
-  <div id="ic-view-content">
-    <div :style="scrollholderCSS" class="ic-view-scollholder">
-      <div :style="scrollContentCSS" class="ic-view-scrollcontent">
+  <div class="cc-view-content">
+    <div :style="scrollholderCSS" class="cc-view-scollholder">
+      <div :style="scrollContentCSS" class="cc-view-scrollcontent">
         <slot/>
       </div>
     </div>
@@ -50,7 +50,7 @@
   function initContentChangeListener() {
     const vue = this;
     // Get reference to the scrollcontent element
-    scrollContent = vue.$el.querySelector('.ic-view-scrollcontent');
+    scrollContent = vue.$el.querySelector('.cc-view-scrollcontent');
     scrollContentObserver = new MutationObserver(((mutations, observer) => {
       const contentUpdate = { content: { size: scrollContent.scrollHeight } };
       vue.$services.view.notifyViewChanged(contentUpdate);
@@ -63,7 +63,7 @@
 
   // Vue module
   module.exports = {
-    name: 'icViewContent',
+    name: 'ccViewContent',
     components: {},
     data() {
       return data;
@@ -79,20 +79,21 @@
 
   @import '../../assets/scss/general-variables';
 
-  #ic-view-content {
+  .cc-view-content {
 
-    border: $ic-box-border;
-    border-radius: 0px 0px $ic-box-border-radius $ic-box-border-radius;
-    background: $ic-color-white;
+    border: $cc-box-border;
+    border-radius: 0px 0px $cc-box-border-radius $cc-box-border-radius;
+    background: $cc-color-white;
 
-    .ic-view-scollholder {
+    .cc-view-scollholder {
 
       height: 100%;
       margin-bottom: 5px;
       overflow-x: auto;
       overflow-y: scroll;
 
-      .ic-view-scrollcontent {
+      .cc-view-scrollcontent {
+        position: relative;
         overflow: hidden;
       }
     }
