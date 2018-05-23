@@ -140,10 +140,17 @@ function get($id) {
 }
 
 function getConsent($id) {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('Unable to get Consent. ConsentCookie is not yet initialized.');
+  }
+
   return mainInstance.$services.consent.getConsent($id);
 }
 
 function getConsents() {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('Unable to get Consents. ConsentCookie is not yet initialized.');
+  }
   return mainInstance.$services.consent.getConsents();
 }
 
