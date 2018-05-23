@@ -24,33 +24,35 @@ const DEFAULT_CONFIG_CONSENTWALL_TIMEOUT = 'general.consentwall.timeout';
 
 const DEFAULT_CONFIG_TIMEOUT_CONSENTWALL = 300; // ms
 
-let vueInstance;
+let vue;
 
 function init(vueServices) {
-  vueInstance = vueServices.getVueInstance();
+  vue = vueServices.getVueInstance();
 }
 
 function showConsentWall() {
   // Show consent after 300ms
   setTimeout(() => {
-    vueInstance.$router.push({ path: '/consent' });
-    vueInstance.$services.view.openContent();
-  }, vueInstance.$services.config.get(DEFAULT_CONFIG_CONSENTWALL_TIMEOUT, DEFAULT_CONFIG_TIMEOUT_CONSENTWALL));
+    vue.$router.push({ path: '/consent' });
+    vue.$services.view.openContent();
+  }, vue.$services.config.get(DEFAULT_CONFIG_CONSENTWALL_TIMEOUT, DEFAULT_CONFIG_TIMEOUT_CONSENTWALL));
 }
 
 function acceptConsentWall() {
-  vueInstance.$services.consent.accept(DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL);
-  vueInstance.$services.view.close();
-  vueInstance.$services.view.enableMenu();
+  vue.$services.consent.save();
+  vue.$services.consent.accept(DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL);
+  vue.$services.script.enableOptOutScripts();
+  vue.$services.view.close();
+  vue.$services.view.enableMenu();
 }
 
 function isConsentWallEnabled() {
-  return vueInstance.$services.config.get(DEFAULT_CONFIG_CONSENTWALL_ENABLED, false);
+  return vue.$services.config.get(DEFAULT_CONFIG_CONSENTWALL_ENABLED, false);
 }
 
 function isConsentWallAccepted() {
   return !(isConsentWallEnabled()) ||
-    (vueInstance.$services.consent.getFlag(DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL) === 1);
+    (vue.$services.consent.getFlag(DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL) === 1);
 }
 
 module.exports = {
@@ -58,4 +60,5 @@ module.exports = {
   showConsentWall,
   acceptConsentWall,
   isConsentWallAccepted,
+  isConsentWallEnabled,
 };

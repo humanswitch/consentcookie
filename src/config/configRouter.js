@@ -118,8 +118,8 @@ function configRouter(vue) {
       path: '/about',
       component: require('views/about.vue'),
     }, {
-      path: '/connections',
-      component: require('views/connections.vue'),
+      path: '/applications',
+      component: require('views/applications.vue'),
     }];
   }
 

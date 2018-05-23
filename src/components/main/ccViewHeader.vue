@@ -16,9 +16,9 @@
   -->
 
 <template>
-  <div :style="componentCss" class="ic-view-header" v-theme="{background:'primary'}">
+  <div v-theme="{background:'primary'}" :style="componentCss" class="cc-view-header">
     <div>
-      <div class="cc-title" v-theme="{color:'secondary'}">{{ title }}</div>
+      <div v-theme="{color:'secondary'}" class="cc-title">{{ title }}</div>
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@
 
   // Vue module
   module.exports = {
-    name: 'icViewHeader',
+    name: 'ccViewHeader',
     props: {
       height: {
         type: Number,
@@ -57,10 +57,10 @@
 
   @import '../../assets/scss/general-variables';
 
-  .ic-view-header {
+  .cc-view-header {
 
     padding: 20px;
-    background: $ic-brand-color;
+    background: $cc-brand-color;
     color: #FFFFFF;
     border-radius: 5px 5px 0px 0px;
     overflow: hidden;

@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'fontello';
-  src: url('../font/fontello.eot?53940564');
-  src: url('../font/fontello.eot?53940564#iefix') format('embedded-opentype'),
-       url('../font/fontello.woff2?53940564') format('woff2'),
-       url('../font/fontello.woff?53940564') format('woff'),
-       url('../font/fontello.ttf?53940564') format('truetype'),
-       url('../font/fontello.svg?53940564#fontello') format('svg');
+  src: url('../font/fontello.eot?55149022');
+  src: url('../font/fontello.eot?55149022#iefix') format('embedded-opentype'),
+       url('../font/fontello.woff2?55149022') format('woff2'),
+       url('../font/fontello.woff?55149022') format('woff'),
+       url('../font/fontello.ttf?55149022') format('truetype'),
+       url('../font/fontello.svg?55149022#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'fontello';
-    src: url('../font/fontello.svg?53940564#fontello') format('svg');
+    src: url('../font/fontello.svg?55149022#fontello') format('svg');
   }
 }
 */
@@ -57,6 +57,7 @@
  
 .cc-user:before { content: '\e81d'; } /* '' */
 .cc-ok:before { content: '\e827'; } /* '' */
+.cc-download-cloud:before { content: '\f0ed'; } /* '' */
 .cc-angle-up:before { content: '\f106'; } /* '' */
 .cc-angle-down:before { content: '\f107'; } /* '' */
 .cc-spinner:before { content: '\f110'; } /* '' */

@@ -16,14 +16,14 @@
   -->
 
 <template>
-  <div id="icView">
-    <div class="icViewWrapper">
-      <transition enter-active-class="icAnimated icSlideIn" leave-active-class="icAnimated icSlideOut">
-        <div v-show="isShown" :style="viewHolderCss" class="viewHolder">
-          <ic-view-header :height="headerHeight" :style="{minWidth:'350px'}"/>
-          <ic-view-content :style="viewContentCss" :class="phoneLandscape">
+  <div class="cc-view">
+    <div class="cc-view-wrapper">
+      <transition enter-active-class="ccAnimated ccSlideIn" leave-active-class="ccAnimated ccSlideOut">
+        <div v-show="isShown" :style="viewHolderCss" class="cc-viewholder">
+          <cc-view-header :height="headerHeight" :style="{minWidth:'350px'}"/>
+          <cc-view-content :style="viewContentCss" :class="phoneLandscape">
             <router-view/>
-          </ic-view-content>
+          </cc-view-content>
         </div>
       </transition>
     </div>
@@ -36,8 +36,8 @@
   const _ = require('underscore');
 
   // Components
-  const icViewHeader = require('components/main/icViewHeader.vue');
-  const icViewContent = require('components/main/icViewContent.vue');
+  const ccViewHeader = require('components/main/ccViewHeader.vue');
+  const ccViewContent = require('components/main/ccViewContent.vue');
 
   // Defaults
   const DEFAULT_VIEW_TOP_MARGIN = 30;
@@ -103,10 +103,10 @@
 
   /* VUE */
   module.exports = {
-    name: 'icView',
+    name: 'ccView',
     components: {
-      icViewHeader,
-      icViewContent,
+      ccViewHeader,
+      ccViewContent,
     },
     data() {
       return data;
@@ -119,7 +119,7 @@
         return this.$store.state.view.content.size;
       },
       phoneLandscape() {
-        return this.$store.state.view.isPhone && !this.$store.state.view.isPortrait ? 'phoneLandscape' : '';
+        return this.$store.state.view.isPhone && !this.$store.state.view.isPortrait ? 'cc-phonelandscape' : '';
       },
     },
     watch: {
@@ -147,10 +147,10 @@
 
   @import '../../assets/scss/general-variables';
 
-  #icView {
+  .cc-view {
     position: relative;
 
-    .icViewWrapper {
+    .cc-view-wrapper {
       position: absolute;
       right: 0px;
       bottom: 0px;
@@ -160,7 +160,7 @@
       .cc-phone & {
         padding: 0px 5px 5px 5px;
 
-        .phoneLandscape {
+        .cc-phonelandscape {
           height: 100% !important;
         }
       }
@@ -175,8 +175,8 @@
         padding: 0px 5px 5px 5px;
       }
 
-      .viewHolder {
-        border-radius: $ic-box-border-radius;
+      .cc-viewholder {
+        border-radius: $cc-box-border-radius;
         box-shadow: -5px 5px 10px 0px rgba(136, 136, 136, 0.15);
         overflow: hidden;
 

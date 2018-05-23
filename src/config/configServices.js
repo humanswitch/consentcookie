@@ -42,11 +42,14 @@ function configVueServices(vue) {
     name: 'consent',
     service: require('services/consentService.js'),
   }, {
-    name: 'connections',
-    service: require('services/connectionsService.js'),
+    name: 'applications',
+    service: require('services/applicationsService.js'),
   }, {
     name: 'plugin',
     service: require('services/pluginService.js'),
+  }, {
+    name: 'script',
+    service: require('services/scriptService.js'),
   }];
 
   return new VueServices(services);

@@ -16,37 +16,14 @@
   -->
 
 <template>
-  <li class="ic-connection-property">
-    <i :class="['cc-ok',{'enabled':isChecked}]"/><span>{{ info }}</span>
-  </li>
+  <div class="cc-content-box">
+    <slot/>
+  </div>
 </template>
 
 <script>
   module.exports = {
-    name: 'ic-connection-property',
-    components: {},
-    props: {
-      property: {
-        type: Object,
-        required: true,
-      },
-    },
-    computed: {
-      info() {
-        return this.property.id + ' - ' + this.property.type;
-      },
-      isChecked() {
-        return this.property.enabled;
-      },
-    },
-    data() {
-      return {
-
-      };
-    },
-    methods: {
-
-    },
+    name: 'icContentBox',
   };
 </script>
 
@@ -54,16 +31,23 @@
 
   @import '../../assets/scss/general-variables';
 
-  .ic-connection-property {
-    list-style: none;
+  .cc-content-box {
+    margin: 5px;
+    padding: 10px 25px;
+    border: $cc-box-border;
+    border-radius: $cc-box-border-radius;
 
-    i {
-      margin-right: 5px;
-      color: $ic-color-dark-grey;
-
-      &.enabled {
-        color: $ic-color-done-true;
-      }
+    .cc-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: $cc-brand-color;
+      margin: 5px 0px 5px 0px;
+    }
+    .ccText {
+      line-height: 22px;
+      font-size: 15px;
+      padding-top: 5px;
+      font-weight: 400;
     }
   }
 </style>
