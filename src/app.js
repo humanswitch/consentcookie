@@ -134,7 +134,11 @@ function on($event, $callback) {
  */
 function get($id) {
   if (!$id) {
-    return getConsents();
+    // Backwards compatibility fix
+    return (($consents) => {
+      $consents.consents = $consents.getConsentMap();
+      return $consents;
+    })(getConsents());
   }
   return getConsent($id);
 }
