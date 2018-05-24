@@ -69,6 +69,11 @@ function getActive() {
   return activeApplications;
 }
 
+function isEnabled($application){
+  return vue.$services.consent.getConsent($application.id)
+    .isEnabled();
+}
+
 function isAccepted($application) {
   return vue.$services.consent.getConsent($application.id)
     .isAccepted();
@@ -196,6 +201,7 @@ module.exports = {
   getActive,
   getApplicationProfile,
   getApplicationProfileInfo,
+  isEnabled,
   isAlwaysOn,
   isAccepted,
   setAccepted,
