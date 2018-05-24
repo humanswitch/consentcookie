@@ -65,7 +65,7 @@
       },
       accepted: {
         get() {
-          return this.$services.applications.isAccepted(this.application);
+          return this.$services.applications.isEnabled(this.application);
         },
         set($newVal) {
           this.$services.applications.setAccepted(this.application, $newVal);
