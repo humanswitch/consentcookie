@@ -16,23 +16,15 @@
   -->
 
 <template>
-  <span class="ic-toggle-img" @click="toggle">
-    <ic-img :img="img" :width="width" :height="height"
-            :size="size" :unit="unit"/></span>
+  <i :class="['cc-toggle-icon',icon,state,{'cc-disabled':disabled}]" :style="styleObject" @click="toggle"/>
 </template>
 
 <script>
-
-  // Components
-  const icImg = require('components/general/icImg.vue');
-
   module.exports = {
-    name: 'ic-toggle-img',
-    components: {
-      icImg,
-    },
-    extends: icImg,
+    name: 'cc-toggle-icon',
     props: {
+      icon: String,
+      size: Number,
       value: {
         type: Boolean,
         default: null,
@@ -52,6 +44,14 @@
           return this.value !== null ? (this.value === true) : (this.default === true);
         },
       },
+      styleObject() {
+        return {
+          fontSize: this.size + 'px',
+        };
+      },
+      state() {
+        return this.toggleValue ? 'cc-on' : 'cc-off';
+      },
     },
     methods: {
       toggle() {
@@ -68,24 +68,22 @@
 
   @import '../../assets/scss/general-variables';
 
-  $icon-color-on: $ic-brand-color;
-  $icon-color-off: $ic-color-dark-grey;
+  $icon-color-on: $cc-brand-color;
+  $icon-color-off: $cc-color-dark-grey;
 
-  i.ic-toggle-icon {
+  i.cc-toggle-icon {
 
     transition: color 0.4s;
     cursor: pointer;
+    color: $icon-color-on;
 
-    &.on {
-      color: $icon-color-on
-    }
-
-    &.off {
+    &.cc-off {
       color: $icon-color-off
     }
 
-    &.disabled {
+    &.cc-disabled {
       cursor: default;
+      color: $cc-color-dark-grey !important;
     }
   }
 </style>

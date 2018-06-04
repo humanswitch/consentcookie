@@ -1,6 +1,7 @@
 
 .cc-user:before { content: '\e81d'; } /* '' */
 .cc-ok:before { content: '\e827'; } /* '' */
+.cc-download-cloud:before { content: '\f0ed'; } /* '' */
 .cc-angle-up:before { content: '\f106'; } /* '' */
 .cc-angle-down:before { content: '\f107'; } /* '' */
 .cc-spinner:before { content: '\f110'; } /* '' */

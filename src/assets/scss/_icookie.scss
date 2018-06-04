@@ -34,7 +34,7 @@
 }
 
 // Animation keyframes
-@keyframes icSlideInRight {
+@keyframes ccSlideInRight {
   from {
     transform: translate3d(100%, 0, 0);
     visibility: visible;
@@ -45,7 +45,7 @@
   }
 }
 
-@keyframes icSlideOutRight {
+@keyframes ccSlideOutRight {
   from {
     transform: translate3d(0, 0, 0);
   }
@@ -56,7 +56,7 @@
   }
 }
 
-@keyframes icSlideInLeft {
+@keyframes ccSlideInLeft {
   from {
     transform: translate3d(-100%, 0, 0);
     visibility: visible;
@@ -67,7 +67,7 @@
   }
 }
 
-@keyframes icSlideOutLeft {
+@keyframes ccSlideOutLeft {
   from {
     transform: translate3d(0, 0, 0);
   }
@@ -84,65 +84,43 @@
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
   font-family: Helvetica, sans-serif;
   vertical-align: baseline;
   -webkit-font-smoothing: antialiased;
+  font-size: 13px;
 }
 
-// ConsentCookie generic css class helpers
 #ConsentCookie {
   z-index: 1073741823;
 
-  .inline-fix {
-    &:before {
-      content: "";
-      display: inline-block;
-      vertical-align: middle;
-      height: 100%;
-    }
-
-    .v-centered {
-      display: inline-block;
-      vertical-align: middle;
-    }
-  }
-
   a {
-    color: $ic-link-color;
+    color: $cc-link-color;
   }
 
-  .notification {
-    padding: 5px 10px;
-    border-left: 3px solid $ic-brand-color;
-    margin: 10px 15px 10px 15px;
-  }
-
-  .icText {
+  .ccText {
     p {
       margin-bottom: 10px;
     }
   }
 
-  // CSS Animations
-  .icAnimated {
+  .ccAnimated {
     animation-duration: 1s;
     animation-fill-mode: both;
   }
 
-  .icSlideIn {
-    animation-name: icSlideInRight;
+  .ccSlideIn {
+    animation-name: ccSlideInRight;
   }
 
-  .icSlideOut {
-    animation-name: icSlideOutRight;
+  .ccSlideOut {
+    animation-name: ccSlideOutRight;
   }
 
-  &.cc-left .icSlideIn {
-    animation-name: icSlideInLeft;
+  &.cc-left .ccSlideIn {
+    animation-name: ccSlideInLeft;
   }
 
-  &.cc-left .icSlideOut {
-    animation-name: icSlideOutLeft;
+  &.cc-left .ccSlideOut {
+    animation-name: ccSlideOutLeft;
   }
 }

@@ -16,28 +16,28 @@
   -->
 
 <template>
-  <div class="connections">
-    <div class="overview">
-      <ic-connection v-for="connection in connections" :key="connection.id" :connection="connection"/>
+  <div class="cc-applications">
+    <div class="cc-overview">
+      <cc-application v-for="application in applications" :key="application.id" :application="application"/>
     </div>
-    <div class="more-info">
-      <a v-if="moreInfo" :href="moreInfo">Meer informatie over jouw connecties</a>
+    <div class="cc-more-info">
+      <a v-if="moreInfo" :href="moreInfo">Meer informatie over deze applicaties</a>
     </div>
   </div>
 </template>
 <script>
 
   // Components
-  const icConnection = require('components/connections/icConnection.vue');
+  const ccApplication = require('components/applications/ccApplication.vue');
 
   // Defaults
   const viewTitle = 'Jouw instellingen';
 
   // Public functions
   module.exports = {
-    name: 'connections',
+    name: 'applications',
     components: {
-      icConnection,
+      ccApplication,
     },
     data() {
       return {
@@ -45,8 +45,8 @@
       };
     },
     asyncComputed: {
-      connections() {
-        return this.$services.connections.getActive();
+      applications() {
+        return this.$services.applications.getActive();
       },
     },
     beforeMount() {
@@ -59,28 +59,27 @@
 
   @import '../assets/scss/general-variables';
 
-  .connections {
+  .cc-applications {
     min-width: 320px;
     display: flex;
     flex-direction: column;
 
-    .overview {
+    .cc-overview {
       display: block;
       flex: 1;
     }
 
-    .more-info {
+    .cc-more-info {
       text-align: right;
       padding: 5px 0px;
 
       a {
-        color: $hs-color-black !important;
+        color: $cc-color-black !important;
         text-decoration: underline;
         font-style: italic;
         font-size: 10px;
         cursor: pointer;
       }
     }
-
   }
 </style>

@@ -1,6 +1,6 @@
 {
   "name": "ConsentCookie",
-  "version": "0.6.0",
+  "version": "0.7.1",
   "license": "Apache 2.0",
   "author": "HumanSwitch",
   "description": "A Javascript application for for managing consents in your browser",
@@ -80,6 +80,7 @@
   },
   "scripts": {
     "dev": "node build/dev-server.js",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "release": "rm ./dist/*.js && rm ./dist/*.js.gz && node build/build.js -- -r && rm ./dist/*.map"
   }
 }

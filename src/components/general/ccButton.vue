@@ -16,8 +16,10 @@
   -->
 
 <template>
-  <button :disabled="disabled" :type="nativeType" :class="'ic-button' + clazz" @click="handleClick">
-    <label class="ic-button-text" v-theme="{color:'secondary'}">
+  <button :disabled="disabled" :type="nativeType"
+          :class="['cc-button','cc-default',{'cc-is-disabled':disabled},{'cc-is-plain':plain},sizeClass]"
+          @click="handleClick">
+    <label class="cc-button-text" v-theme="{color:'secondary'}">
       <slot/>
     </label>
   </button>
@@ -37,38 +39,14 @@
    * @param {slot} [icon]
    *
    * @example
-   * <ic-button size="large" icon="back" type="primary"></mt-button>
+   * <cc-button size="large" icon="back" type="primary"></cc-button>
    */
   module.exports = {
-    name: 'ic-button',
-    methods: {
-      handleClick(evt) {
-        this.$emit('click', evt);
-      },
-    },
-    computed: {
-      clazz() {
-        return (this.type ? ' ' + this.type : '')
-          + (this.size ? ' ' + this.size : '')
-          + (this.disabled ? ' is-disabled' : '')
-          + (this.plain ? ' is-plain' : '');
-      },
-    },
+    name: 'cc-button',
     props: {
       disabled: Boolean,
       nativeType: String,
       plain: Boolean,
-      type: {
-        type: String,
-        default: 'default',
-        validator(value) {
-          return [
-            'default',
-            'danger',
-            'primary',
-          ].indexOf(value) > -1;
-        },
-      },
       size: {
         type: String,
         default: 'normal',
@@ -81,6 +59,16 @@
         },
       },
     },
+    computed: {
+      sizeClass() {
+        return 'cc-' + this.size;
+      },
+    },
+    methods: {
+      handleClick(evt) {
+        this.$emit('click', evt);
+      },
+    },
   };
 </script>
 
@@ -88,7 +76,7 @@
 
   @import '../../assets/scss/general-variables';
 
-  .ic-button {
+  .cc-button {
     appearance: none;
     border-radius: 4px;
     border: 0;
@@ -114,73 +102,47 @@
     }
 
     // States
-    &:not(.is-disabled):active:after,
-    &:not(.is-disabled):hover:active:after {
+    &:not(.cc-is-disabled):active:after,
+    &:not(.cc-is-disabled):hover:active:after {
       display: block;
       background: rgba(0, 0, 0, 0.2);
     }
-    &:not(.is-disabled):hover:after {
+    &:not(.cc-is-disabled):hover:after {
       display: block;
       background: rgba(255, 255, 255, 0.1)
     }
 
-    &.default {
-      color: $ic-button-default-font-color;
-      background-color: $ic-button-default-background-color;
-      box-shadow: $ic-button-default-box-shadow;
-      &.is-plain {
-        border: 1px solid $ic-button-default-plain-color;
+    &.cc-default {
+      color: $cc-button-default-font-color;
+      background-color: $cc-button-default-background-color;
+      box-shadow: $cc-button-default-box-shadow;
+
+      &.cc-is-plain {
+        border: 1px solid $cc-button-default-plain-color;
         background-color: transparent;
         box-shadow: none;
-        color: $ic-button-default-plain-color;
+        color: $cc-button-default-plain-color;
         &:after {
           background-color: #FFFFFF;
         }
       }
     }
-    &.primary {
-      color: $ic-button-default-font-color;
-      background-color: $ic-button-default-background-color;
-      box-shadow: $ic-button-default-box-shadow;
-      &.is-plain {
-        border: 1px solid $ic-button-default-plain-color;
-        background-color: transparent;
-        box-shadow: none;
-        color: $ic-button-default-plain-color;
-        &:after {
-          background-color: #FFFFFF;
-        }
-      }
-    }
-    &.danger {
-      color: $ic-button-default-font-color;
-      background-color: $ic-button-default-background-color;
-      box-shadow: $ic-button-default-box-shadow;
-      &.is-plain {
-        border: 1px solid $ic-button-default-plain-color;
-        background-color: transparent;
-        box-shadow: none;
-        color: $ic-button-default-plain-color;
-        &:after {
-          background-color: #FFFFFF;
-        }
-      }
-    }
-    &.large {
+
+    &.cc-large {
       display: block;
       width: 100%;
     }
-    &.normal {
+    &.cc-normal {
       display: inline-block;
       padding: 0 12px;
     }
-    &.small {
+    &.cc-small {
       display: inline-block;
       font-size: 14px;
       padding: 0 12px;
       height: 33px;
     }
-    &.is-disabled {
+    &.cc-is-disabled {
       opacity: .6;
     }
   }

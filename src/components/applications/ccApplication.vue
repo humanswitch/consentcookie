@@ -16,25 +16,36 @@
   -->
 
 <template>
-  <div id="icContent">
-    <consent-view/>
-    <ic-view/>
+  <div class="cc-application">
+    <cc-application-summary :application="application" :state="state" @update="state"/>
+    <cc-application-detail :application="application" :state="state"/>
   </div>
 </template>
 
 <script>
+  // Components
+  const ccApplicationSummary = require('components/applications/ccApplicationSummary.vue');
+  const ccApplicationDetail = require('components/applications/ccApplicationDetail.vue');
 
-  const icView = require('components/main/icView.vue');
-  const consentView = require('views/consent.vue');
-
+  // Public functions
   module.exports = {
-    name: 'icContent',
+    name: 'cc-application',
     components: {
-      icView,
-      consentView,
+      ccApplicationSummary,
+      ccApplicationDetail,
+    },
+    props: {
+      application: {
+        type: Object,
+        required: true,
+      },
     },
     data() {
-      return {};
+      return {
+        state: {
+          showInfo: false,
+        },
+      };
     },
   };
 </script>
@@ -43,7 +54,10 @@
 
   @import '../../assets/scss/general-variables';
 
-  #icContent {
-    position: relative;
+  .cc-application {
+
+    @include default-content-border();
+    margin: 10px;
   }
+
 </style>
