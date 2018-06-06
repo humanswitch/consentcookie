@@ -79,6 +79,7 @@
     "npm": ">= 3.0.0"
   },
   "scripts": {
+    "start": "npm run dev",
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
     "release": "rm ./dist/*.js && rm ./dist/*.js.gz && node build/build.js -- -r && rm ./dist/*.map"
