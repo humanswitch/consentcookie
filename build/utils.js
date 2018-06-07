@@ -32,10 +32,21 @@ exports.assetsPath = function (_path) {
 exports.cssLoaders = function (options) {
   options = options || {};
 
+  const vueStyleLoader = {
+    // Using style loader instead of vue-style-loader
+    loader: 'style-loader',
+    options: {
+      singleton: true,
+    }
+  };
+
   const cssLoader = {
     loader: 'css-loader',
     options: {
-      sourceMap: options.sourceMap
+      sourceMap: options.sourceMap,
+      minimize: {
+        discardComments: { removeAll: true },
+      }
     }
   };
 
@@ -64,10 +75,10 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader'
+        fallback: vueStyleLoader
       });
     } else {
-      return ['vue-style-loader'].concat(loaders);
+      return [vueStyleLoader].concat(loaders);
     }
   }
 

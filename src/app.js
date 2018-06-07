@@ -36,8 +36,8 @@ import vueEvents from 'vue-events';
 import vueAsyncComputed from 'vue-async-computed';
 import vueI18n from 'vue-i18n';
 
-// Underscore mixins
 import _ from 'mixins/underscore';
+import utils from 'base/utils';
 
 // Default Directives
 import ccTheme from 'directives/ccTheme';
