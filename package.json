@@ -89,6 +89,7 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --info --inline --progress --config build/webpack.dev.conf.js",
+    "start": "npm run dev",
     "build": "node build/build.js",
     "release": "find ./dist/ -type f -not -name 'consentcookie.json' -delete && node build/build.js -- --singlefile && rm ./dist/*.map"
   }

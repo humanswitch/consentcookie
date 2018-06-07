@@ -18,7 +18,7 @@
 <template>
   <div class="cc-application-summary">
     <cc-toggle v-model="showInfo" class="cc-toggle-text">
-      <cc-img :img="application.icon" :size="15" :unit="'px'"/>
+      <cc-img :img="logo" :size="15" :unit="'px'"/>
       <span>{{ application.name }}</span>
     </cc-toggle>
     <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
@@ -74,6 +74,9 @@
       disabled() {
         return this.$services.applications.isAlwaysOn(this.application);
       },
+      logo() {
+        return this.$services.applications.getLogo(this.application);
+      }
     },
     asyncComputed: {
       hasPlugin: {

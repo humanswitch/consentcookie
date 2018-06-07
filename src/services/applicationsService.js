@@ -22,8 +22,11 @@ import jsCookie from 'js-cookie';
 // Helpers
 import utils from 'base/utils';
 
-const DEFAULT_APPS_ENDPOINT = 'https://cdn.humanswitch.services/cc/consentcookie/consentcookie.json';
-const DEFAULT_URL_PARAM_APPLICATION_ID = "ccid";
+const DEFAULT_APPS_CONFIG_LOCATION = 'https://cdn.humanswitch.services/cc/consentcookie/';
+const DEFAULT_APPS_ENDPOINT = DEFAULT_APPS_CONFIG_LOCATION + 'consentcookie.json';
+const DEFAULT_APPS_LOGO_LOCATION = DEFAULT_APPS_CONFIG_LOCATION + 'logo/';
+const DEFAULT_APPS_LOGO_EXTENSION = '.png';
+const DEFAULT_URL_PARAM_APPLICATION_ID = 'ccid';
 
 const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
 const DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK = 'general.gdpr.contact';
@@ -69,7 +72,7 @@ function getActive() {
   return activeApplications;
 }
 
-function isEnabled($application){
+function isEnabled($application) {
   return vue.$services.consent.getConsent($application.id)
     .isEnabled();
 }
@@ -100,7 +103,8 @@ function removeApplicationData($application) {
 
 function removeApplicationClientData($application) {
   const cookiePatterns = _.chain($application.dataProcessing)
-    .map(($dataProcessing) => ($dataProcessing.dataIds && _.isArray($dataProcessing.dataIds.cookies)) ? $dataProcessing.dataIds.cookies : null)
+    .map($dataProcessing => (($dataProcessing.dataIds && _.isArray($dataProcessing.dataIds.cookies)) ?
+      $dataProcessing.dataIds.cookies : null))
     .flatten()
     .compact()
     .value();
@@ -141,9 +145,7 @@ function getPlugin($application) {
           return $resolve($plugin);
         }
         return $reject($reject);
-      }, ($error) => {
-        return $reject($error);
-      });
+      }, $error => $reject($error));
   });
 }
 
@@ -191,7 +193,12 @@ function getGDPRLink($application) {
   if (!gdprContactLink) {
     return null;
   }
-  return gdprContactLink + '?' + DEFAULT_URL_PARAM_APPLICATION_ID +'=' + $application.id;
+  return gdprContactLink + '?' + DEFAULT_URL_PARAM_APPLICATION_ID + '=' + $application.id;
+}
+
+function getLogo($application) {
+  return $application.icon ? $application.icon : DEFAULT_APPS_LOGO_LOCATION +
+    $application.id + DEFAULT_APPS_LOGO_EXTENSION;
 }
 
 export default {
@@ -212,4 +219,5 @@ export default {
   disableApplication,
   downloadApplicationProfile,
   getGDPRLink,
+  getLogo,
 };
