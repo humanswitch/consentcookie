@@ -25,6 +25,7 @@ const utils = require('base/utils');
 const DEFAULT_APPS_CONFIG_LOCATION = 'https://cdn.humanswitch.services/cc/consentcookie/';
 const DEFAULT_APPS_ENDPOINT = DEFAULT_APPS_CONFIG_LOCATION + 'consentcookie.json';
 const DEFAULT_APPS_LOGO_LOCATION = DEFAULT_APPS_CONFIG_LOCATION + 'logo/';
+const DEFAULT_APPS_LOGO_EXTENSION = '.png';
 const DEFAULT_URL_PARAM_APPLICATION_ID = 'ccid';
 
 const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
@@ -144,9 +145,7 @@ function getPlugin($application) {
           return $resolve($plugin);
         }
         return $reject($reject);
-      }, ($error) => {
-        return $reject($error);
-      });
+      }, $error => $reject($error));
   });
 }
 
@@ -198,7 +197,8 @@ function getGDPRLink($application) {
 }
 
 function getLogo($application) {
-  return $application.icon ? $application.icon : DEFAULT_APPS_LOGO_LOCATION + $application.id + '.png';
+  return $application.icon ? $application.icon : DEFAULT_APPS_LOGO_LOCATION +
+    $application.id + DEFAULT_APPS_LOGO_EXTENSION;
 }
 
 module.exports = {
