@@ -43,11 +43,11 @@
 <script>
 
   // Libraries
-  const ccToggleBox = require('components/general/ccToggleBox.vue');
-  const ccApplicationActions = require('components/applications/ccApplicationActions.vue');
+  import ccToggleBox from 'components/general/ccToggleBox.vue';
+  import ccApplicationActions from 'components/applications/ccApplicationActions.vue';
 
   // Vue module
-  module.exports = {
+  export default {
     name: 'cc-application-profile',
     components: {
       ccToggleBox,

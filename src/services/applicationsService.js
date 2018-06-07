@@ -16,11 +16,11 @@
  */
 
 // Dependencies
-const _ = require('underscore');
-const jsCookie = require('js-cookie');
+import _ from 'underscore';
+import jsCookie from 'js-cookie';
 
 // Helpers
-const utils = require('base/utils');
+import utils from 'base/utils';
 
 const DEFAULT_APPS_ENDPOINT = 'https://cdn.humanswitch.services/cc/consentcookie/consentcookie.json';
 const DEFAULT_URL_PARAM_APPLICATION_ID = "ccid";
@@ -194,7 +194,7 @@ function getGDPRLink($application) {
   return gdprContactLink + '?' + DEFAULT_URL_PARAM_APPLICATION_ID +'=' + $application.id;
 }
 
-module.exports = {
+export default {
   init,
   hasPlugin,
   getPlugin,

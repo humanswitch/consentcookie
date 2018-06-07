@@ -38,7 +38,7 @@
    * <cc-switch v-model="value"></cc-switch>
    */
 
-  module.exports = {
+  export default {
     name: 'cc-switch',
     props: {
       value: Boolean,

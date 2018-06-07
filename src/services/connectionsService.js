@@ -16,7 +16,7 @@
  */
 
 // Dependencies
-const _ = require('underscore');
+import _ from 'underscore';
 
 const DEFAULT_APPS_ENDPOINT = 'https://cdn.humanswitch.services/cc/consentcookie/consentcookie.json';
 const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
@@ -66,7 +66,7 @@ function getActive() {
   return activeConnections;
 }
 
-module.exports = {
+export default {
   init,
   getPlugin,
   getActive,

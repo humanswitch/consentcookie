@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-const _ = require('underscore');
+import _ from 'underscore';
 
 let vue;
 
@@ -17,7 +17,7 @@ function setTheme($el, $mapping, $type, $color) {
   });
 }
 
-module.exports = {
+export default {
 
   // Create reference to vue on bind
   bind($el, $binding, $vnode) {

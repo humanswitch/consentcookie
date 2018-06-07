@@ -185,7 +185,7 @@ function notifyViewChanged($update) {
   vue.$store.commit('updateView', $update);
 }
 
-module.exports = {
+export default {
   init,
   getWindowHeight,
   getWindowWidth,

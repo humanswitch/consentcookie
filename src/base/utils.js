@@ -122,7 +122,7 @@ function getDomainTree() {
   return domainTree;
 }
 
-module.exports = {
+export default {
   download,
   logErrorOrThrowException,
   getObjectValue,

@@ -16,8 +16,8 @@
  */
 
 // Depencencies
-const utils = require('base/utils.js');
-const _ = require('underscore');
+import utils from 'base/utils.js';
+import _ from 'underscore';
 
 // Defaults
 const SCRIPT_ELEMENT_ATTRIBUTE_CC_ID = 'cc-id';
@@ -141,7 +141,7 @@ function createScriptElement($uniqueId, $path, $callback, $async) {
   return scriptTag;
 }
 
-module.exports = {
+export default {
   init,
   enableScripts,
   enableOptOutScripts,

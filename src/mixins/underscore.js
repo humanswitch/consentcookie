@@ -1,7 +1,7 @@
-const _ = require('underscore');
+import _ from 'underscore';
 
 _.mixin({
   trim: $string => (typeof $string === 'string') ? $string.trim() : null
 });
 
-module.exports = _;
+export default _;

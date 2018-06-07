@@ -33,11 +33,11 @@
 <script>
 
   // Dependencies
-  const _ = require('underscore');
+  import _ from 'underscore';
 
   // Components
-  const ccViewHeader = require('components/main/ccViewHeader.vue');
-  const ccViewContent = require('components/main/ccViewContent.vue');
+  import ccViewHeader from 'components/main/ccViewHeader.vue';
+  import ccViewContent from 'components/main/ccViewContent.vue';
 
   // Defaults
   const DEFAULT_VIEW_TOP_MARGIN = 30;
@@ -102,7 +102,7 @@
   }
 
   /* VUE */
-  module.exports = {
+  export default {
     name: 'ccView',
     components: {
       ccViewHeader,

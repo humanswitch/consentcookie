@@ -26,7 +26,7 @@
 <script>
 
   /* VUE */
-  module.exports = {
+  export default {
     name: 'ccMenuItem',
     props: {
       data: {
