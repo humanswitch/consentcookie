@@ -24,74 +24,60 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseWebpackConfig = require('./webpack.base.conf');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const env = config.build.env;
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
-    loaders: utils.styleLoaders({
+    rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
-      extract: true
+      extract: !config.build.singlefile,
+      usePostCSS: true
     })
   },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.release ? config.build.assetsRootRelease : config.build.assetsRoot,
-    filename: config.build.release ? utils.assetsPath('[name].min.js') : utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: config.build.release ? utils.assetsPath('[id].js') : utils.assetsPath('js/[id].[chunkhash].js')
-  },
-  vue: {
-    loaders: utils.cssLoaders({
-      sourceMap: config.build.productionSourceMap
-    })
+    filename: utils.assetsPath('[name].min.js'),
+    chunkFilename: utils.assetsPath('[id].js'),
   },
   plugins: [
+    /*
     new webpack.ProvidePlugin({
       Promise: 'es6-promise-promise'
     }),
+    */
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env,
       VERSION: (config.build.ver),
     }),
     new webpack.optimize.UglifyJsPlugin({
-      comments: config.build.minify ? false : true,
+      cache: true,
+      comments: false,
       compress: {
         warnings: false
-      }
+      },
+      sourceMap: true,
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     // extract css into its own file
-    new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),
-    // single-file options
-    config.build.singlefile
-      // Stub to not execute this plugin in release version
-      ? function () {
-      } :
-      // split vendor js into its own file
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        minChunks: function (module, count) {
-          // any required modules inside node_modules are extracted to vendor
-          return (
-            module.resource &&
-            /\.js$/.test(module.resource) &&
-            module.resource.indexOf(
-              path.join(__dirname, '../node_modules')
-            ) === 0
-          );
+    new ExtractTextPlugin(utils.assetsPath('[name].min.css')),
+    // Compress extracted CSS. We are using this plugin so that possible
+    // duplicated CSS from different components can be deduped.
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: config.build.productionSourceMap
+        ? {
+          safe: true,
+          discardComments: { removeAll: true },
+          map: { inline: false }
         }
-      }),
-    // extract webpack runtime and module manifest to its own file in order to
-    // prevent vendor hash from being updated whenever app bundle is updated
-    config.build.singlefile
-      // Stub to not execute this plugin in release version
-      ? function () {
-      } :
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'manifest',
-        chunks: ['vendor']
-      })
+        : {
+          safe: true,
+          discardComments: { removeAll: true }
+        }
+    }),
   ]
 });
 
@@ -111,6 +97,11 @@ if (config.build.productionGzip) {
       minRatio: 0.8
     })
   );
+}
+
+if (config.build.bundleAnalyzerReport) {
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+  webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 }
 
 module.exports = webpackConfig;

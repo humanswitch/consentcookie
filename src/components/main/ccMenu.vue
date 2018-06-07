@@ -41,10 +41,10 @@
   const DEFAULT_TOOLTIP_CLOSE = 'ConsentCookie sluiten';
 
   // Components
-  const ccMenuItem = require('components/main/ccMenuItem.vue');
+  import ccMenuItem from 'components/main/ccMenuItem.vue';
 
-  const ccSvgLogo = require('../../assets/img/logo.svg');
-  const ccSvgClose = require('../../assets/img/close.svg');
+  import ccSvgLogo from '../../assets/img/logo.svg';
+  import ccSvgClose from '../../assets/img/close.svg';
 
   const menuItems = [{
     icon: 'toggle-on',
@@ -58,7 +58,7 @@
   }];
 
   /* VUE */
-  module.exports = {
+  export default {
     name: 'ccMenu',
     components: {
       ccMenuItem,

@@ -29,7 +29,7 @@
   let videoPlayer;
   let videoHoverFixTimer;
 
-  module.exports = {
+  export default {
     name: 'ccVideo',
     props: {
       videoUrl: String,

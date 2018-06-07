@@ -17,26 +17,60 @@
 
 'use strict';
 
-const config = require('../config/index');
-const webpack = require('webpack');
-const merge = require('webpack-merge');
 const utils = require('./utils');
+const webpack = require('webpack');
+const config = require('../config');
+const merge = require('webpack-merge');
+const path = require('path');
 const baseWebpackConfig = require('./webpack.base.conf');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FriendlyErrors = require('friendly-errors-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const portfinder = require('portfinder');
 
-// add hot-reload related code to entry chunks
-Object.keys(baseWebpackConfig.entry)
-  .forEach(function (name) {
-    baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name]);
-  });
+const HOST = process.env.HOST;
+const PORT = process.env.PORT && Number(process.env.PORT);
 
-module.exports = merge(baseWebpackConfig, {
+const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
-    loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+    rules: utils.styleLoaders({
+      sourceMap: config.dev.cssSourceMap,
+      usePostCSS: true
+    })
   },
   // eval-source-map is faster for development
   devtool: '#eval-source-map',
+  // these devServer options should be customized in /config/index.js
+  devServer: {
+    clientLogLevel: 'warning',
+    historyApiFallback: {
+      rewrites: [
+        // { from: /\/configurator\/static\/js\/app\.js/, to: path.posix.join(config.dev.assetsPublicPath, 'app.js') },
+        // { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
+      ],
+    },
+    hot: true,
+    contentBase: false, // since we use CopyWebpackPlugin.
+    compress: true,
+    host: HOST || config.dev.host,
+    disableHostCheck: true,
+    port: PORT || config.dev.port,
+    open: config.dev.autoOpenBrowser,
+    openPage: config.dev.autoOpenPage,
+    overlay: config.dev.errorOverlay
+      ? {
+        warnings: false,
+        errors: true
+      }
+      : false,
+    publicPath: config.dev.assetsPublicPath,
+    proxy: config.dev.proxyTable,
+    quiet: true, // necessary for FriendlyErrorsPlugin
+    watchOptions: {
+      poll: config.dev.poll,
+    }
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': config.dev.env,
@@ -45,14 +79,15 @@ module.exports = merge(baseWebpackConfig, {
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
+    new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'demo/index.html',
       inject: 'head',
       config: config.build.customBuildConfig,
-      minify: config.build.minify ? {
+      minify: {
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -61,8 +96,35 @@ module.exports = merge(baseWebpackConfig, {
         minifyCSS: true,
         minifyJS: true,
         minifyURLs: true
-      } : false
+      }
     }),
-    new FriendlyErrors()
+    new ExtractTextPlugin(utils.assetsPath('[name].min.css')),
+    new FriendlyErrorsPlugin()
   ]
+});
+
+module.exports = new Promise((resolve, reject) => {
+  portfinder.basePort = process.env.PORT || config.dev.port;
+  portfinder.getPort((err, port) => {
+    if (err) {
+      reject(err);
+    } else {
+      // publish the new Port, necessary for e2e tests
+      process.env.PORT = port;
+      // add port to devServer config
+      devWebpackConfig.devServer.port = port;
+
+      // Add FriendlyErrorsPlugin
+      devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
+        compilationSuccessInfo: {
+          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
+        },
+        onErrors: config.dev.notifyOnErrors
+          ? utils.createNotifierCallback()
+          : undefined
+      }));
+
+      resolve(devWebpackConfig);
+    }
+  });
 });

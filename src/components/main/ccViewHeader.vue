@@ -29,7 +29,7 @@
   const DEFAULT_HEADER_HEIGHT = '60';
 
   // Vue module
-  module.exports = {
+  export default {
     name: 'ccViewHeader',
     props: {
       height: {

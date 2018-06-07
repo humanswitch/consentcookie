@@ -28,13 +28,13 @@
 <script>
 
   // Components
-  const ccApplication = require('components/applications/ccApplication.vue');
+  import ccApplication from 'components/applications/ccApplication.vue';
 
   // Defaults
   const viewTitle = 'Jouw instellingen';
 
   // Public functions
-  module.exports = {
+  export default {
     name: 'applications',
     components: {
       ccApplication,

@@ -7,7 +7,7 @@
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless export defaultd by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -16,30 +16,36 @@
  */
 
 // Polyfils to support up from IE9 and up
-require('mutationobserver-shim');
-require('promise-polyfill');
-
-// Static assets included in bundle
-require('assets/fonts/fontello/css/fontello.css');
-require('assets/scss/_icookie.scss');
+import mutationObserverShim from 'mutationobserver-shim';
+import promisePolyfill from 'promise-polyfill';
 
 // Defaults
 const DEFAULT_INFO_LINK = 'https://www.consentcookie.nl/';
 const DEFAULT_APP_NAME = 'ConsentCookie';
 
-// Vue dependencies
-const vue = require('vue');
-const vueState = require('config/configState.js');
-const vueRouter = require('config/configRouter.js');
-const vueServices = require('config/configServices.js');
-const vueResources = require('vue-resource');
-const vueEvents = require('vue-events').default; // ES6 plugin workaround
-const vueAsyncComputed = require('vue-async-computed');
+import icons from  'assets/fonts/fontello/css/fontello.css';
+import css from 'assets/scss/_icookie.scss';
 
-// Helpers
-const utils = require('base/utils');
-const _ = require('mixins/underscore');
+// Vue Framework
+import vue from 'vue';
+import vueState from 'config/configState.js';
+import vueRouter from 'config/configRouter.js';
+import vueServices from 'config/configServices.js';
+import vueResources from 'vue-resource';
+import vueEvents from 'vue-events';
+import vueAsyncComputed from 'vue-async-computed';
+import vueI18n from 'vue-i18n';
 
+import _ from 'mixins/underscore';
+import utils from 'base/utils';
+
+// Default Directives
+import ccTheme from 'directives/ccTheme';
+
+// Views
+import mainView from 'views/main';
+
+// Instance variables
 let mainInstance;
 
 function init($config) {
@@ -68,13 +74,11 @@ function initVue($config) {
   vue.use(vueResources);
   vue.use(vueEvents);
   vue.use(vueAsyncComputed);
+  vue.use(vueI18n);
 
-  vue.directive('theme', require('directives/ccTheme.js'));
+  vue.directive('theme', ccTheme);
 
-  vue.component('cc-switch', require('components/general/ccSwitch.vue'));
-  vue.component('cc-toggle-icon', require('components/general/ccToggleIcon.vue'));
-
-  const MainComponent = vue.extend(require('./views/main.vue'));
+  const MainComponent = vue.extend(mainView);
   mainInstance = new MainComponent({
     router,
     store,
@@ -166,7 +170,7 @@ function registerPlugin($plugin) {
   return mainInstance.$services.plugin.register($plugin);
 }
 
-module.exports = (function () {
+export default (function () {
   if (global[DEFAULT_APP_NAME]) {
     const error = new Error('Unable to initialize ConsentCookie. ConsentCookie already initialized. ' +
       'Check if the you have not included the library twice.');

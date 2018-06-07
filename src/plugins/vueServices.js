@@ -26,7 +26,7 @@
 /* eslint no-underscore-dangle: 0 */
 
 // Dependencies
-const _ = require('underscore');
+import _ from 'underscore';
 
 let Vue; // bind on install
 let services;
@@ -129,4 +129,4 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueServices);
 }
 
-module.exports = VueServices;
+export default VueServices;

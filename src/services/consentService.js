@@ -16,8 +16,9 @@
  */
 
 // Dependencies
-const _ = require('underscore');
-const jsCookie = require('js-cookie');
+import _ from 'underscore';
+
+import jsCookie from 'js-cookie';
 
 // Defaults
 const DEFAULT_CONSENTS_SEPERATOR = '&';
@@ -265,7 +266,7 @@ function getState($flag) {
   }
 }
 
-module.exports = {
+export default {
   init,
   load,
   save,

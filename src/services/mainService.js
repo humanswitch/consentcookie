@@ -55,7 +55,7 @@ function isConsentWallAccepted() {
     (vue.$services.consent.getFlag(DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL) === 1);
 }
 
-module.exports = {
+export default {
   init,
   showConsentWall,
   acceptConsentWall,

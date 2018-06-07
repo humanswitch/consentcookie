@@ -16,8 +16,8 @@
  */
 
 // Dependencies
-const _ = require('underscore');
-const jsCookies = require('js-cookie');
+import _ from 'underscore';
+import jsCookies from 'js-cookie';
 
 // Defaults
 const DEFAULT_PLUGIN_PROTOTYPE_FUNCTIONS = ['deleteProfile', 'getId', 'getProfile',
@@ -130,7 +130,7 @@ function getPlugin($application) {
   });
 }
 
-module.exports = {
+export default {
   init,
   getPlugin,
   register,

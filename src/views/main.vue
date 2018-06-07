@@ -28,10 +28,10 @@
   const DEFAULT_CONFIG_DESIGN_LAYOUT_POSITION_LEFT_VAL = 'left';
 
   // Components
-  const ccMenu = require('../components/main/ccMenu.vue');
-  const ccView = require('../components/main/ccView.vue');
+  import ccMenu from 'components/main/ccMenu';
+  import ccView from 'components/main/ccView';
 
-  module.exports = {
+  export default {
     name: 'mainView', // main is a reserved word
     props: ['id', 'config'],
     components: {

@@ -28,12 +28,12 @@
 
 <script>
 
-  const ccImg = require('components/general/ccImg.vue');
-  const ccToggle = require('components/general/ccToggle.vue');
-  const ccToggleIcon = require('components/general/ccToggleIcon.vue');
-  const ccSwitch = require('components/general/ccSwitch.vue');
+  import ccImg from 'components/general/ccImg.vue';
+  import ccToggle from 'components/general/ccToggle.vue';
+  import ccToggleIcon from 'components/general/ccToggleIcon.vue';
+  import ccSwitch from 'components/general/ccSwitch.vue';
 
-  module.exports = {
+  export default {
     name: 'cc-application-summary',
     components: {
       ccImg,

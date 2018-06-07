@@ -29,8 +29,8 @@
 <script>
 
   // Components
-  const ccContentBox = require('components/general/ccContentBox.vue');
-  const ccButton = require('components/general/ccButton.vue');
+  import ccContentBox from 'components/general/ccContentBox.vue';
+  import ccButton from 'components/general/ccButton.vue';
 
   // Defaults
   const DEFAULT_CONFIG_KEY_CONSENTWALL_BLOCKPAGE = 'general.consent.blockpage';
@@ -47,7 +47,7 @@
   const DEFAULT_CONSENTWALL_CONSENT_INFOLINK = 'https://www.consentcookie.nl/';
 
   // Public functions
-  module.exports = {
+  export default {
     name: 'consentView',
     components: {
       ccContentBox,

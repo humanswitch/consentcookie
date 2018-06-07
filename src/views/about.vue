@@ -43,7 +43,7 @@
 <script>
 
   // Components
-  const ccContentBox = require('components/general/ccContentBox.vue');
+  import ccContentBox from 'components/general/ccContentBox.vue';
 
   // Defaults
   const DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TITLE = 'resources.nl.about.title';
@@ -52,7 +52,7 @@
   const DEFAULT_VIEW_TITLE = 'Over ConsentCookie';
 
   // Public functions
-  module.exports = {
+  export default {
     name: 'about',
     components: {
       ccContentBox,
