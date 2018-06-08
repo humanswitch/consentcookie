@@ -22,7 +22,7 @@
       <span>{{ application.name }}</span>
     </cc-toggle>
     <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
-    <cc-switch v-model="accepted" :disabled="disabled"/>
+    <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
   </div>
 </template>
 

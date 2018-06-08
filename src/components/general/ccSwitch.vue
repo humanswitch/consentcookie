@@ -18,8 +18,8 @@
   <label :class="['cc-switch',{'cc-disabled':disabled}]">
     <input v-model="currentValue" :disabled="disabled" type="checkbox" @change="$emit('change', currentValue)">
     <span v-theme="{background:'primary'}">
-      <div class="cc-state cc-on">Aan</div>
-      <div class="cc-state cc-off" v-theme="{color:'primary'}">Uit</div>
+      <div class="cc-state cc-on">{{onTitle}}</div>
+      <div class="cc-state cc-off" v-theme="{color:'primary'}">{{offTitle}}</div>
       <div class="cc-switch-toggle" v-theme="{borderColor:'primary'}"/>
     </span>
   </label>
@@ -43,6 +43,14 @@
     props: {
       value: Boolean,
       disabled: Boolean,
+      onTitle: {
+        type: String,
+        default: 'On',
+      },
+      offTitle: {
+        type: String,
+        default: 'Off',
+      },
     },
     computed: {
       currentValue: {

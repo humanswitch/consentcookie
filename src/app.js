@@ -23,7 +23,7 @@ import promisePolyfill from 'promise-polyfill';
 const DEFAULT_INFO_LINK = 'https://www.consentcookie.nl/';
 const DEFAULT_APP_NAME = 'ConsentCookie';
 
-import icons from  'assets/fonts/fontello/css/fontello.css';
+import icons from 'assets/fonts/fontello/css/fontello.css';
 import css from 'assets/scss/_icookie.scss';
 
 // Vue Framework
@@ -31,10 +31,10 @@ import vue from 'vue';
 import vueState from 'config/configState.js';
 import vueRouter from 'config/configRouter.js';
 import vueServices from 'config/configServices.js';
+import vueI18n from 'config/configI18n.js';
 import vueResources from 'vue-resource';
 import vueEvents from 'vue-events';
 import vueAsyncComputed from 'vue-async-computed';
-import vueI18n from 'vue-i18n';
 
 import _ from 'mixins/underscore';
 import utils from 'base/utils';
@@ -56,7 +56,6 @@ function init($config) {
     return utils.logErrorOrThrowException('Unable to initialize ConsentCookie.' +
       'ConsentCookie already initialized. Visit: ' + DEFAULT_INFO_LINK + ' for more information.');
   }
-
   return initVue($config);
 }
 
@@ -70,11 +69,11 @@ function initBaseView() {
 function initVue($config) {
   const store = vueState(vue);
   const router = vueRouter(vue);
+  const i18n = vueI18n(vue);
   const services = vueServices(vue);
   vue.use(vueResources);
   vue.use(vueEvents);
   vue.use(vueAsyncComputed);
-  vue.use(vueI18n);
 
   vue.directive('theme', ccTheme);
 
@@ -82,18 +81,21 @@ function initVue($config) {
   mainInstance = new MainComponent({
     router,
     store,
+    i18n,
     services,
     propsData: {
       config: $config,
     },
     created() {
       bootstrapApp.call(this);
-    }
+    },
   });
+  setTimeout(() => mainInstance.$events.$emit('created'), 0);
 
   return onReady(() => {
     initBaseView();
     mainInstance.$mount('#ConsentCookie');
+    setTimeout(() => mainInstance.$events.$emit('mounted'), 0);
   });
 }
 
@@ -162,12 +164,18 @@ function getConsents() {
   return mainInstance.$services.consent.getConsents();
 }
 
-
 function registerPlugin($plugin) {
   if (!mainInstance) {
     return utils.logErrorOrThrowException('Unable to register plugin. ConsentCookie is not yet initialized.');
   }
   return mainInstance.$services.plugin.register($plugin);
+}
+
+function setLanguage($lang) {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('Unable to setLanguage. ConsentCookie is not yet initialized.');
+  }
+  return mainInstance.$services.translate.setLanguage($lang);
 }
 
 export default (function () {
@@ -186,6 +194,7 @@ export default (function () {
     getConsent,
     getConsents,
     registerPlugin,
+    setLanguage,
     ver: VERSION,
   };
 }());

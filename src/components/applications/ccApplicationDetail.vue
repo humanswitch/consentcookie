@@ -31,8 +31,8 @@
           <div class="cc-description" v-html="application.description.connection"/>
           <cc-application-profile :application="application" :state="state"/>
           <div class="cc-links">
-            <a class="cc-more-info" :href="application.infolink.connection" target="_blank">Meer informatie over {{ application.name }}</a>
-            <a class="cc-gdpr" v-if="gdprLink" :href="gdprLink" target="_blank">Contact over jouw AVG rechten</a>
+            <a class="cc-more-info" :href="application.infolink.connection" target="_blank">{{ $t('applications.detail.moreInfo') + " " + application.name}}</a>
+            <a class="cc-gdpr" v-if="gdprLink" :href="gdprLink" target="_blank" v-t="'applications.detail.gdprInfo'"/>
           </div>
         </div>
       </div>

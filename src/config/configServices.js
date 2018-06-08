@@ -24,6 +24,7 @@ import consentService from 'services/consentService';
 import applicationsService from 'services/applicationsService';
 import pluginService from 'services/pluginService';
 import scriptService from 'services/scriptService';
+import translateService from '../services/translateService';
 
 /**
  *
@@ -59,6 +60,9 @@ function configVueServices(vue) {
   }, {
     name: 'script',
     service: scriptService,
+  }, {
+    name: 'translate',
+    service: translateService,
   }];
 
   return new VueServices(services);

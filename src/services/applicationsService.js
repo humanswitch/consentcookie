@@ -19,17 +19,9 @@
 import _ from 'underscore';
 import jsCookie from 'js-cookie';
 
-// Helpers
 import utils from 'base/utils';
+import * as constants from 'base/constants';
 
-const DEFAULT_APPS_CONFIG_LOCATION = 'https://cdn.humanswitch.services/cc/consentcookie/';
-const DEFAULT_APPS_ENDPOINT = DEFAULT_APPS_CONFIG_LOCATION + 'consentcookie.json';
-const DEFAULT_APPS_LOGO_LOCATION = DEFAULT_APPS_CONFIG_LOCATION + 'logo/';
-const DEFAULT_APPS_LOGO_EXTENSION = '.png';
-const DEFAULT_URL_PARAM_APPLICATION_ID = 'ccid';
-
-const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
-const DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK = 'general.gdpr.contact';
 
 let vue;
 let applications;
@@ -41,7 +33,7 @@ function init(vueServices) {
 
 function loadApplications() {
   if (!applications) {
-    const applicationsUrl = vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_ENDPOINT, DEFAULT_APPS_ENDPOINT);
+    const applicationsUrl = vue.$services.config.get(constants.CONFIG_KEY_APPS_ENDPOINT, constants.DEFAULT_CONSENTCOOKIE_APPLICATION_RESOURCE_LOCATION);
     applications = vue.$http.get(applicationsUrl)
       .then($request => ($request.status === 200 ? $request.body : []));
   }
@@ -52,7 +44,7 @@ function getActive() {
   if (!activeApplications) {
     activeApplications = loadApplications()
       .then(($applications) => {
-        const consentConfig = vue.$services.config.get('apps.consent');
+        const consentConfig = vue.$services.config.get(constants.CONFIG_KEY_APPS_CONSENT);
         const active = [];
         const map = _.reduce($applications, ($memo, $application) => {
           $memo[$application.id] = $application;
@@ -182,23 +174,23 @@ function downloadApplicationProfile($application) {
   return new Promise(($resolve, $reject) => {
     getApplicationProfile($application)
       .then(($profile) => {
-        utils.download(JSON.stringify($profile, null, 3), 'application/json', $application.id + '-profile.json');
+        utils.download(JSON.stringify($profile, null, 3), 'application/json', $application.id + constants.DEFAULT_CONSENTCOOKIE_PROFILE_EXPORT_SUFFIX);
         return $resolve(true);
       }, $error => $reject($error));
   });
 }
 
 function getGDPRLink($application) {
-  const gdprContactLink = vue.$services.config.get(DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK);
+  const gdprContactLink = vue.$services.config.get(constants.CONFIG_KEY_GENERAL_GDPR_CONTACTLINK);
   if (!gdprContactLink) {
     return null;
   }
-  return gdprContactLink + '?' + DEFAULT_URL_PARAM_APPLICATION_ID + '=' + $application.id;
+  return gdprContactLink + '?' + constants.DEFAULT_CONSENTCOOKIE_APPLICATION_ID_URL_PARAM + '=' + $application.id;
 }
 
 function getLogo($application) {
-  return $application.icon ? $application.icon : DEFAULT_APPS_LOGO_LOCATION +
-    $application.id + DEFAULT_APPS_LOGO_EXTENSION;
+  return $application.icon ? $application.icon : constants.DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_LOCATION +
+    $application.id + constants.DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_EXTENSION;
 }
 
 export default {
