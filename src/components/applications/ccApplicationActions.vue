@@ -18,7 +18,7 @@
 <template>
   <div class="cc-application-actions" v-if="application.gdpr">
     <button class="cc-contact" v-theme="{color:'primary',borderColor:'primary'}" @click="gdprContact()">
-      <span>Recht op...</span>
+      <span v-t="'applications.actions.gdpr'"/>
     </button>
   </div>
 </template>

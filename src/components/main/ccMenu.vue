@@ -35,11 +35,6 @@
 
 <script>
 
-  // Defaults
-  const DEFAULT_TOOLTIP_DISABLED = 'accepteer eerst';
-  const DEFAULT_TOOLTIP_OPEN = 'ConsentCookie openen';
-  const DEFAULT_TOOLTIP_CLOSE = 'ConsentCookie sluiten';
-
   // Components
   import ccMenuItem from 'components/main/ccMenuItem.vue';
 
@@ -49,12 +44,12 @@
   const menuItems = [{
     icon: 'toggle-on',
     path: '/applications',
-    info: 'Jouw instellingen',
+    info: 'menu.applications',
   }, {
     icon: 'help',
     iconSize: '30',
     path: '/about',
-    info: 'Over ConsentCookie',
+    info: 'menu.about',
   }];
 
   /* VUE */
@@ -80,12 +75,12 @@
       menuTooltip() {
         // If disabled
         if (this.isDisabled) {
-          return DEFAULT_TOOLTIP_DISABLED;
+          return this.$t('menu.disabled');
         }
         if (this.isOpen) {
-          return DEFAULT_TOOLTIP_CLOSE;
+          return this.$t('menu.close');
         }
-        return DEFAULT_TOOLTIP_OPEN;
+        return this.$t('menu.open');
       },
     },
     methods: {

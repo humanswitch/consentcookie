@@ -15,15 +15,14 @@
  *
  */
 
+import _ from 'underscore';
+import * as constants from 'base/constants';
+
 // Defaults
 const DEFAULT_EVENT_WINDOW_RESIZE = 'windowResize';
 const DEFAULT_EVENT_CONTENT_OPENED = 'contentOpened';
 const DEFAULT_MAX_PHONE_WIDTH_PORTRAIT = 480;
 const DEFAULT_MAX_PHONE_HEIGHT_LANDSCAPE = 480;
-
-const DEFAULT_CONFIG_KEY_DESIGN_LAYOUT_POSITION = 'design.layout.position';
-const DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_PRIMARY = 'design.colorscheme.primary';
-const DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_SECONDARY = 'design.colorscheme.secondary';
 
 const window = global || null;
 
@@ -35,6 +34,7 @@ function init($vueServices) {
   initRouteListener();
   initResizeListener();
   initInitialViewState();
+  initEventListeners();
 }
 
 function initInitialViewState() {
@@ -78,6 +78,14 @@ function initResizeListener() {
   });
 }
 
+function initEventListeners() {
+  vue.$events.$on(constants.DEFAULT_EVENT_NAME_APP_OPENVIEW, ($payload) => {
+    if ($payload && _.isString($payload.name)) {
+      vue.$router.push($payload.name);
+    }
+  });
+}
+
 function updateViewState() {
   // Update the view state
   const width = getWindowWidth();
@@ -111,15 +119,15 @@ function getWindowWidth() {
 }
 
 function getPosition() {
-  return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_LAYOUT_POSITION, null);
+  return vue.$services.config.get(constants.CONFIG_KEY_DESIGN_LAYOUT_POSITION, null);
 }
 
 function getColorPrimary() {
-  return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_PRIMARY, null);
+  return vue.$services.config.get(constants.CONFIG_KEY_DESIGN_COLORSCHEME_PRIMARY, null);
 }
 
 function getColorSecondary() {
-  return vue.$services.config.get(DEFAULT_CONFIG_KEY_DESIGN_COLORSCHEME_SECONDARY, null);
+  return vue.$services.config.get(constants.CONFIG_KEY_DESIGN_COLORSCHEME_SECONDARY, null);
 }
 
 function isPhoneMode($width, $height) {
@@ -184,6 +192,7 @@ function onResize($fn) {
 function notifyViewChanged($update) {
   vue.$store.commit('updateView', $update);
 }
+
 
 export default {
   init,

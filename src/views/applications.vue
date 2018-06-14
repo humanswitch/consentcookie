@@ -27,13 +27,9 @@
 </template>
 <script>
 
-  // Components
+  import * as constants from 'base/constants.js'
   import ccApplication from 'components/applications/ccApplication.vue';
 
-  // Defaults
-  const viewTitle = 'Jouw instellingen';
-
-  // Public functions
   export default {
     name: 'applications',
     components: {
@@ -50,7 +46,7 @@
       },
     },
     beforeMount() {
-      this.$store.commit('updateView', { title: viewTitle });
+      this.$store.commit('updateView', { title:  constants.CONFIG_KEY_RESOURCES_APPLICATIONS_TITLE});
     },
   };
 </script>
