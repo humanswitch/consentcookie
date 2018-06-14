@@ -78,7 +78,7 @@ export const DEFAULT_EVENT_NAME_APP_OPENVIEW = 'openView';
 export const DEFAULT_RESOURCES_ABOUT_TEXT = '<p>Baas over eigen data, dat vinden wij heel normaal. Niet alleen vanwege de AVG, maar omdat wij geloven in transparantie en fatsoen. Daarom gebruiken wij ConsentCookie.</p>' +
   '<p>ConsentCookie laat jou zien welke data we van jou verzamelen en waarom we dat doen. Ga naar Jouw instellingen om jouw persoonlijke voorkeuren vast te leggen. Ze zijn daarna direct van kracht en kunnen op elk moment worden aangepast.</p>' +
   '<p><em>ConsentCookie op jouw eigen website gebruiken?</em><br />Voor meer informatie:<a href=\\"https://www.consentcookie.nl\\">www.consentcookie.nl</a></p>';
-export const DEFAULT_RESOURCES_CONSENT_TEXT = '<p>Deze website maakt gebruik van <a href=\\"https://www.consentcookie.nl.nl\\">' +
+export const DEFAULT_RESOURCES_CONSENT_TEXT = '<p>Deze website maakt gebruik van <a href=\\"https://www.consentcookie.nl\\">' +
   '<u>ConsentCookie</u></a> om je cookies en privacy toestemmingen op deze website te beheren.</p>';
 /* eslint-enable max-len */
 
