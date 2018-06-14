@@ -70,6 +70,10 @@ export const DEFAULT_EVENT_CONSENT_STATE_DEFAULT = 'updated';
 export const DEFAULT_EVENT_NAME_CONSENT = 'consent';
 export const DEFAULT_EVENT_NAME_PROFILE = 'profile';
 
+export const DEFAULT_EVENT_NAME_APP_CREATED = 'created';
+export const DEFAULT_EVENT_NAME_APP_MOUNTED = 'mounted';
+export const DEFAULT_EVENT_NAME_APP_OPENVIEW = 'openView';
+
 /* eslint-disable max-len */
 export const DEFAULT_RESOURCES_ABOUT_TEXT = '<p>Baas over eigen data, dat vinden wij heel normaal. Niet alleen vanwege de AVG, maar omdat wij geloven in transparantie en fatsoen. Daarom gebruiken wij ConsentCookie.</p>' +
   '<p>ConsentCookie laat jou zien welke data we van jou verzamelen en waarom we dat doen. Ga naar Jouw instellingen om jouw persoonlijke voorkeuren vast te leggen. Ze zijn daarna direct van kracht en kunnen op elk moment worden aangepast.</p>' +

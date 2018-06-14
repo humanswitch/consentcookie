@@ -38,6 +38,7 @@ import vueAsyncComputed from 'vue-async-computed';
 
 import _ from 'mixins/underscore';
 import utils from 'base/utils';
+import * as constants from 'base/constants';
 
 // Default Directives
 import ccTheme from 'directives/ccTheme';
@@ -90,12 +91,12 @@ function initVue($config) {
       bootstrapApp.call(this);
     },
   });
-  setTimeout(() => mainInstance.$events.$emit('created'), 0);
+  setTimeout(() => mainInstance.$events.$emit(constants.DEFAULT_EVENT_NAME_APP_CREATED), 0);
 
   return onReady(() => {
     initBaseView();
     mainInstance.$mount('#ConsentCookie');
-    setTimeout(() => mainInstance.$events.$emit('mounted'), 0);
+    setTimeout(() => mainInstance.$events.$emit(constants.DEFAULT_EVENT_NAME_APP_MOUNTED), 0);
   });
 }
 

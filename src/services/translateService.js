@@ -30,18 +30,19 @@ let configuredLanguage;
 function init(vueServices) {
   vue = vueServices.getVueInstance();
   vue.$i18n.locale = getLanguage();
-  vue.$events.on('created', () => initDefaultResources());
+  vue.$events.on(constants.DEFAULT_EVENT_NAME_APP_CREATED, () => initDefaultResources());
 }
 
 function initDefaultResources() {
   const resources = vue.$services.config.get('resources');
   _.each(resources, ($val, $key) => {
-    const merged = _.extendDeep(vue.$i18n.getLocaleMessage($key),$val,($target,$source) => {
-      if((_.isObject($source)) || !(_.isEmpty(_.trim($source)))){
+    const merged = _.extendDeep(vue.$i18n.getLocaleMessage($key), $val, ($target, $source) => {
+      if ((_.isObject($source)) || !(_.isEmpty(_.trim($source)))) {
         return $source;
       }
+      return undefined;
     });
-    vue.$i18n.mergeLocaleMessage($key,merged);
+    vue.$i18n.mergeLocaleMessage($key, merged);
   });
 }
 
@@ -50,23 +51,23 @@ function setLanguage($lang) {
   vue.$i18n.locale = $lang;
 }
 
-function getLanguage(){
-  if(configuredLanguage){
+function getLanguage() {
+  if (configuredLanguage) {
     return configuredLanguage;
   }
   return getBrowserLanguage() || constants.DEFAULT_RESOURCE_LANGUAGE;
 }
 
 function getBrowserLanguage() {
-  const navLanguages = utils.getObjectValue(window,'navigator.languages');
-  if(!(_.isEmpty(navLanguages))){
-    return navLanguages[0];
-  }
-  if(!window || !window.navigator){
+  if (!window || !window.navigator) {
     return null;
   }
+  const navLanguages = utils.getObjectValue(window, 'navigator.languages');
+  if (!(_.isEmpty(navLanguages))) {
+    return navLanguages[0];
+  }
   for (let i = 0; i < DEFAULT_LEGACY_LANGUAGE_PROPERTIES.length; i++) {
-    let language = window.navigator[DEFAULT_LEGACY_LANGUAGE_PROPERTIES[i]];
+    const language = window.navigator[DEFAULT_LEGACY_LANGUAGE_PROPERTIES[i]];
     if (language && language.length) {
       return language;
     }

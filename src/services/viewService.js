@@ -78,13 +78,12 @@ function initResizeListener() {
   });
 }
 
-function initEventListeners(){
-  vue.$events.$on("openView",($payload) => {
-    if($payload && _.isString($payload.name)){
-      debugger;
+function initEventListeners() {
+  vue.$events.$on(constants.DEFAULT_EVENT_NAME_APP_OPENVIEW, ($payload) => {
+    if ($payload && _.isString($payload.name)) {
       vue.$router.push($payload.name);
     }
-  })
+  });
 }
 
 function updateViewState() {
