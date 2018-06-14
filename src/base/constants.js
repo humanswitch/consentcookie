@@ -97,7 +97,6 @@ export const DEFAULT_CONFIG = {
       general: {
         on: 'Aan',
         off: 'Uit',
-        close: 'Sluiten',
         moreInfo: 'Meer informatie'
       },
       menu: {
