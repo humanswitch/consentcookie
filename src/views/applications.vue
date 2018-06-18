@@ -21,13 +21,14 @@
       <cc-application v-for="application in applications" :key="application.id" :application="application"/>
     </div>
     <div class="cc-more-info">
-      <a v-if="moreInfo" :href="moreInfo">Meer informatie over deze applicaties</a>
+      <a v-if="hasMoreInfoLink" :href="$t(configKeyMoreInfoLink)">{{ $t(configKeyMoreInfo) }}</a>
     </div>
   </div>
 </template>
 <script>
 
-  import * as constants from 'base/constants.js'
+  import _ from 'underscore';
+  import * as constants from 'base/constants.js';
   import ccApplication from 'components/applications/ccApplication.vue';
 
   export default {
@@ -37,8 +38,18 @@
     },
     data() {
       return {
-        moreInfo: this.$services.config.get('moreinfolink'),
+        configKeyMoreInfo: constants.CONFIG_KEY_RESOURCES_APPLICATIONS_MOREINFO,
+        configKeyMoreInfoLink: constants.CONFIG_KEY_RESOURCES_APPLICATIONS_MOREINFO_LINK,
       };
+    },
+    computed: {
+      configKeyResourceMoreInfoLink() {
+        return _.template(constants.DEFAULT_RESOURCE_PREFIX_TEMPLATE)({ language: this.$i18n.locale }) + constants.CONFIG_KEY_RESOURCES_APPLICATIONS_MOREINFO_LINK;
+      },
+      hasMoreInfoLink() {
+        return this.$services.config.get(this.configKeyResourceMoreInfoLink, null) !== null
+          || constants.DEFAULT_RESOURCE_LANGUAGE === this.$i18n.locale;
+      }
     },
     asyncComputed: {
       applications() {
@@ -46,7 +57,7 @@
       },
     },
     beforeMount() {
-      this.$store.commit('updateView', { title:  constants.CONFIG_KEY_RESOURCES_APPLICATIONS_TITLE});
+      this.$store.commit('updateView', { title: constants.CONFIG_KEY_RESOURCES_APPLICATIONS_TITLE });
     },
   };
 </script>
