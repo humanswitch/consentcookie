@@ -35,25 +35,8 @@ module.exports = {
   // check if imports actually resolve
   settings: {
     'import/resolver': {
-      // TODO Need to replace this with the reference of the Webpack config. Due to a bug it was not working
       webpack: {
-        config: {
-          resolve: {
-            extensions: ['', '.js', '.vue', '.json'],
-            fallback: [path.join(__dirname, '../node_modules')],
-            alias: {
-              'src': path.resolve(__dirname, './src'),
-              'assets': path.resolve(__dirname, './src/assets'),
-              'base': path.resolve(__dirname, './src/base'),
-              'config': path.resolve(__dirname, './src/config'),
-              'components': path.resolve(__dirname, './src/components'),
-              'router': path.resolve(__dirname, './src/router'),
-              'views': path.resolve(__dirname, './src/views'),
-              'services': path.resolve(__dirname, './src/services'),
-              'plugins': path.resolve(__dirname, './src/plugins')
-            }
-          },
-        },
+        config: 'build/webpack.base.conf.js'
       }
     }
   },

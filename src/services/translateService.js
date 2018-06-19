@@ -19,43 +19,90 @@
  * Translate service for handling i18n business
  */
 import _ from 'underscore';
-import utils from 'base/utils.js';
+import utils from 'base/utils';
 import * as constants from 'base/constants';
 
 const DEFAULT_LEGACY_LANGUAGE_PROPERTIES = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'];
+const DEFAULT_I18N_PROPERTY_LOCALE = 'locale';
+const DEFAULT_I18N_PROPERTY_FALLBACK_LOCALE = 'fallbackLocale';
+
+const DEFAULT_AVAILABLE_LANGUAGES = [];
 
 let vue;
-let configuredLanguage;
+let manualConfiguredLanguage;
 
 function init(vueServices) {
   vue = vueServices.getVueInstance();
-  vue.$i18n.locale = getLanguage();
-  vue.$events.on(constants.DEFAULT_EVENT_NAME_APP_CREATED, () => initDefaultResources());
-}
-
-function initDefaultResources() {
-  const resources = vue.$services.config.get('resources');
-  _.each(resources, ($val, $key) => {
-    const merged = _.extendDeep(vue.$i18n.getLocaleMessage($key), $val, ($target, $source) => {
-      if ((_.isObject($source)) || !(_.isEmpty(_.trim($source)))) {
-        return $source;
-      }
-      return undefined;
-    });
-    vue.$i18n.mergeLocaleMessage($key, merged);
+  vue.$set(vue.$i18n, DEFAULT_I18N_PROPERTY_LOCALE, getLanguage());
+  vue.$set(vue.$i18n, DEFAULT_I18N_PROPERTY_FALLBACK_LOCALE, constants.DEFAULT_RESOURCE_LANGUAGE);
+  vue.$events.on(constants.DEFAULT_EVENT_NAME_APP_CREATED, () => {
+    initDefaultResources();
+    initLanguage();
   });
 }
 
-function setLanguage($lang) {
-  configuredLanguage = $lang;
-  vue.$i18n.locale = $lang;
+function initDefaultResources() {
+  DEFAULT_AVAILABLE_LANGUAGES.splice(0, DEFAULT_AVAILABLE_LANGUAGES.length);
+  const resources = vue.$services.config.get('resources');
+  _.each(resources, ($val, $key) => {
+    if (addLanguage($key, $val)) {
+      DEFAULT_AVAILABLE_LANGUAGES.push($key);
+    }
+  });
+}
+
+function initLanguage() {
+  vue.$set(vue.$i18n, DEFAULT_I18N_PROPERTY_LOCALE, getLanguage());
+}
+
+function addLanguage($lang, $resouce) {
+  if (_.isEmpty(_.trim($lang)) || !(_.isObject($resouce))) {
+    return false;
+  }
+  const merged = _.extendDeep(vue.$i18n.getLocaleMessage($lang), $resouce, ($target, $source) => {
+    if ((_.isObject($source)) || !(_.isEmpty(_.trim($source)))) {
+      return $source;
+    }
+    return undefined;
+  });
+  vue.$i18n.mergeLocaleMessage($lang, merged);
+  return true;
+}
+
+function setLanguage($lang, $force) {
+  manualConfiguredLanguage = $lang;
+  if ($force === true || DEFAULT_AVAILABLE_LANGUAGES.includes($lang)) {
+    vue.$set(vue.$i18n, DEFAULT_I18N_PROPERTY_LOCALE, $lang);
+  }
 }
 
 function getLanguage() {
-  if (configuredLanguage) {
-    return configuredLanguage;
+  if (manualConfiguredLanguage && DEFAULT_AVAILABLE_LANGUAGES.includes(manualConfiguredLanguage)) {
+    return manualConfiguredLanguage;
   }
-  return getBrowserLanguage() || constants.DEFAULT_RESOURCE_LANGUAGE;
+  let selected = vue.$services.config.get(constants.CONFIG_KEY_GENERAL_LANGUAGE_DEFAULT, null);
+
+  if (isLanguageAvailable(selected)) {
+    return selected;
+  }
+
+  selected = getBrowserLanguage();
+
+  if (isLanguageAvailable(selected)) {
+    return selected;
+  }
+
+  selected = vue.$services.config.get(constants.CONFIG_KEY_GENERAL_LANGUAGE_FALLBACK, null);
+
+  if (isLanguageAvailable(selected)) {
+    return selected;
+  }
+
+  return constants.DEFAULT_RESOURCE_LANGUAGE;
+}
+
+function isLanguageAvailable($language) {
+  return !(_.isEmpty(_.trim($language))) && DEFAULT_AVAILABLE_LANGUAGES.includes($language);
 }
 
 function getBrowserLanguage() {
@@ -79,4 +126,5 @@ export default {
   init,
   setLanguage,
   getLanguage,
+  addLanguage,
 };
