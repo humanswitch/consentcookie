@@ -19,19 +19,15 @@
 import mutationObserverShim from 'mutationobserver-shim';
 import promisePolyfill from 'promise-polyfill';
 
-// Defaults
-const DEFAULT_INFO_LINK = 'https://www.consentcookie.nl/';
-const DEFAULT_APP_NAME = 'ConsentCookie';
-
 import icons from 'assets/fonts/fontello/css/fontello.css';
 import css from 'assets/scss/_icookie.scss';
 
 // Vue Framework
 import vue from 'vue';
-import vueState from 'config/configState.js';
-import vueRouter from 'config/configRouter.js';
-import vueServices from 'config/configServices.js';
-import vueI18n from 'config/configI18n.js';
+import vueState from 'config/configState';
+import vueRouter from 'config/configRouter';
+import vueServices from 'config/configServices';
+import vueI18n from 'config/configI18n';
 import vueResources from 'vue-resource';
 import vueEvents from 'vue-events';
 import vueAsyncComputed from 'vue-async-computed';
@@ -45,6 +41,10 @@ import ccTheme from 'directives/ccTheme';
 
 // Views
 import mainView from 'views/main';
+
+// Defaults
+const DEFAULT_INFO_LINK = 'https://www.consentcookie.nl/';
+const DEFAULT_APP_NAME = 'ConsentCookie';
 
 // Instance variables
 let mainInstance;
@@ -172,11 +172,18 @@ function registerPlugin($plugin) {
   return mainInstance.$services.plugin.register($plugin);
 }
 
-function setLanguage($lang) {
+function setLanguage($lang, $force) {
   if (!mainInstance) {
     return utils.logErrorOrThrowException('Unable to setLanguage. ConsentCookie is not yet initialized.');
   }
-  return mainInstance.$services.translate.setLanguage($lang);
+  return mainInstance.$services.translate.setLanguage($lang, $force);
+}
+
+function addLanguage($lang, $resource) {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('Unable to addLanguage. ConsentCookie is not yet initialized.');
+  }
+  return mainInstance.$services.translate.addLanguage($lang, $resource);
 }
 
 export default (function () {
@@ -196,6 +203,7 @@ export default (function () {
     getConsents,
     registerPlugin,
     setLanguage,
+    addLanguage,
     ver: VERSION,
   };
 }());

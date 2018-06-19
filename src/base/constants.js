@@ -1,11 +1,18 @@
 const uuidv1 = require('uuid/v1');
 
 /* CONFIG KEYS */
-export const CONFIG_KEY_GENERAL_GDPR_CONTACTLINK = 'general.gdpr.contact';
-export const CONFIG_KEY_GENERAL_CONSENTWALL = 'general.consentwall';
+export const CONFIG_KEY_GENERAL = 'general';
+export const CONFIG_KEY_GENERAL_GDPR = CONFIG_KEY_GENERAL + '.gdpr';
+export const CONFIG_KEY_GENERAL_GDPR_CONTACTLINK = CONFIG_KEY_GENERAL_GDPR + '.contact';
+
+export const CONFIG_KEY_GENERAL_CONSENTWALL = CONFIG_KEY_GENERAL + '.consentwall';
 export const CONFIG_KEY_GENERAL_CONSENTWALL_ENABLED = CONFIG_KEY_GENERAL_CONSENTWALL + '.enabled';
 export const CONFIG_KEY_GENERAL_CONSENTWALL_TIMEOUT = CONFIG_KEY_GENERAL_CONSENTWALL + '.timeout';
 export const CONFIG_KEY_GENERAL_CONSENTWALL_BLOCKPAGE = CONFIG_KEY_GENERAL_CONSENTWALL + '.blockpage';
+
+export const CONFIG_KEY_GENERAL_LANGUAGE = CONFIG_KEY_GENERAL + '.language';
+export const CONFIG_KEY_GENERAL_LANGUAGE_DEFAULT = CONFIG_KEY_GENERAL_LANGUAGE + '.default';
+export const CONFIG_KEY_GENERAL_LANGUAGE_FALLBACK = CONFIG_KEY_GENERAL_LANGUAGE + '.fallback';
 
 export const CONFIG_KEY_APPS = 'apps';
 export const CONFIG_KEY_APPS_ENDPOINT = CONFIG_KEY_APPS + '.endpoint';
@@ -94,14 +101,17 @@ export const DEFAULT_CONFIG = {
       timeout: 1000,
       blockpage: false,
     },
-    defaultLanguage: DEFAULT_RESOURCE_LANGUAGE
+    language: {
+      default: '',
+      fallback: '',
+    },
   },
   resources: {
     nl: {
       general: {
         on: 'Aan',
         off: 'Uit',
-        moreInfo: 'Meer informatie'
+        moreInfo: 'Meer informatie',
       },
       menu: {
         applications: 'Jouw instellingen',
@@ -119,14 +129,14 @@ export const DEFAULT_CONFIG = {
         },
         detail: {
           moreInfo: 'Meer informatie over',
-          gdprInfo: 'Contact over jouw AVG rechten'
+          gdprInfo: 'Contact over jouw AVG rechten',
         },
         profile: {
           title: 'Jouw profiel',
           loading: 'Profiel wordt opgehaald',
           noPlugin: 'Deze applicatie heeft geen publiek profiel beschikbaar',
           noProfile: 'Geen profiel beschikbaar',
-        }
+        },
       },
       about: {
         title: 'Over ConsentCookie',
