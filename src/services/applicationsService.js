@@ -33,11 +33,34 @@ function init(vueServices) {
 
 function loadApplications() {
   if (!applications) {
-    const applicationsUrl = vue.$services.config.get(constants.CONFIG_KEY_APPS_ENDPOINT, constants.DEFAULT_CONSENTCOOKIE_APPLICATION_RESOURCE_LOCATION);
-    applications = vue.$http.get(applicationsUrl)
-      .then($request => ($request.status === 200 ? $request.body : []));
+    const applicationsEndPoint = getApplicationEndPoint();
+    applications = (applicationsEndPoint == null) ? new Promise(($resolve) => $resolve([])) :
+      vue.$http.get(applicationsEndPoint)
+        .then($request => ($request.status === 200 ? $request.body : []));
   }
   return applications;
+}
+
+function getApplicationEndPoint() {
+  const endpoint = vue.$services.config.get(constants.CONFIG_KEY_APPS_ENDPOINT);
+
+  if (!(_.isEmpty(_.trim(endpoint)))) {
+    return endpoint;
+  }
+  if (_.isObject(endpoint)) {
+    const language = vue.$services.translate.getLanguage();
+    if (endpoint[language]) {
+      return endpoint[language];
+    }
+  }
+  if (endpoint === false) {
+    return null;
+  }
+  return getDefaultApplicationEndPoint();
+}
+
+function getDefaultApplicationEndPoint() {
+  return constants.DEFAULT_CONSENTCOOKIE_APPLICATION_RESOURCE_LOCATION;
 }
 
 function getActive() {
