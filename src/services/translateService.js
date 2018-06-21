@@ -30,6 +30,7 @@ const DEFAULT_AVAILABLE_LANGUAGES = [];
 
 let vue;
 let manualConfiguredLanguage;
+let languageAliases;
 
 function init(vueServices) {
   vue = vueServices.getVueInstance();
@@ -43,10 +44,13 @@ function init(vueServices) {
 
 function initDefaultResources() {
   DEFAULT_AVAILABLE_LANGUAGES.splice(0, DEFAULT_AVAILABLE_LANGUAGES.length);
+  languageAliases = {};
   const resources = vue.$services.config.get('resources');
   _.each(resources, ($val, $key) => {
     if (addLanguage($key, $val)) {
       DEFAULT_AVAILABLE_LANGUAGES.push($key);
+    } else if (_.isString(_.trim($val))) {
+      languageAliases[$key] = $val;
     }
   });
 }
@@ -77,28 +81,32 @@ function setLanguage($lang, $force) {
 }
 
 function getLanguage() {
-  if (manualConfiguredLanguage && DEFAULT_AVAILABLE_LANGUAGES.includes(manualConfiguredLanguage)) {
-    return manualConfiguredLanguage;
+  if (manualConfiguredLanguage && isLanguageAvailable(getAlias(manualConfiguredLanguage))) {
+    return getAlias(manualConfiguredLanguage);
   }
   let selected = vue.$services.config.get(constants.CONFIG_KEY_GENERAL_LANGUAGE_DEFAULT, null);
 
-  if (isLanguageAvailable(selected)) {
-    return selected;
+  if (isLanguageAvailable(getAlias(selected))) {
+    return getAlias(selected);
   }
 
   selected = getBrowserLanguage();
 
-  if (isLanguageAvailable(selected)) {
-    return selected;
+  if (isLanguageAvailable(getAlias(selected))) {
+    return getAlias(selected);
   }
 
   selected = vue.$services.config.get(constants.CONFIG_KEY_GENERAL_LANGUAGE_FALLBACK, null);
 
-  if (isLanguageAvailable(selected)) {
-    return selected;
+  if (isLanguageAvailable(getAlias(selected))) {
+    return getAlias(selected);
   }
 
   return constants.DEFAULT_RESOURCE_LANGUAGE;
+}
+
+function getAlias($language) {
+  return (languageAliases && languageAliases[$language]) ? languageAliases[$language] : $language;
 }
 
 function isLanguageAvailable($language) {
