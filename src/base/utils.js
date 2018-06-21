@@ -30,8 +30,8 @@ function getObjectValue($object, $nameSpace, $default) {
   for (let i = 0; i < nameSpaceArray.length; i += 1) {
     object = object[nameSpaceArray[i]];
 
-    if (!object) {
-      return object || defaultVal;
+    if (typeof object === 'undefined' || object === null) {
+      return (typeof object !== 'undefined' && object !== null) ? object : defaultVal;
     }
   }
   return object;
