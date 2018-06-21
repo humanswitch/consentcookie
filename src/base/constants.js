@@ -149,5 +149,7 @@ export const DEFAULT_CONFIG = {
         infolink: 'https://www.consentcookie.nl',
       },
     },
+    // Default aliases
+    "nl-BE": 'nl'
   },
 };
