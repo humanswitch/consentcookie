@@ -90,8 +90,17 @@ export const DEFAULT_EVENT_NAME_APP_OPENVIEW = 'openView';
 export const DEFAULT_RESOURCES_ABOUT_TEXT = '<p>Baas over eigen data, dat vinden wij heel normaal. Niet alleen vanwege de AVG, maar omdat wij geloven in transparantie en fatsoen. Daarom gebruiken wij ConsentCookie.</p>' +
   '<p>ConsentCookie laat jou zien welke data we van jou verzamelen en waarom we dat doen. Ga naar Jouw instellingen om jouw persoonlijke voorkeuren vast te leggen. Ze zijn daarna direct van kracht en kunnen op elk moment worden aangepast.</p>' +
   '<p><em>ConsentCookie op jouw eigen website gebruiken?</em><br />Voor meer informatie:<a href=\\"https://www.consentcookie.nl\\">www.consentcookie.nl</a></p>';
+
 export const DEFAULT_RESOURCES_CONSENT_TEXT = '<p>Deze website maakt gebruik van <a href=\\"https://www.consentcookie.nl\\">' +
   '<u>ConsentCookie</u></a> om je cookies en privacy toestemmingen op deze website te beheren.</p>';
+
+export const DEFAULT_RESOURCES_ABOUT_TEXT_EN = '<p>Being in control of your data is one of our core believes. Not just because of the GDPR, but because we believe it is important to be transparent and decent. That is why we use ConsentCookie!</p>' +
+  '<p>ConsentCookie gives you insight in which data we collect and for what purposes. Go to Your Settings to configure your preferences for which data is collected. Changes are active immediately and can be applied at any time.</p>' +
+  '<p><em>ConsentCookie on your website?</em><br />For more info:<a href=\\"https://www.consentcookie.nl\\">www.consentcookie.nl</a></p>';
+
+export const DEFAULT_RESOURCES_CONSENT_TEXT_EN = '<p>This websites uses <a href=\\"https://www.consentcookie.nl\\">' +
+  '<u>ConsentCookie</u></a> to be able to control your cookies and privacy consents on this website.</p>';
+
 /* eslint-enable max-len */
 
 /* DEFAULT CONFIG */
@@ -150,7 +159,61 @@ export const DEFAULT_CONFIG = {
         infolink: 'https://www.consentcookie.nl',
       },
     },
+    en: {
+      general: {
+        on: 'On',
+        off: 'Off',
+        moreInfo: 'More information',
+      },
+      menu: {
+        applications: 'Your settings',
+        about: 'About ConsentCookie',
+        open: 'Open ConsentCookie',
+        close: 'Close ConsentCookie',
+        disabled: 'You need to accept first',
+      },
+      applications: {
+        title: 'Your settings',
+        moreInfo: 'More information about these applications',
+        moreInfoLink: 'https://www.consentcookie.nl',
+        actions: {
+          gdpr: 'Your GDPR rights...',
+        },
+        detail: {
+          moreInfo: 'More information about',
+          gdprInfo: 'Contact about your GDPR rights',
+        },
+        profile: {
+          title: 'Your profile',
+          loading: 'Retrieving profile',
+          noPlugin: 'This application has no public profile available',
+          noProfile: 'No profile available',
+        },
+      },
+      about: {
+        title: 'About ConsentCookie',
+        text: DEFAULT_RESOURCES_ABOUT_TEXT_EN,
+      },
+      consent: {
+        title: 'ConsentCookie!',
+        text: DEFAULT_RESOURCES_CONSENT_TEXT_EN,
+        button: 'Ok!',
+        infolink: 'https://www.consentcookie.nl',
+      },
+    },
     // Default aliases
-    'nl-BE': 'nl'
+    'nl-BE': 'nl',
+    'en-AU': 'en',
+    'en-BZ': 'en',
+    'en-CA': 'en',
+    'en-IE': 'en',
+    'en-JM': 'en',
+    'en-NZ': 'en',
+    'en-PH': 'en',
+    'en-ZA': 'en',
+    'en-TT': 'en',
+    'en-GB': 'en',
+    'en-US': 'en',
+    'en-ZW': 'en',
   },
 };
