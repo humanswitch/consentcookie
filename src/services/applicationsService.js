@@ -24,7 +24,7 @@ import * as constants from 'base/constants';
 
 
 let vue;
-let applications;
+let applicationsPromise;
 let activeApplications;
 
 function init(vueServices) {
@@ -32,13 +32,53 @@ function init(vueServices) {
 }
 
 function loadApplications() {
-  if (!applications) {
+  if (!applicationsPromise) {
     const applicationsEndPoint = getApplicationEndPoint();
-    applications = (applicationsEndPoint == null) ? new Promise(($resolve) => $resolve([])) :
-      vue.$http.get(applicationsEndPoint)
-        .then($request => ($request.status === 200 ? $request.body : []));
+    const emptyResult = [];
+    if (applicationsEndPoint === null) {
+      applicationsPromise = new Promise(($resolve) => $resolve(processApplicationsResult(emptyResult)));
+    } else {
+      applicationsPromise = vue.$http.get(applicationsEndPoint)
+        .then($request => ($request.status === 200 ? processApplicationsResult($request.body) : processApplicationsResult(emptyResult)));
+    }
   }
-  return applications;
+  return applicationsPromise;
+}
+
+function processApplicationsResult($applications) {
+  const staticApplications = getStaticApplications();
+
+  if (!(_.isArray($applications)) || _.isEmpty($applications)) {
+    return staticApplications;
+  } else if (!(_.isArray(staticApplications)) || _.isEmpty(staticApplications)) {
+    return $applications;
+  }
+  const staticApplicationsMap = _.reduce(staticApplications, ($memo, $app) => {
+    if ($app.id) {
+      $memo[$app.id] = $app;
+    }
+    return $app;
+  }, {});
+
+  return _.chain($applications)
+    .filter(($application) => !(_.isObject(staticApplicationsMap[$application.id])))
+    .union(staticApplications)
+    .sortBy(($application) => $application.id)
+    .value();
+}
+
+function getStaticApplications() {
+  const emptyResult = [];
+  const staticApplications = vue.$services.config.get(constants.CONFIG_KEY_APPS_STATIC, null);
+
+  if (_.isArray(staticApplications)) {
+    return staticApplications;
+  }
+  else if (_.isObject(staticApplications)) {
+    const language = vue.$services.translate.getLanguage();
+    return _.isArray(staticApplications[language]) ? staticApplications[language] : emptyResult;
+  }
+  return emptyResult;
 }
 
 function getApplicationEndPoint() {

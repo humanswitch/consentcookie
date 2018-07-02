@@ -15,6 +15,7 @@ export const CONFIG_KEY_GENERAL_LANGUAGE_DEFAULT = CONFIG_KEY_GENERAL_LANGUAGE +
 export const CONFIG_KEY_GENERAL_LANGUAGE_FALLBACK = CONFIG_KEY_GENERAL_LANGUAGE + '.fallback';
 
 export const CONFIG_KEY_APPS = 'apps';
+export const CONFIG_KEY_APPS_STATIC = CONFIG_KEY_APPS + '.static';
 export const CONFIG_KEY_APPS_ENDPOINT = CONFIG_KEY_APPS + '.endpoint';
 export const CONFIG_KEY_APPS_CONSENT = CONFIG_KEY_APPS + '.consent';
 
@@ -150,6 +151,6 @@ export const DEFAULT_CONFIG = {
       },
     },
     // Default aliases
-    "nl-BE": 'nl'
+    'nl-BE': 'nl'
   },
 };
