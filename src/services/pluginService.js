@@ -93,10 +93,10 @@ function cleanupScriptTag($id) {
   }
 }
 
-function loadPlugin($id, $path) {
+function loadPlugin($id, $src) {
   return new Promise(($resolve, $reject) => {
     const uniqueId = ($id + '_' + new Date().getTime());
-    const scriptElement = vue.$services.script.createScriptElement(uniqueId, $path, () => {
+    const scriptElement = vue.$services.script.createScriptElement(uniqueId, $src, () => {
       // Check if plugin is registered
       const plugin = pluginCache[$id];
 
@@ -119,13 +119,14 @@ function getPlugin($application) {
     if (!(_.isString($application.id))) {
       return $reject(new Error('No plugin available. Missing id.'));
     }
-    if (!(_.isString($application.plugin))) {
-      return $reject(new Error('No plugin available. Missing path.'));
+    const pluginSrc = vue.$services.applications.getPluginSrc($application);
+    if (_.isEmpty(_.trim(pluginSrc))) {
+      return $reject(new Error('No plugin available. Missing plugin src.'));
     }
     if (pluginCache[$application.id]) {
       return $resolve(pluginCache[$application.id]);
     }
-    return loadPlugin($application.id, $application.plugin)
+    return loadPlugin($application.id, pluginSrc)
       .then($plugin => $resolve($plugin), $error => $reject($error));
   });
 }

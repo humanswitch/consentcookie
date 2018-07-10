@@ -124,11 +124,11 @@ function enableEnabledScripts() {
   }
 }
 
-function createScriptElement($uniqueId, $path, $callback, $async) {
+function createScriptElement($uniqueId, $src, $callback, $async) {
   const self = this;
   const scriptTag = window.document.createElement('script');
   scriptTag.id = $uniqueId;
-  scriptTag.src = $path;
+  scriptTag.src = $src;
   if ($async === true) {
     scriptTag.async = 'true';
   }

@@ -204,6 +204,14 @@ function getPlugin($application) {
   });
 }
 
+function getPluginSrc($application) {
+  if (!$application || !$application.id) {
+    return null;
+  }
+  const consentConfigKey = _.template(constants.DEFAULT_CONSENTCOOKIE_APPLICATION_CONSENT_PREFIX_TEMPLATE)({ applicationId: $application.id }) + constants.CONFIG_KEY_APPS_CONSENT_PLUGIN;
+  return vue.$services.config.get(consentConfigKey, $application.plugin);
+}
+
 function getApplicationProfile($application) {
   return new Promise(($resolve, $reject) => {
     getPlugin($application)
@@ -260,6 +268,7 @@ export default {
   init,
   hasPlugin,
   getPlugin,
+  getPluginSrc,
   getActive,
   getApplicationProfile,
   getApplicationProfileInfo,
