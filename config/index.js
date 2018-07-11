@@ -22,7 +22,6 @@ const packageConfig = require('../package.json');
 module.exports = {
   build: {
     env: require('./prod.env'), // eslint-disable-line global-require
-    ver: JSON.stringify(packageConfig.version),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsRootRelease: path.resolve(__dirname, '../dist'),

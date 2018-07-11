@@ -128,3 +128,7 @@ exports.createNotifierCallback = () => {
     });
   };
 };
+
+exports.getBuildVersion = function () {
+  return process.env.BUILD_VER ? process.env.BUILD_VER : packageConfig.version;
+};
