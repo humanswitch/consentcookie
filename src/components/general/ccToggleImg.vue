@@ -24,9 +24,9 @@
 <script>
 
   // Components
-  const ccImg = require('components/general/ccImg.vue');
+  import ccImg from 'components/general/ccImg.vue';
 
-  module.exports = {
+  export default {
     name: 'cc-toggle-img',
     components: {
       ccImg,

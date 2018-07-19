@@ -16,20 +16,28 @@
  */
 
 'use strict';
-
 const path = require('path');
-const config = require('../config/index');
 const utils = require('./utils');
-const projectRoot = path.resolve(__dirname, '../');
+const config = require('../config');
+const vueLoaderConfig = require('./vue-loader.conf');
 
-const env = process.env.NODE_ENV;
-// check env & config/index.js to decide whether to enable CSS source maps for the
-// constious preprocessor loaders added to vue-loader at the end of this file
-const cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap);
-const cssSourceMapProd = (env === 'production' && config.build.productionSourceMap);
-const useCssSourceMap = cssSourceMapDev || cssSourceMapProd;
+function resolve(dir) {
+  return path.join(__dirname, '..', dir);
+}
+
+const createLintingRule = () => ({
+  test: /\.(js|vue)$/,
+  loader: 'eslint-loader',
+  enforce: 'pre',
+  include: [resolve('src'), resolve('test')],
+  options: {
+    formatter: require('eslint-friendly-formatter'),
+    emitWarning: !config.dev.showEslintErrorsInOverlay
+  }
+});
 
 module.exports = {
+  context: path.resolve(__dirname, '../'),
   entry: {
     consentcookie: './src/app.js'
   },
@@ -39,45 +47,48 @@ module.exports = {
     filename: '[name].js',
     libraryTarget: 'umd',
     // the name exported to window
-    library: 'ConsentCookie'
+    library: 'ConsentCookie',
   },
   resolve: {
-    extensions: ['', '.js', '.vue', '.json'],
-    fallback: [path.join(__dirname, '../node_modules')],
+    extensions: ['.js', '.vue', '.json'],
     alias: {
-      'src': path.resolve(__dirname, '../src'),
-      'assets': path.resolve(__dirname, '../src/assets'),
-      'base': path.resolve(__dirname, '../src/base'),
-      'config': path.resolve(__dirname, '../src/config'),
-      'components': path.resolve(__dirname, '../src/components'),
-      'router': path.resolve(__dirname, '../src/router'),
-      'views': path.resolve(__dirname, '../src/views'),
-      'services': path.resolve(__dirname, '../src/services'),
-      'plugins': path.resolve(__dirname, '../src/plugins'),
-      'directives': path.resolve(__dirname, '../src/directives'),
-      'mixins': path.resolve(__dirname, '../src/mixins'),
+      'node_modules': resolve('node_modules'),
+      'vue$': 'vue/dist/vue.runtime.esm.js',
+      '@': resolve('src'),
+      'src': resolve('src'),
+      'assets': resolve('src/assets'),
+      'base': resolve('src/base'),
+      'config': resolve('src/config'),
+      'components': resolve('src/components'),
+      'router': resolve('src/router'),
+      'views': resolve('src/views'),
+      'services': resolve('src/services'),
+      'plugins': resolve('src/plugins'),
+      'directives': resolve('src/directives'),
+      'mixins': resolve('src/mixins'),
     }
   },
-  resolveLoader: {
-    fallback: [path.join(__dirname, '../node_modules')]
-  },
   module: {
-    loaders: [
+    rules: [
+      ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
         test: /\.vue$/,
-        loader: 'vue'
+        loader: 'vue-loader',
+        options: vueLoaderConfig
       },
       {
         test: /\.js$/,
-        loader: 'babel',
-        include: [
-          path.join(projectRoot, 'src')
-        ],
+        loader: 'babel-loader',
+        include: [resolve('src'), resolve('test')],
         exclude: /node_modules/
       },
       {
-        test: /\.json$/,
-        loader: 'json'
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: [resolve('node_modules/webpack-dev-server/client')],
+        options: {
+          babelrc: false
+        }
       },
       {
         test: /\.(yml|yaml)$/,
@@ -85,7 +96,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif)(\?.*)?$/,
-        loader: process.env.NODE_ENV === 'production' ? 'base64-image-loader' : 'url',
+        loader: process.env.NODE_ENV === 'production' ? 'base64-image-loader' : 'url-loader',
         query: {
           limit: 1000000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
@@ -93,8 +104,8 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|ttf|eot|svg)(\?.*)?$/,
-        include: [path.join(projectRoot, 'src/assets/fonts')],
-        loader: process.env.NODE_ENV === 'production' ? 'base64-font-loader' : 'url',
+        include: [resolve('src/assets/fonts')],
+        loader: process.env.NODE_ENV === 'production' ? 'base64-font-loader' : 'url-loader',
         query: {
           limit: 1000000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
@@ -102,26 +113,30 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        include: [path.join(projectRoot, 'src/assets/img')],
+        include: [resolve('src/assets/img')],
         loader: 'vue-svg-loader', // `vue-svg` for webpack 1.x
         options: {
           // optional [svgo](https://github.com/svg/svgo) options
           svgo: {
             plugins: [
-              {removeDoctype: true},
-              {removeComments: true}
+              { removeDoctype: true },
+              { removeComments: true }
             ]
           }
         }
       },
     ]
   },
-  vue: {
-    loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
-    postcss: [
-      require('autoprefixer')({
-        browsers: ['last 2 versions']
-      })
-    ]
+  node: {
+    // prevent webpack from injecting useless setImmediate polyfill because Vue
+    // source contains it (although only uses it if it's native).
+    setImmediate: false,
+    // prevent webpack from injecting mocks to Node native modules
+    // that does not make sense for the client
+    dgram: 'empty',
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    child_process: 'empty'
   }
 };

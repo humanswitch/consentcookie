@@ -24,11 +24,11 @@
 
 <script>
   // Components
-  const ccApplicationSummary = require('components/applications/ccApplicationSummary.vue');
-  const ccApplicationDetail = require('components/applications/ccApplicationDetail.vue');
+  import ccApplicationSummary from 'components/applications/ccApplicationSummary.vue';
+  import ccApplicationDetail from 'components/applications/ccApplicationDetail.vue';
 
   // Public functions
-  module.exports = {
+  export default {
     name: 'cc-application',
     components: {
       ccApplicationSummary,

@@ -16,20 +16,15 @@
  */
 
 // Dependencies
-const _ = require('underscore');
-const jsCookie = require('js-cookie');
+import _ from 'underscore';
+import jsCookie from 'js-cookie';
 
-// Helpers
-const utils = require('base/utils');
+import utils from 'base/utils';
+import * as constants from 'base/constants';
 
-const DEFAULT_APPS_ENDPOINT = 'https://cdn.humanswitch.services/cc/consentcookie/consentcookie.json';
-const DEFAULT_URL_PARAM_APPLICATION_ID = "ccid";
-
-const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
-const DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK = 'general.gdpr.contact';
 
 let vue;
-let applications;
+let applicationsPromise;
 let activeApplications;
 
 function init(vueServices) {
@@ -37,19 +32,82 @@ function init(vueServices) {
 }
 
 function loadApplications() {
-  if (!applications) {
-    const applicationsUrl = vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_ENDPOINT, DEFAULT_APPS_ENDPOINT);
-    applications = vue.$http.get(applicationsUrl)
-      .then($request => ($request.status === 200 ? $request.body : []));
+  if (!applicationsPromise) {
+    const applicationsEndPoint = getApplicationEndPoint();
+    const emptyResult = [];
+    if (applicationsEndPoint === null) {
+      applicationsPromise = new Promise(($resolve) => $resolve(processApplicationsResult(emptyResult)));
+    } else {
+      applicationsPromise = vue.$http.get(applicationsEndPoint)
+        .then($request => ($request.status === 200 ? processApplicationsResult($request.body) : processApplicationsResult(emptyResult)));
+    }
   }
-  return applications;
+  return applicationsPromise;
+}
+
+function processApplicationsResult($applications) {
+  const staticApplications = getStaticApplications();
+
+  if (!(_.isArray($applications)) || _.isEmpty($applications)) {
+    return staticApplications;
+  } else if (!(_.isArray(staticApplications)) || _.isEmpty(staticApplications)) {
+    return $applications;
+  }
+  const staticApplicationsMap = _.reduce(staticApplications, ($memo, $app) => {
+    if ($app.id) {
+      $memo[$app.id] = $app;
+    }
+    return $app;
+  }, {});
+
+  return _.chain($applications)
+    .filter(($application) => !(_.isObject(staticApplicationsMap[$application.id])))
+    .union(staticApplications)
+    .sortBy(($application) => $application.id)
+    .value();
+}
+
+function getStaticApplications() {
+  const emptyResult = [];
+  const staticApplications = vue.$services.config.get(constants.CONFIG_KEY_APPS_STATIC, null);
+
+  if (_.isArray(staticApplications)) {
+    return staticApplications;
+  }
+  else if (_.isObject(staticApplications)) {
+    const language = vue.$services.translate.getLanguage();
+    return _.isArray(staticApplications[language]) ? staticApplications[language] : emptyResult;
+  }
+  return emptyResult;
+}
+
+function getApplicationEndPoint() {
+  const endpoint = vue.$services.config.get(constants.CONFIG_KEY_APPS_ENDPOINT);
+
+  if (!(_.isEmpty(_.trim(endpoint)))) {
+    return endpoint;
+  }
+  if (_.isObject(endpoint)) {
+    const language = vue.$services.translate.getLanguage();
+    if (endpoint[language]) {
+      return endpoint[language];
+    }
+  }
+  if (endpoint === false) {
+    return null;
+  }
+  return getDefaultApplicationEndPoint();
+}
+
+function getDefaultApplicationEndPoint() {
+  return constants.DEFAULT_CONSENTCOOKIE_APPLICATION_RESOURCE_LOCATION;
 }
 
 function getActive() {
   if (!activeApplications) {
     activeApplications = loadApplications()
       .then(($applications) => {
-        const consentConfig = vue.$services.config.get('apps.consent');
+        const consentConfig = vue.$services.config.get(constants.CONFIG_KEY_APPS_CONSENT);
         const active = [];
         const map = _.reduce($applications, ($memo, $application) => {
           $memo[$application.id] = $application;
@@ -69,7 +127,7 @@ function getActive() {
   return activeApplications;
 }
 
-function isEnabled($application){
+function isEnabled($application) {
   return vue.$services.consent.getConsent($application.id)
     .isEnabled();
 }
@@ -100,7 +158,8 @@ function removeApplicationData($application) {
 
 function removeApplicationClientData($application) {
   const cookiePatterns = _.chain($application.dataProcessing)
-    .map(($dataProcessing) => ($dataProcessing.dataIds && _.isArray($dataProcessing.dataIds.cookies)) ? $dataProcessing.dataIds.cookies : null)
+    .map($dataProcessing => (($dataProcessing.dataIds && _.isArray($dataProcessing.dataIds.cookies)) ?
+      $dataProcessing.dataIds.cookies : null))
     .flatten()
     .compact()
     .value();
@@ -141,10 +200,16 @@ function getPlugin($application) {
           return $resolve($plugin);
         }
         return $reject($reject);
-      }, ($error) => {
-        return $reject($error);
-      });
+      }, $error => $reject($error));
   });
+}
+
+function getPluginSrc($application) {
+  if (!$application || !$application.id) {
+    return null;
+  }
+  const consentConfigKey = _.template(constants.DEFAULT_CONSENTCOOKIE_APPLICATION_CONSENT_PREFIX_TEMPLATE)({ applicationId: $application.id }) + constants.CONFIG_KEY_APPS_CONSENT_PLUGIN;
+  return vue.$services.config.get(consentConfigKey, $application.plugin);
 }
 
 function getApplicationProfile($application) {
@@ -180,24 +245,30 @@ function downloadApplicationProfile($application) {
   return new Promise(($resolve, $reject) => {
     getApplicationProfile($application)
       .then(($profile) => {
-        utils.download(JSON.stringify($profile, null, 3), 'application/json', $application.id + '-profile.json');
+        utils.download(JSON.stringify($profile, null, 3), 'application/json', $application.id + constants.DEFAULT_CONSENTCOOKIE_PROFILE_EXPORT_SUFFIX);
         return $resolve(true);
       }, $error => $reject($error));
   });
 }
 
 function getGDPRLink($application) {
-  const gdprContactLink = vue.$services.config.get(DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK);
+  const gdprContactLink = vue.$services.config.get(constants.CONFIG_KEY_GENERAL_GDPR_CONTACTLINK);
   if (!gdprContactLink) {
     return null;
   }
-  return gdprContactLink + '?' + DEFAULT_URL_PARAM_APPLICATION_ID +'=' + $application.id;
+  return gdprContactLink + '?' + constants.DEFAULT_CONSENTCOOKIE_APPLICATION_ID_URL_PARAM + '=' + $application.id;
 }
 
-module.exports = {
+function getLogo($application) {
+  return $application.icon ? $application.icon : constants.DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_LOCATION +
+    $application.id + constants.DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_EXTENSION;
+}
+
+export default {
   init,
   hasPlugin,
   getPlugin,
+  getPluginSrc,
   getActive,
   getApplicationProfile,
   getApplicationProfileInfo,
@@ -212,4 +283,5 @@ module.exports = {
   disableApplication,
   downloadApplicationProfile,
   getGDPRLink,
+  getLogo,
 };

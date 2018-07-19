@@ -18,22 +18,22 @@
 <template>
   <div class="cc-application-summary">
     <cc-toggle v-model="showInfo" class="cc-toggle-text">
-      <cc-img :img="application.icon" :size="15" :unit="'px'"/>
+      <cc-img :img="logo" :size="15" :unit="'px'"/>
       <span>{{ application.name }}</span>
     </cc-toggle>
     <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
-    <cc-switch v-model="accepted" :disabled="disabled"/>
+    <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
   </div>
 </template>
 
 <script>
 
-  const ccImg = require('components/general/ccImg.vue');
-  const ccToggle = require('components/general/ccToggle.vue');
-  const ccToggleIcon = require('components/general/ccToggleIcon.vue');
-  const ccSwitch = require('components/general/ccSwitch.vue');
+  import ccImg from 'components/general/ccImg.vue';
+  import ccToggle from 'components/general/ccToggle.vue';
+  import ccToggleIcon from 'components/general/ccToggleIcon.vue';
+  import ccSwitch from 'components/general/ccSwitch.vue';
 
-  module.exports = {
+  export default {
     name: 'cc-application-summary',
     components: {
       ccImg,
@@ -74,6 +74,9 @@
       disabled() {
         return this.$services.applications.isAlwaysOn(this.application);
       },
+      logo() {
+        return this.$services.applications.getLogo(this.application);
+      }
     },
     asyncComputed: {
       hasPlugin: {

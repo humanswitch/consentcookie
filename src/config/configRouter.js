@@ -15,6 +15,13 @@
  *
  */
 
+// Dependencies
+import VueRouter from 'vue-router';
+
+import consentView from 'views/consent';
+import aboutView from 'views/about';
+import applicationsView from 'views/applications';
+
 /**
  * Function to config vueRouter with defaults of this application
  *
@@ -22,8 +29,6 @@
  * @return {VueRouter}
  */
 function configRouter(vue) {
-  // Dependencies
-  const VueRouter = require('vue-router');
 
   // Defaults
   const DEFAULT_PATH_CONSENT = '/consent';
@@ -113,13 +118,13 @@ function configRouter(vue) {
   function getRouterPaths() {
     return [{
       path: DEFAULT_PATH_CONSENT,
-      component: require('views/consent.vue'),
+      component: consentView,
     }, {
       path: '/about',
-      component: require('views/about.vue'),
+      component: aboutView,
     }, {
       path: '/applications',
-      component: require('views/applications.vue'),
+      component: applicationsView,
     }];
   }
 
@@ -127,4 +132,4 @@ function configRouter(vue) {
   return routerInstance;
 }
 
-module.exports = configRouter;
+export default configRouter;

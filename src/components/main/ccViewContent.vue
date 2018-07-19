@@ -62,7 +62,7 @@
   }
 
   // Vue module
-  module.exports = {
+  export default {
     name: 'ccViewContent',
     components: {},
     data() {

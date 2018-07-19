@@ -35,30 +35,25 @@
 
 <script>
 
-  // Defaults
-  const DEFAULT_TOOLTIP_DISABLED = 'accepteer eerst';
-  const DEFAULT_TOOLTIP_OPEN = 'ConsentCookie openen';
-  const DEFAULT_TOOLTIP_CLOSE = 'ConsentCookie sluiten';
-
   // Components
-  const ccMenuItem = require('components/main/ccMenuItem.vue');
+  import ccMenuItem from 'components/main/ccMenuItem.vue';
 
-  const ccSvgLogo = require('../../assets/img/logo.svg');
-  const ccSvgClose = require('../../assets/img/close.svg');
+  import ccSvgLogo from '../../assets/img/logo.svg';
+  import ccSvgClose from '../../assets/img/close.svg';
 
   const menuItems = [{
     icon: 'toggle-on',
     path: '/applications',
-    info: 'Jouw instellingen',
+    info: 'menu.applications',
   }, {
     icon: 'help',
     iconSize: '30',
     path: '/about',
-    info: 'Over ConsentCookie',
+    info: 'menu.about',
   }];
 
   /* VUE */
-  module.exports = {
+  export default {
     name: 'ccMenu',
     components: {
       ccMenuItem,
@@ -80,12 +75,12 @@
       menuTooltip() {
         // If disabled
         if (this.isDisabled) {
-          return DEFAULT_TOOLTIP_DISABLED;
+          return this.$t('menu.disabled');
         }
         if (this.isOpen) {
-          return DEFAULT_TOOLTIP_CLOSE;
+          return this.$t('menu.close');
         }
-        return DEFAULT_TOOLTIP_OPEN;
+        return this.$t('menu.open');
       },
     },
     methods: {

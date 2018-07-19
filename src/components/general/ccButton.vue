@@ -41,7 +41,7 @@
    * @example
    * <cc-button size="large" icon="back" type="primary"></cc-button>
    */
-  module.exports = {
+  export default {
     name: 'cc-button',
     props: {
       disabled: Boolean,

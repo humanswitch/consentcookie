@@ -18,15 +18,17 @@
 <template>
   <div class="cc-profile-wrapper">
     <div class="cc-title">
-      <span>Jouw profiel</span>
+      <span v-t="'applications.profile.title'"/>
       <button type="button" class="cc-download" v-if="profileInfo" @click="downloadProfile()">
         <i class="cc-download-cloud" v-theme="{color:'primary'}" v-if="!isDownloading"/>
         <i class="cc-spinner cc-animate-pulse" v-if="isDownloading" v-theme="{color:'primary'}"/>
       </button>
     </div>
-    <div class="cc-no-profile" v-if="!hasPlugin">Deze applicatie heeft geen publiek profiel beschikbaar</div>
+    <div class="cc-no-profile" v-if="!hasPlugin">
+      <span v-t="'applications.profile.noPlugin'"/>
+    </div>
     <div class="cc-application-profile" v-if="hasPlugin">
-      <div v-if="isLoading" class="cc-loading">Profiel wordt opgehaald <i
+      <div v-if="isLoading" class="cc-loading">{{ $t('applications.profile.loading') + ' '}}<i
         class="cc-spinner cc-animate-pulse animate-spin"/>
       </div>
       <cc-toggle-box v-if="profileInfo && !isLoading">
@@ -35,7 +37,9 @@
           <div v-html="profileInfo.content"/>
         </div>
       </cc-toggle-box>
-      <div v-if="!profileInfo && !isLoading" class="cc-no-profile">Geen profiel beschikbaar</div>
+      <div v-if="!profileInfo && !isLoading" class="cc-no-profile">
+        <span v-t="'applications.profile.noProfile'"/>
+      </div>
     </div>
   </div>
 </template>
@@ -43,11 +47,11 @@
 <script>
 
   // Libraries
-  const ccToggleBox = require('components/general/ccToggleBox.vue');
-  const ccApplicationActions = require('components/applications/ccApplicationActions.vue');
+  import ccToggleBox from 'components/general/ccToggleBox.vue';
+  import ccApplicationActions from 'components/applications/ccApplicationActions.vue';
 
   // Vue module
-  module.exports = {
+  export default {
     name: 'cc-application-profile',
     components: {
       ccToggleBox,

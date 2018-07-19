@@ -19,63 +19,9 @@
 const path = require('path');
 const packageConfig = require('../package.json');
 
-// Used for handling commandline arguments
-const commandLineArgs = require('command-line-args');
-const commandLineUsage = require('command-line-usage');
-
-// Config the commandLine arg parser
-const commandLineArgDefinitions = [
-  {
-    name: 'release',
-    alias: 'r',
-    type: Boolean,
-    description: 'When options is: a release version is created.',
-  },
-  {
-    name: 'minify',
-    alias: 'm',
-    type: Boolean,
-    description: 'When options is: minify all output',
-  },
-  {
-    name: 'singlefile',
-    alias: 's',
-    type: Boolean,
-    description: 'When options is: a single file is created',
-  },
-];
-
-// Print the options
-const commandLineUsageInfo = [
-  {
-    header: 'ConsentCookie',
-    content: 'build script for testing and building ConsentCookie. \n e.g. npm run build -- -f -m -r',
-  },
-  {
-    header: 'Options',
-    optionList: commandLineArgDefinitions,
-  },
-];
-console.log(commandLineUsage(commandLineUsageInfo));
-
-// Get the options (partial so we don`t fall over unknown given options)
-const commandLineOptions = commandLineArgs(commandLineArgDefinitions, { partial: true });
-
-// The options parse to build flags
-const isRelease = commandLineOptions.release === true;
-const isMinify = isRelease || commandLineOptions.minify === true;
-const isSingleFile = isRelease || commandLineOptions.singlefile === true;
-
-console.log(`Building with build flags: ${JSON.stringify({
-  release: String(isRelease),
-  minify: String(isMinify),
-  singlefile: String(isSingleFile),
-})}`);
-
 module.exports = {
   build: {
     env: require('./prod.env'), // eslint-disable-line global-require
-    ver: JSON.stringify(packageConfig.version),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsRootRelease: path.resolve(__dirname, '../dist'),
@@ -88,10 +34,13 @@ module.exports = {
     // npm install --save-dev compression-webpack-plugin
     productionGzip: true,
     productionGzipExtensions: ['js', 'css'],
-    // Release flag. If its a release version, set flag true
-    release: isRelease,
-    minify: isMinify,
-    singlefile: isSingleFile,
+    // Run the build command with an extra argument to
+    // View the bundle analyzer report after build finishes:
+    // `npm run build --report`
+    // Set to `true` or `false` to always turn it on or off
+    bundleAnalyzerReport: process.env.npm_config_report,
+    //
+    singlefile:(process.argv.includes("--singlefile") || process.argv.includes("-s"))
   },
   dev: {
     env: require('./dev.env'), // eslint-disable-line global-require
@@ -105,5 +54,22 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
+    devtool: 'source-map',
+    // Various Dev Server settings
+    host: 'localhost', // can be overwritten by process.env.HOST
+    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    autoOpenBrowser: true,
+    autoOpenPage: 'index.html',
+    errorOverlay: true,
+    notifyOnErrors: true,
+    poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
+
+    // Use Eslint Loader?
+    // If true, your code will be linted during bundling and
+    // linting errors and warnings will be shown in the console.
+    useEslint: false,
+    // If true, eslint errors and warnings will also be shown in the error overlay
+    // in the browser.
+    showEslintErrorsInOverlay: false,
   },
 };

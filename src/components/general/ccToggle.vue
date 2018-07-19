@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'cc-toggle',
     props: {
       value: {
