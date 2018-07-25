@@ -20,7 +20,7 @@ import mutationObserverShim from 'mutationobserver-shim';
 import promisePolyfill from 'promise-polyfill';
 
 import icons from 'assets/fonts/fontello/css/fontello.css';
-import css from 'assets/scss/_icookie.scss';
+import css from 'assets/scss/_consentcookie.scss';
 
 // Vue Framework
 import vue from 'vue';
@@ -143,6 +143,7 @@ function get($id) {
   if (!$id) {
     // Backwards compatibility fix
     return (($consents) => {
+      // eslint-disable-next-line no-param-reassign
       $consents.consents = $consents.getConsentMap();
       return $consents;
     })(getConsents());
@@ -204,6 +205,7 @@ export default (function () {
     registerPlugin,
     setLanguage,
     addLanguage,
+    // eslint-disable-next-line no-undef
     ver: VERSION,
   };
 }());

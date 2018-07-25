@@ -22,7 +22,6 @@ import jsCookie from 'js-cookie';
 import utils from 'base/utils';
 import * as constants from 'base/constants';
 
-
 let vue;
 let applicationsPromise;
 let activeApplications;
@@ -36,7 +35,7 @@ function loadApplications() {
     const applicationsEndPoint = getApplicationEndPoint();
     const emptyResult = [];
     if (applicationsEndPoint === null) {
-      applicationsPromise = new Promise(($resolve) => $resolve(processApplicationsResult(emptyResult)));
+      applicationsPromise = new Promise($resolve => $resolve(processApplicationsResult(emptyResult)));
     } else {
       applicationsPromise = vue.$http.get(applicationsEndPoint)
         .then($request => ($request.status === 200 ? processApplicationsResult($request.body) : processApplicationsResult(emptyResult)));
@@ -61,9 +60,9 @@ function processApplicationsResult($applications) {
   }, {});
 
   return _.chain($applications)
-    .filter(($application) => !(_.isObject(staticApplicationsMap[$application.id])))
+    .filter($application => !(_.isObject(staticApplicationsMap[$application.id])))
     .union(staticApplications)
-    .sortBy(($application) => $application.id)
+    .sortBy($application => $application.id)
     .value();
 }
 
@@ -73,8 +72,7 @@ function getStaticApplications() {
 
   if (_.isArray(staticApplications)) {
     return staticApplications;
-  }
-  else if (_.isObject(staticApplications)) {
+  } else if (_.isObject(staticApplications)) {
     const language = vue.$services.translate.getLanguage();
     return _.isArray(staticApplications[language]) ? staticApplications[language] : emptyResult;
   }

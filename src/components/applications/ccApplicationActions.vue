@@ -26,7 +26,7 @@
 <script>
 
   // Components
-  import ccToggleBox from 'components/general/ccToggleBox.vue';
+  import ccToggleBox from 'components/general/ccToggleBox';
 
   // Vue module
   export default {

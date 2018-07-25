@@ -170,6 +170,8 @@ function toggleMenu() {
 
   // Close the content also when we have open content and we are closing the menu
   // Open the content when a content was already active
+
+  // eslint-disable-next-line no-nested-ternary
   show((isOpen ? false : (isContentActive ? true : null)), !(vue.$store.state.application.state.menuOpen));
 
   /* Disabled

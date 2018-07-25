@@ -16,7 +16,7 @@
  */
 
 // Depencencies
-import utils from 'base/utils.js';
+import utils from 'base/utils';
 
 let vue; // eslint-disable-line no-unused-vars
 let config;

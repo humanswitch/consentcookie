@@ -28,8 +28,8 @@
 <script>
 
   import _ from 'underscore';
-  import * as constants from 'base/constants.js';
-  import ccApplication from 'components/applications/ccApplication.vue';
+  import * as constants from 'base/constants';
+  import ccApplication from 'components/applications/ccApplication';
 
   export default {
     name: 'applications',
@@ -49,7 +49,7 @@
       hasMoreInfoLink() {
         return this.$services.config.get(this.configKeyResourceMoreInfoLink, null) !== null
           || constants.DEFAULT_RESOURCE_LANGUAGE === this.$i18n.locale;
-      }
+      },
     },
     asyncComputed: {
       applications() {

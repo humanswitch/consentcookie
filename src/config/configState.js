@@ -26,7 +26,6 @@ import VuexPersistedState from 'vuex-persistedstate';
  * @return {Store<any>}
  */
 function configState(vue) {
-
   // Defaults
   // Config which paths to persist automatically
   const pathsToPersist = [

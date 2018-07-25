@@ -32,7 +32,8 @@
           <cc-application-profile :application="application" :state="state"/>
           <div class="cc-links">
             <a class="cc-more-info" :href="application.infolink.connection" target="_blank">{{ $t('applications.detail.moreInfo') + " " + application.name}}</a>
-            <a class="cc-gdpr" v-if="gdprLink" :href="gdprLink" target="_blank" v-t="'applications.detail.gdprInfo'"/>
+            <a class="cc-gdpr" v-if="gdprLink" :href="gdprLink"
+               target="_blank" v-t="'applications.detail.gdprInfo'"/>
           </div>
         </div>
       </div>
@@ -42,10 +43,10 @@
 
 <script>
 
-  import ccToggleBox from 'components/general/ccToggleBox.vue';
+  import ccToggleBox from 'components/general/ccToggleBox';
 
-  import ccApplicationProfile from 'components/applications/ccApplicationProfile.vue';
-  import ccApplicationActions from 'components/applications/ccApplicationActions.vue';
+  import ccApplicationProfile from 'components/applications/ccApplicationProfile';
+  import ccApplicationActions from 'components/applications/ccApplicationActions';
 
   // Vue module
   export default {
@@ -72,10 +73,10 @@
       showInfo() {
         return this.state.showInfo === true;
       },
-      gdprLink(){
+      gdprLink() {
         return this.$services.applications.getGDPRLink(this.application);
-      }
-    }
+      },
+    },
   };
 </script>
 

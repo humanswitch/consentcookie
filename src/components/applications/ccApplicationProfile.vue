@@ -47,8 +47,8 @@
 <script>
 
   // Libraries
-  import ccToggleBox from 'components/general/ccToggleBox.vue';
-  import ccApplicationActions from 'components/applications/ccApplicationActions.vue';
+  import ccToggleBox from 'components/general/ccToggleBox';
+  import ccApplicationActions from 'components/applications/ccApplicationActions';
 
   // Vue module
   export default {
@@ -92,12 +92,12 @@
           }, () => {
             this.isLoading = false;
             this.profileInfo = null;
-          });
+        });
       },
       downloadProfile() {
         this.isDownloading = true;
         return this.$services.applications.downloadApplicationProfile(this.application)
-          .then(() => this.isDownloading = false);
+          .then(() => { this.isDownloading = false; });
       },
     },
     created() {
@@ -108,7 +108,7 @@
           self.loadProfile();
         }
       });
-    }
+    },
   };
 </script>
 

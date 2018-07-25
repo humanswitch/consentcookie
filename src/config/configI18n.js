@@ -17,17 +17,16 @@
 
 import VueI18n from 'vue-i18n';
 
-import * as constants from 'base/constants.js';
-import utils from 'base/utils.js';
+import * as constants from 'base/constants';
+import utils from 'base/utils';
 
 function configI18n(vue) {
-
   vue.use(VueI18n);
 
   return new VueI18n({
     locale: constants.DEFAULT_RESOURCE_LANGUAGE, // set locale
     fallbackLocale: constants.DEFAULT_RESOURCE_LANGUAGE,
-    messages: utils.getObjectValue(constants.DEFAULT_CONFIG,constants.CONFIG_KEY_RESOURCES,{}),
+    messages: utils.getObjectValue(constants.DEFAULT_CONFIG, constants.CONFIG_KEY_RESOURCES, {}),
   });
 }
 

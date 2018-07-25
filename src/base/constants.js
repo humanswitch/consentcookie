@@ -1,4 +1,18 @@
-const uuidv1 = require('uuid/v1');
+/*
+ * Copyright 2018 Asknow Solutions B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 /* CONFIG KEYS */
 export const CONFIG_KEY_GENERAL = 'general';
@@ -71,7 +85,7 @@ export const DEFAULT_CONSENTCOOKIE_APPLICATION_RESOURCE_LOCATION = DEFAULT_CONSE
 export const DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_LOCATION = DEFAULT_CONSENTCOOKIE_HOST_LOCATION + 'logo/';
 export const DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_EXTENSION = '.png';
 export const DEFAULT_CONSENTCOOKIE_APPLICATION_ID_URL_PARAM = 'ccid';
-export const DEFAULT_CONSENTCOOKIE_APPLICATION_CONSENT_PREFIX_TEMPLATE = CONFIG_KEY_APPS_CONSENT + ".<%= applicationId %>";
+export const DEFAULT_CONSENTCOOKIE_APPLICATION_CONSENT_PREFIX_TEMPLATE = CONFIG_KEY_APPS_CONSENT + '.<%= applicationId %>';
 
 export const DEFAULT_CONSENTCOOKIE_PROFILE_EXPORT_SUFFIX = '-profile.json';
 
@@ -154,6 +168,6 @@ export const DEFAULT_CONFIG = {
       },
     },
     // Default aliases
-    'nl-BE': 'nl'
+    'nl-BE': 'nl',
   },
 };
