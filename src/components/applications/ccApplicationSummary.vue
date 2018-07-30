@@ -21,17 +21,18 @@
       <cc-img :img="logo" :size="15" :unit="'px'"/>
       <span>{{ application.name }}</span>
     </cc-toggle>
-    <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
+    <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin"
+:size="20"/>
     <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
   </div>
 </template>
 
 <script>
 
-  import ccImg from 'components/general/ccImg.vue';
-  import ccToggle from 'components/general/ccToggle.vue';
-  import ccToggleIcon from 'components/general/ccToggleIcon.vue';
-  import ccSwitch from 'components/general/ccSwitch.vue';
+  import ccImg from 'components/general/ccImg';
+  import ccToggle from 'components/general/ccToggle';
+  import ccToggleIcon from 'components/general/ccToggleIcon';
+  import ccSwitch from 'components/general/ccSwitch';
 
   export default {
     name: 'cc-application-summary',
@@ -61,7 +62,7 @@
         },
         set($newVal) {
           this.state.showInfo = $newVal;
-        }
+        },
       },
       accepted: {
         get() {
@@ -76,7 +77,7 @@
       },
       logo() {
         return this.$services.applications.getLogo(this.application);
-      }
+      },
     },
     asyncComputed: {
       hasPlugin: {

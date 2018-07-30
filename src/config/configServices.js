@@ -15,8 +15,7 @@
  *
  */
 
-import VueServices from 'plugins/vueServices.js';
-
+import VueServices from 'plugins/vueServices';
 import mainService from 'services/mainService';
 import configService from 'services/configService';
 import viewService from 'services/viewService';
@@ -36,9 +35,9 @@ function configVueServices(vue) {
   // Init service loader
   vue.use(VueServices);
 
-// Init the service
-// Make sure to define the services in order of dependecy
-// If a service depends on another, define it later in the order.
+  // Init the service
+  // Make sure to define the services in order of dependecy
+  // If a service depends on another, define it later in the order.
   const services = [{
     name: 'main',
     service: mainService,

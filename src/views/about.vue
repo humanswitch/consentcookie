@@ -24,11 +24,11 @@
 </template>
 <script>
 
-  import * as constants from 'base/constants.js';
-  import ccContentBox from 'components/general/ccContentBox.vue';
+  import * as constants from 'base/constants';
+  import ccContentBox from 'components/general/ccContentBox';
 
   export default {
-    name: 'about',
+    name: 'AboutView',
     components: {
       ccContentBox,
     },

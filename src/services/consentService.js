@@ -23,7 +23,6 @@ import * as constants from 'base/constants';
 class Consents {
 
   constructor($ccCookies) {
-
     const consents = {};
 
     this.getCookieValues = function () {
@@ -77,6 +76,7 @@ class Consents {
     });
     return consents;
   }
+
 }
 
 class Consent {
@@ -112,6 +112,7 @@ class Consent {
     }
     return new Consent($ccAppId, getConsentValue($ccAppId, $ccAppVal, $ccCookieMap));
   }
+
 }
 
 let vue;

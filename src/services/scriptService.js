@@ -16,7 +16,7 @@
  */
 
 // Depencencies
-import utils from 'base/utils.js';
+import utils from 'base/utils';
 import _ from 'underscore';
 
 // Defaults
@@ -76,7 +76,7 @@ function executeScript($element) {
   const script = (_.isString($element.innerHTML) && !(_.isEmpty($element.innerHTML.trim()))) ? $element.innerHTML.trim() : '';
   try {
     (window.execScript || function ($script) {
-      window['eval'].call(window, $script);
+      window.eval.call(window, $script);
     })(script);
   } catch ($e) {
     console.error($e);
@@ -100,20 +100,20 @@ function cleanupScriptElement($id) {
 
 function enableScripts($consentId) {
   const consentScriptElements = getScriptElements($consentId);
-  consentScriptElements.forEach($element => {
+  consentScriptElements.forEach(($element) => {
     enableScript($element);
   });
 }
 
 function enableOptOutScripts() {
   const optOutConsentIds = _.map(vue.$services.consent.getConsents()
-    .getAccepted(), ($consent) => $consent.id);
+    .getAccepted(), $consent => $consent.id);
   enableScripts(optOutConsentIds);
 }
 
 function enableAlwaysOnScripts() {
   const alwaysOnConsentIds = _.map(vue.$services.consent.getConsents()
-    .getAlwaysOn(), ($consent) => $consent.id);
+    .getAlwaysOn(), $consent => $consent.id);
   enableScripts(alwaysOnConsentIds);
 }
 

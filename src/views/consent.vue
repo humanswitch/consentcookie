@@ -28,9 +28,9 @@
 </template>
 <script>
 
-  import * as constants from 'base/constants.js';
-  import ccContentBox from 'components/general/ccContentBox.vue';
-  import ccButton from 'components/general/ccButton.vue';
+  import * as constants from 'base/constants';
+  import ccContentBox from 'components/general/ccContentBox';
+  import ccButton from 'components/general/ccButton';
 
   export default {
     name: 'consentView',
