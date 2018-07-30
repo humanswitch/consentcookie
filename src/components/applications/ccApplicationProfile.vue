@@ -48,14 +48,12 @@
 
   // Libraries
   import ccToggleBox from 'components/general/ccToggleBox';
-  import ccApplicationActions from 'components/applications/ccApplicationActions';
 
   // Vue module
   export default {
     name: 'cc-application-profile',
     components: {
       ccToggleBox,
-      ccApplicationActions,
     },
     props: {
       application: {

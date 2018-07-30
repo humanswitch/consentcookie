@@ -28,10 +28,10 @@
           </div>
         </div>
         <div class="cc-application-info">
-          <div class="cc-description" v-html="application.description.connection"/>
+          <div class="cc-description" v-html="application.description"/>
           <cc-application-profile :application="application" :state="state"/>
           <div class="cc-links">
-            <a class="cc-more-info" :href="application.infolink.connection" target="_blank">{{ $t('applications.detail.moreInfo') + " " + application.name}}</a>
+            <a class="cc-more-info" :href="application.urlSite" target="_blank">{{ $t('applications.detail.moreInfo') + " " + application.name}}</a>
             <a class="cc-gdpr" v-if="gdprLink" :href="gdprLink"
                target="_blank" v-t="'applications.detail.gdprInfo'"/>
           </div>
@@ -46,7 +46,6 @@
   import ccToggleBox from 'components/general/ccToggleBox';
 
   import ccApplicationProfile from 'components/applications/ccApplicationProfile';
-  import ccApplicationActions from 'components/applications/ccApplicationActions';
 
   // Vue module
   export default {
@@ -54,7 +53,6 @@
     components: {
       ccToggleBox,
       ccApplicationProfile,
-      ccApplicationActions,
     },
     props: {
       application: {

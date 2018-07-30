@@ -26,6 +26,30 @@ let vue;
 let applicationsPromise;
 let activeApplications;
 
+/* Used fot given*/
+class Application {
+
+  constructor($application) {
+    // Not using setPrototype because its not supported by IE9
+    _.extend(this, $application);
+  }
+
+  getCookiePatterns() {
+    return _.chain(this.dataProcessings)
+      .map($dataProcessing => $dataProcessing.identifications)
+      .flatten()
+      .filter($identification => $identification.fileSystem && $identification.fileSystem.id === 'persistent-cookie')
+      .map($identification => $identification.pattern)
+      .compact()
+      .value();
+  }
+
+  // Todo workaround for https://github.com/humanswitch/consentcookie/issues/73
+  getPlugin(){
+    return _.chain(this.plugins).map($plugin => $plugin.url).first().value();
+  }
+}
+
 function init(vueServices) {
   vue = vueServices.getVueInstance();
 }
@@ -108,7 +132,7 @@ function getActive() {
         const consentConfig = vue.$services.config.get(constants.CONFIG_KEY_APPS_CONSENT);
         const active = [];
         const map = _.reduce($applications, ($memo, $application) => {
-          $memo[$application.id] = $application;
+          $memo[$application.id] = _.extend(new Application($application));
           return $memo;
         }, {});
 
@@ -155,13 +179,7 @@ function removeApplicationData($application) {
 }
 
 function removeApplicationClientData($application) {
-  const cookiePatterns = _.chain($application.dataProcessing)
-    .map($dataProcessing => (($dataProcessing.dataIds && _.isArray($dataProcessing.dataIds.cookies)) ?
-      $dataProcessing.dataIds.cookies : null))
-    .flatten()
-    .compact()
-    .value();
-
+  const cookiePatterns = $application.getCookiePatterns();
   if (_.isEmpty(cookiePatterns)) {
     return;
   }
@@ -207,7 +225,7 @@ function getPluginSrc($application) {
     return null;
   }
   const consentConfigKey = _.template(constants.DEFAULT_CONSENTCOOKIE_APPLICATION_CONSENT_PREFIX_TEMPLATE)({ applicationId: $application.id }) + constants.CONFIG_KEY_APPS_CONSENT_PLUGIN;
-  return vue.$services.config.get(consentConfigKey, $application.plugin);
+  return vue.$services.config.get(consentConfigKey, $application.getPlugin());
 }
 
 function getApplicationProfile($application) {
@@ -258,7 +276,7 @@ function getGDPRLink($application) {
 }
 
 function getLogo($application) {
-  return $application.icon ? $application.icon : constants.DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_LOCATION +
+  return $application.urlIcon ? $application.urlIcon : constants.DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_LOCATION +
     $application.id + constants.DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_EXTENSION;
 }
 
