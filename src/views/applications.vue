@@ -17,8 +17,13 @@
 
 <template>
   <div class="cc-applications">
-    <div class="cc-overview">
-      <cc-application v-for="application in applications" :key="application.id" :application="application"/>
+    <div class="cc-overview" v-if="applicationList && !isGroupedByPurpose">
+      <cc-application v-for="application in applicationList.getActive()" :key="application.id"
+                      :application="application"/>
+    </div>
+    <div class="cc-overview-purpose" v-if="applicationList && isGroupedByPurpose">
+      <cc-application-group v-for="group in applicationList.getActiveGroupedByPurpose()" :key="group.id"
+                            :group="group"/>
     </div>
     <div class="cc-more-info">
       <a v-if="hasMoreInfoLink" :href="$t(configKeyMoreInfoLink)">{{ $t(configKeyMoreInfo) }}</a>
@@ -30,11 +35,13 @@
   import _ from 'underscore';
   import * as constants from 'base/constants';
   import ccApplication from 'components/applications/ccApplication';
+  import ccApplicationGroup from 'components/applications/ccApplicationGroup';
 
   export default {
     name: 'applications',
     components: {
       ccApplication,
+      ccApplicationGroup,
     },
     data() {
       return {
@@ -50,10 +57,16 @@
         return this.$services.config.get(this.configKeyResourceMoreInfoLink, null) !== null
           || constants.DEFAULT_RESOURCE_LANGUAGE === this.$i18n.locale;
       },
+      isGroupedByPurpose() {
+        return this.$services.applications.isGroupEnabled('purpose');
+      },
     },
     asyncComputed: {
-      applications() {
-        return this.$services.applications.getActive();
+      applicationList: {
+        get() {
+          return this.$services.applications.getApplicationListAsync();
+        },
+        default: null,
       },
     },
     beforeMount() {
@@ -70,6 +83,7 @@
     min-width: 320px;
     display: flex;
     flex-direction: column;
+    color: #4e4e4e;
 
     .cc-overview {
       display: block;
