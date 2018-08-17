@@ -75,7 +75,7 @@ function addLanguage($lang, $resouce) {
 
 function setLanguage($lang, $force) {
   manualConfiguredLanguage = $lang;
-  if ($force === true || DEFAULT_AVAILABLE_LANGUAGES.includes($lang)) {
+  if ($force === true || (DEFAULT_AVAILABLE_LANGUAGES.indexOf($lang) > -1)) {
     vue.$set(vue.$i18n, DEFAULT_I18N_PROPERTY_LOCALE, $lang);
   }
 }
@@ -110,7 +110,7 @@ function getAlias($language) {
 }
 
 function isLanguageAvailable($language) {
-  return !(_.isEmpty(_.trim($language))) && DEFAULT_AVAILABLE_LANGUAGES.includes($language);
+  return !(_.isEmpty(_.trim($language))) && (DEFAULT_AVAILABLE_LANGUAGES.indexOf($language) > -1);
 }
 
 function getBrowserLanguage() {
