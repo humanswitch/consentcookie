@@ -223,7 +223,7 @@ function setAccepted($item, $isAccepted) {
 }
 
 function setGroupAccepted($group, $isAccepted) {
-  setAccepted($group.definition.id, $isAccepted);
+  setAccepted($group.definition, $isAccepted);
   _.each($group.items, $application => removeApplicationClientData($application));
 }
 

@@ -15,7 +15,7 @@
   -->
 
 <template>
-  <div class="cc-application-group">
+  <div class="cc-application-group" :data-id="group.definition.id">
     <cc-application-group-summary :group="group" :state="state"/>
     <cc-application-group-detail :group="group" :state="state"/>
   </div>

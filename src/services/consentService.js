@@ -150,9 +150,9 @@ function getCCCookieMap() {
 }
 
 function getConsentConfig() {
-  const consentConfig = vue.$services.applications.isGroupEnabled('purpose') ?
+  const consentConfig = (vue.$services.applications.isGroupEnabled('purpose') ?
     _.clone(vue.$services.config.get(constants.CONFIG_KEY_PURPOSES_CONSENT)) :
-    _.clone(vue.$services.config.get(constants.CONFIG_KEY_APPS_CONSENT));
+    _.clone(vue.$services.config.get(constants.CONFIG_KEY_APPS_CONSENT))) || {};
 
   if (vue.$services.main.isConsentWallEnabled()) {
     consentConfig[constants.DEFAULT_CONSENTWALL_COOKIE_ID] = { initstate: constants.DEFAULT_CONSENT_STATE_LABEL_OPTIN };
