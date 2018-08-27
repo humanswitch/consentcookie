@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'cc-toggle-icon',
     props: {
       icon: String,

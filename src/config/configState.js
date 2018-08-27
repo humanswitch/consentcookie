@@ -15,17 +15,17 @@
  *
  */
 
+// Dependencies
+import _ from 'underscore';
+import Vuex from 'vuex';
+import VuexPersistedState from 'vuex-persistedstate';
+
 /**
  *
  * @param vue
  * @return {Store<any>}
  */
 function configState(vue) {
-  // Dependencies
-  const _ = require('underscore');
-  const Vuex = require('vuex');
-  const VuexPersistedState = require('vuex-persistedstate');
-
   // Defaults
   // Config which paths to persist automatically
   const pathsToPersist = [
@@ -107,4 +107,4 @@ function configState(vue) {
   });
 }
 
-module.exports = configState;
+export default configState;

@@ -16,48 +16,19 @@
  */
 
 // Dependencies
-const _ = require('underscore');
-const jsCookie = require('js-cookie');
-
-// Defaults
-const DEFAULT_CONSENTS_SEPERATOR = '&';
-const DEFAULT_CONSENT_SEPERATOR = '=';
-
-const DEFAULT_CONSENTCOOKIE_NAME = 'consentcookie';
-const DEFAULT_CONSENTCOOKIE_TTL = (20 * 365); // Default expire time, 20 years from now in days
-const DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED = 1;
-const DEFAULT_CONSENTCOOKIE_VAL_REJECTED = 0;
-const DEFAULT_CONSENTCOOKIE_VAL_ALWAYSON = -1;
-
-const DEFAULT_STATE_CONSENT_OPTIN = DEFAULT_CONSENTCOOKIE_VAL_REJECTED;
-const DEFAULT_STATE_CONSENT_OPTOUT = DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED;
-const DEFAULT_STATE_CONSENT_ALWAYSON = DEFAULT_CONSENTCOOKIE_VAL_ALWAYSON;
-
-const DEFAULT_CONSENT_STATE_LABEL_OPTIN = 'optin';
-const DEFAULT_CONSENT_STATE_LABEL_OPTOUT = 'optout';
-const DEFAULT_CONSENT_STATE_LABEL_ALWAYSON = 'alwayson';
-
-const DEFAULT_CONSENT_STATE = DEFAULT_STATE_CONSENT_ALWAYSON;
-
-const DEFAULT_CONFIG_KEY_APPS_CONSENT = 'apps.consent';
-
-const DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL = 'ccw';
+import jsCookie from 'js-cookie';
+import _ from 'underscore';
+import * as constants from 'base/constants';
 
 class Consents {
 
-  constructor($ccCookies) {
-
+  constructor($ccCookie) {
     const consents = {};
+    const ccCookie = _.clone($ccCookie);
 
-    this.getCookieValues = function () {
-      return _.clone($ccCookies);
-    };
-    this.get = function ($id) {
-      return _.isString($id) ? consents[$id] : _.values(consents);
-    };
-    this.getConsentMap = function () {
-      return consents;
-    };
+    this.getCookie = () => ccCookie;
+    this.get = $id => (_.isString($id) ? consents[$id] : _.values(consents));
+    this.getConsentMap = () => consents;
   }
 
   getAccepted() {
@@ -77,29 +48,29 @@ class Consents {
   serialize() {
     const toSerialize = _.clone(this.getConsentMap());
     // Add all `stale` consents so that we aren`t overriding values
-    _.each(this.getCookieValues(), ($ccAppValue, $ccAppId) => {
+    _.each(this.getCookie(), ($ccAppValue, $ccAppId) => {
       if (!toSerialize[$ccAppId]) {
         toSerialize[$ccAppId] = new Consent($ccAppId, $ccAppValue);
       }
     });
     const serialized = _.map(_.values(toSerialize), $consent => $consent.serialize());
-    return serialized.join(DEFAULT_CONSENTS_SEPERATOR);
+    return serialized.join(constants.DEFAULT_CONSENTS_SEPERATOR);
   }
 
-  static create($ccApps, $ccCookieMap) {
-    const consents = new Consents($ccCookieMap);
+  static create($consentsConfigs, $cookieMap) {
+    const consents = new Consents($cookieMap);
 
-    if (!(_.isObject($ccApps))) {
+    if (!(_.isObject($consentsConfigs))) {
       return consents;
     }
-
-    _.each($ccApps, ($ccAppVal, $ccAppId) => {
-      if (_.isString($ccAppId) && _.isObject($ccAppVal)) {
-        consents.add(Consent.create($ccAppId, $ccAppVal, $ccCookieMap));
+    _.each($consentsConfigs, ($consentConfig, $consentId) => {
+      if (_.isString($consentId) && _.isObject($consentConfig)) {
+        consents.add(Consent.create($consentId, $consentConfig, $cookieMap));
       }
     });
     return consents;
   }
+
 }
 
 class Consent {
@@ -110,31 +81,32 @@ class Consent {
   }
 
   serialize() {
-    return this.id + DEFAULT_CONSENT_SEPERATOR + this.flag;
+    return this.id + constants.DEFAULT_CONSENT_SEPERATOR + this.flag;
   }
 
   isAccepted() {
-    return this.flag === DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED;
+    return this.flag === constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_ACCEPTED;
   }
 
   isRejected() {
-    return this.flag === DEFAULT_CONSENTCOOKIE_VAL_REJECTED;
+    return this.flag === constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_REJECTED;
   }
 
   isAlwaysOn() {
-    return this.flag === DEFAULT_CONSENTCOOKIE_VAL_ALWAYSON;
+    return this.flag === constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_ALWAYSON;
   }
 
   isEnabled() {
     return this.isAccepted() || this.isAlwaysOn();
   }
 
-  static create($ccAppId, $ccAppVal, $ccCookieMap) {
-    if (!(_.isString($ccAppId)) && !(_.isObject($ccAppVal))) {
+  static create($consentId, $consentConfig, $cookieVal) {
+    if (!(_.isString($consentId)) || (!(_.isObject($consentConfig)))) {
       return null;
     }
-    return new Consent($ccAppId, getConsentValue($ccAppId, $ccAppVal, $ccCookieMap));
+    return new Consent($consentId, getConsentValue($consentId, $consentConfig, $cookieVal));
   }
+
 }
 
 let vue;
@@ -144,31 +116,31 @@ function init(vueServices) {
   vue = vueServices.getVueInstance();
 }
 
-function getConsentValue($ccAppId, $ccAppVal, $ccCookieVal) {
-  const $ccAppInitState = getInitState($ccAppVal.initstate);
-  let $ccCookieConsentVal = $ccCookieVal[$ccAppId];
+function getConsentValue($ccAppId, $ccConsentAppConfig, $ccCookieVal) {
+  const ccAppInitState = getInitState($ccConsentAppConfig.initstate);
+  let ccCookieConsentVal = $ccCookieVal[$ccAppId];
 
-  if (typeof $ccCookieConsentVal === 'undefined' || $ccCookieConsentVal == null) {
-    $ccCookieConsentVal = $ccAppInitState;
-  } else if (DEFAULT_STATE_CONSENT_ALWAYSON === $ccAppInitState) {
+  if (typeof ccCookieConsentVal === 'undefined' || ccCookieConsentVal == null) {
+    ccCookieConsentVal = ccAppInitState;
+  } else if (constants.DEFAULT_CONSENT_INIT_STATE_ALWAYSON === ccAppInitState) {
     // New settings is, no optin or optout. Override setting
-    $ccCookieConsentVal = $ccAppInitState;
-  } else if (DEFAULT_STATE_CONSENT_ALWAYSON !== $ccAppInitState
-    && $ccCookieConsentVal === DEFAULT_STATE_CONSENT_ALWAYSON) {
+    ccCookieConsentVal = ccAppInitState;
+  } else if (constants.DEFAULT_CONSENT_INIT_STATE_ALWAYSON !== ccAppInitState
+    && ccCookieConsentVal === constants.DEFAULT_CONSENT_INIT_STATE_ALWAYSON) {
     // New setting is optin or optout and old was mandatory
-    $ccCookieConsentVal = $ccAppInitState;
+    ccCookieConsentVal = ccAppInitState;
   }
-  return $ccCookieConsentVal;
+  return ccCookieConsentVal;
 }
 
 function getCCCookieMap() {
-  const ccCookie = jsCookie.get(DEFAULT_CONSENTCOOKIE_NAME) || '';
-  const map = _.reduce(ccCookie.split(DEFAULT_CONSENTS_SEPERATOR), ($memo, $ccCookieVal) => {
+  const ccCookie = jsCookie.get(constants.DEFAULT_CONSENTCOOKIE_COOKIE_NAME) || '';
+  const map = _.reduce(ccCookie.split(constants.DEFAULT_CONSENTS_SEPERATOR), ($memo, $ccCookieVal) => {
     if (!(_.isString($ccCookieVal))) {
       return $memo;
     }
 
-    const parsed = $ccCookieVal.split(DEFAULT_CONSENT_SEPERATOR);
+    const parsed = $ccCookieVal.split(constants.DEFAULT_CONSENT_SEPERATOR);
     if (_.isString(parsed[0]) && !(_.isNaN(Number(parsed[1])))) {
       $memo[parsed[0]] = Number(parsed[1]);
     }
@@ -177,35 +149,38 @@ function getCCCookieMap() {
   return map;
 }
 
-function getCCApps() {
-  const configuredApps = _.clone(vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_CONSENT));
+function getConsentConfig() {
+  const consentConfig = (vue.$services.applications.isGroupEnabled('purpose') ?
+    _.clone(vue.$services.config.get(constants.CONFIG_KEY_PURPOSES_CONSENT)) :
+    _.clone(vue.$services.config.get(constants.CONFIG_KEY_APPS_CONSENT))) || {};
+
   if (vue.$services.main.isConsentWallEnabled()) {
-    configuredApps[DEFAULT_CONSENTCOOKIE_ID_CONSENTWALL] = { initstate: DEFAULT_CONSENT_STATE_LABEL_OPTIN };
+    consentConfig[constants.DEFAULT_CONSENTWALL_COOKIE_ID] = { initstate: constants.DEFAULT_CONSENT_STATE_LABEL_OPTIN };
   }
-  return configuredApps;
+  return consentConfig;
 }
 
 function getInitState($stateName) {
-  if (DEFAULT_CONSENT_STATE_LABEL_OPTIN === $stateName) {
-    return DEFAULT_STATE_CONSENT_OPTIN;
+  if (constants.DEFAULT_CONSENT_STATE_LABEL_OPTIN === $stateName) {
+    return constants.DEFAULT_CONSENT_INIT_STATE_OPTIN;
   }
-  if (DEFAULT_CONSENT_STATE_LABEL_OPTOUT === $stateName) {
-    return DEFAULT_STATE_CONSENT_OPTOUT;
+  if (constants.DEFAULT_CONSENT_STATE_LABEL_OPTOUT === $stateName) {
+    return constants.DEFAULT_CONSENT_INIT_STATE_OPTOUT;
   }
-  if (DEFAULT_CONSENT_STATE_LABEL_ALWAYSON === $stateName) {
-    return DEFAULT_STATE_CONSENT_ALWAYSON;
+  if (constants.DEFAULT_CONSENT_STATE_LABEL_ALWAYSON === $stateName) {
+    return constants.DEFAULT_CONSENT_INIT_STATE_ALWAYSON;
   }
-  return DEFAULT_CONSENT_STATE;
+  return constants.DEFAULT_CONSENT_INIT_STATE;
 }
 
 function save() {
-  jsCookie.set(DEFAULT_CONSENTCOOKIE_NAME, consents.serialize(), { expires: DEFAULT_CONSENTCOOKIE_TTL });
+  jsCookie.set(constants.DEFAULT_CONSENTCOOKIE_COOKIE_NAME, consents.serialize(), { expires: constants.DEFAULT_CONSENTCOOKIE_COOKIE_TTL });
 }
 
 function load() {
   const ccCookieMap = getCCCookieMap();
-  const ccApps = getCCApps();
-  consents = Consents.create(ccApps, ccCookieMap);
+  const consentConfigs = getConsentConfig();
+  consents = Consents.create(consentConfigs, ccCookieMap);
   if (vue.$services.main.isConsentWallAccepted()) {
     save();
   }
@@ -219,7 +194,7 @@ function update($id, $flag) {
   }
   save();
 
-  vue.$events.$emit('consent', {
+  vue.$events.$emit(constants.DEFAULT_EVENT_NAME_CONSENT, {
     id: $id,
     state: getState($flag),
   });
@@ -238,34 +213,34 @@ function getFlag($id) {
 }
 
 function isAccepted($id) {
-  return getFlag($id) === DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED;
+  return getFlag($id) === constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_ACCEPTED;
 }
 
 function isRejected($id) {
-  return getFlag($id) === DEFAULT_CONSENTCOOKIE_VAL_REJECTED;
+  return getFlag($id) === constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_REJECTED;
 }
 
 function accept($id) {
-  update($id, DEFAULT_CONSENTCOOKIE_VAL_ACCEPTED);
+  update($id, constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_ACCEPTED);
   vue.$services.script.enableScripts($id);
 }
 
 function reject($id) {
-  update($id, DEFAULT_CONSENTCOOKIE_VAL_REJECTED);
+  update($id, constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_REJECTED);
 }
 
 function getState($flag) {
   switch ($flag) {
     case 0:
-      return 'disabled';
+      return constants.DEFAULT_EVENT_CONSENT_STATE_VAL_REJECTED;
     case 1:
-      return 'enabled';
+      return constants.DEFAULT_EVENT_CONSENT_STATE_VAL_ACCEPTED;
     default:
-      return 'updated';
+      return constants.DEFAULT_EVENT_CONSENT_STATE_DEFAULT;
   }
 }
 
-module.exports = {
+export default {
   init,
   load,
   save,

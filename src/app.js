@@ -7,7 +7,7 @@
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless export defaultd by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -16,30 +16,37 @@
  */
 
 // Polyfils to support up from IE9 and up
-require('mutationobserver-shim');
-require('promise-polyfill');
+import mutationObserverShim from 'mutationobserver-shim';
+import promisePolyfill from 'promise-polyfill';
 
-// Static assets included in bundle
-require('assets/fonts/fontello/css/fontello.css');
-require('assets/scss/_icookie.scss');
+import icons from 'assets/fonts/fontello/css/fontello.css';
+import css from 'assets/scss/_consentcookie.scss';
+
+// Vue Framework
+import vue from 'vue';
+import vueState from 'config/configState';
+import vueRouter from 'config/configRouter';
+import vueServices from 'config/configServices';
+import vueI18n from 'config/configI18n';
+import vueResources from 'vue-resource';
+import vueEvents from 'vue-events';
+import vueAsyncComputed from 'vue-async-computed';
+
+import _ from 'mixins/underscore';
+import utils from 'base/utils';
+import * as constants from 'base/constants';
+
+// Default Directives
+import ccTheme from 'directives/ccTheme';
+
+// Views
+import mainView from 'views/main';
 
 // Defaults
 const DEFAULT_INFO_LINK = 'https://www.consentcookie.nl/';
 const DEFAULT_APP_NAME = 'ConsentCookie';
 
-// Vue dependencies
-const vue = require('vue');
-const vueState = require('config/configState.js');
-const vueRouter = require('config/configRouter.js');
-const vueServices = require('config/configServices.js');
-const vueResources = require('vue-resource');
-const vueEvents = require('vue-events').default; // ES6 plugin workaround
-const vueAsyncComputed = require('vue-async-computed');
-
-// Helpers
-const utils = require('base/utils');
-const _ = require('mixins/underscore');
-
+// Instance variables
 let mainInstance;
 
 function init($config) {
@@ -50,7 +57,6 @@ function init($config) {
     return utils.logErrorOrThrowException('Unable to initialize ConsentCookie.' +
       'ConsentCookie already initialized. Visit: ' + DEFAULT_INFO_LINK + ' for more information.');
   }
-
   return initVue($config);
 }
 
@@ -64,32 +70,33 @@ function initBaseView() {
 function initVue($config) {
   const store = vueState(vue);
   const router = vueRouter(vue);
+  const i18n = vueI18n(vue);
   const services = vueServices(vue);
   vue.use(vueResources);
   vue.use(vueEvents);
   vue.use(vueAsyncComputed);
 
-  vue.directive('theme', require('directives/ccTheme.js'));
+  vue.directive('theme', ccTheme);
 
-  vue.component('cc-switch', require('components/general/ccSwitch.vue'));
-  vue.component('cc-toggle-icon', require('components/general/ccToggleIcon.vue'));
-
-  const MainComponent = vue.extend(require('./views/main.vue'));
+  const MainComponent = vue.extend(mainView);
   mainInstance = new MainComponent({
     router,
     store,
+    i18n,
     services,
     propsData: {
       config: $config,
     },
     created() {
       bootstrapApp.call(this);
-    }
+    },
   });
+  setTimeout(() => mainInstance.$events.$emit(constants.DEFAULT_EVENT_NAME_APP_CREATED), 0);
 
   return onReady(() => {
     initBaseView();
     mainInstance.$mount('#ConsentCookie');
+    setTimeout(() => mainInstance.$events.$emit(constants.DEFAULT_EVENT_NAME_APP_MOUNTED), 0);
   });
 }
 
@@ -136,6 +143,7 @@ function get($id) {
   if (!$id) {
     // Backwards compatibility fix
     return (($consents) => {
+      // eslint-disable-next-line no-param-reassign
       $consents.consents = $consents.getConsentMap();
       return $consents;
     })(getConsents());
@@ -158,7 +166,6 @@ function getConsents() {
   return mainInstance.$services.consent.getConsents();
 }
 
-
 function registerPlugin($plugin) {
   if (!mainInstance) {
     return utils.logErrorOrThrowException('Unable to register plugin. ConsentCookie is not yet initialized.');
@@ -166,7 +173,21 @@ function registerPlugin($plugin) {
   return mainInstance.$services.plugin.register($plugin);
 }
 
-module.exports = (function () {
+function setLanguage($lang, $force) {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('Unable to setLanguage. ConsentCookie is not yet initialized.');
+  }
+  return mainInstance.$services.translate.setLanguage($lang, $force);
+}
+
+function addLanguage($lang, $resource) {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('Unable to addLanguage. ConsentCookie is not yet initialized.');
+  }
+  return mainInstance.$services.translate.addLanguage($lang, $resource);
+}
+
+export default (function () {
   if (global[DEFAULT_APP_NAME]) {
     const error = new Error('Unable to initialize ConsentCookie. ConsentCookie already initialized. ' +
       'Check if the you have not included the library twice.');
@@ -182,6 +203,9 @@ module.exports = (function () {
     getConsent,
     getConsents,
     registerPlugin,
+    setLanguage,
+    addLanguage,
+    // eslint-disable-next-line no-undef
     ver: VERSION,
   };
 }());

@@ -30,8 +30,8 @@ function getObjectValue($object, $nameSpace, $default) {
   for (let i = 0; i < nameSpaceArray.length; i += 1) {
     object = object[nameSpaceArray[i]];
 
-    if (!object) {
-      return object || defaultVal;
+    if (typeof object === 'undefined' || object === null) {
+      return (typeof object !== 'undefined' && object !== null) ? object : defaultVal;
     }
   }
   return object;
@@ -94,12 +94,13 @@ function getElementsByTagName($tagname, $filter, $global) {
  */
 function uuidv4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    // eslint-disable-next-line no-bitwise
     const r = Math.random() * 16 | 0;
+    // eslint-disable-next-line no-bitwise,no-mixed-operators
     const v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
 }
-
 
 function getDomainTree() {
   const domainTree = [];
@@ -122,11 +123,35 @@ function getDomainTree() {
   return domainTree;
 }
 
-module.exports = {
+function cacheResult($fn, $new) {
+  const context = this;
+  let result = undefined;
+
+  return () => {
+    if (typeof result === 'undefined' || $new === true) {
+      result = $fn.apply(context, [].slice.call(arguments));
+    }
+    return result;
+  };
+}
+
+function getOrCreateAndReturn($object, $name, $value) {
+  if ((typeof $object === 'undefined' || $object === null) || typeof $name !== 'string') {
+    throw new Error('Invalid arguments. Unable to get or create and return');
+  }
+  if (!$object[$name]) {
+    $object[$name] = $value;
+  }
+  return $object[$name];
+}
+
+export default {
   download,
   logErrorOrThrowException,
   getObjectValue,
   getElementsByTagName,
   getDomainTree,
   uuidv4,
+  cacheResult,
+  getOrCreateAndReturn,
 };

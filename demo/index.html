@@ -45,23 +45,36 @@
       'consentwall': {
         'enabled': true,
         'timeout': 1000,
+      },
+      'language': {
+        'default': '',
+        'fallback': ''
+      },
+      'consent': {
+        'type': 'purpose'
+      }
+    },
+    'purposes': {
+      'consent': {
+        'ccp-4': {
+          'initstate': 'alwayson'
+        },
+        'ccp-6': {
+          'initstate': 'optout'
+        },
+        'ccp-ot': {
+          'initstate': 'alwayson'
+        }
       }
     },
     'apps': {
+      'static': null,
       'endpoint': '',
       'consent': {
-        'cc': {
-          'initstate': 'optin'
-        },
-        'iq': {
-          'initstate': 'optin'
-        },
-        'ga': {
-          'initstate': 'optin'
-        },
-        'gtm': {
-          'initstate': 'optin'
-        }
+        'cc': {},
+        'iq': {},
+        'ga': {},
+        'gtm': {}
       }
     },
     'design': {

@@ -17,40 +17,60 @@
 
 <template>
   <div class="cc-applications">
-    <div class="cc-overview">
-      <cc-application v-for="application in applications" :key="application.id" :application="application"/>
+    <div class="cc-overview" v-if="applicationList && !isGroupedByPurpose">
+      <cc-application v-for="application in applicationList.getActive()" :key="application.id"
+                      :application="application"/>
+    </div>
+    <div class="cc-overview-purpose" v-if="applicationList && isGroupedByPurpose">
+      <cc-application-group v-for="group in applicationList.getActiveGroupedByPurpose()" :key="group.id"
+                            :group="group"/>
     </div>
     <div class="cc-more-info">
-      <a v-if="moreInfo" :href="moreInfo">Meer informatie over deze applicaties</a>
+      <a v-if="hasMoreInfoLink" :href="$t(configKeyMoreInfoLink)">{{ $t(configKeyMoreInfo) }}</a>
     </div>
   </div>
 </template>
 <script>
 
-  // Components
-  const ccApplication = require('components/applications/ccApplication.vue');
+  import _ from 'underscore';
+  import * as constants from 'base/constants';
+  import ccApplication from 'components/applications/ccApplication';
+  import ccApplicationGroup from 'components/applications/ccApplicationGroup';
 
-  // Defaults
-  const viewTitle = 'Jouw instellingen';
-
-  // Public functions
-  module.exports = {
+  export default {
     name: 'applications',
     components: {
       ccApplication,
+      ccApplicationGroup,
     },
     data() {
       return {
-        moreInfo: this.$services.config.get('moreinfolink'),
+        configKeyMoreInfo: constants.CONFIG_KEY_RESOURCES_APPLICATIONS_MOREINFO,
+        configKeyMoreInfoLink: constants.CONFIG_KEY_RESOURCES_APPLICATIONS_MOREINFO_LINK,
       };
     },
+    computed: {
+      configKeyResourceMoreInfoLink() {
+        return _.template(constants.DEFAULT_RESOURCE_PREFIX_TEMPLATE)({ language: this.$i18n.locale }) + constants.CONFIG_KEY_RESOURCES_APPLICATIONS_MOREINFO_LINK;
+      },
+      hasMoreInfoLink() {
+        return this.$services.config.get(this.configKeyResourceMoreInfoLink, null) !== null
+          || constants.DEFAULT_RESOURCE_LANGUAGE === this.$i18n.locale;
+      },
+      isGroupedByPurpose() {
+        return this.$services.applications.isGroupEnabled('purpose');
+      },
+    },
     asyncComputed: {
-      applications() {
-        return this.$services.applications.getActive();
+      applicationList: {
+        get() {
+          return this.$services.applications.getApplicationListAsync();
+        },
+        default: null,
       },
     },
     beforeMount() {
-      this.$store.commit('updateView', { title: viewTitle });
+      this.$store.commit('updateView', { title: constants.CONFIG_KEY_RESOURCES_APPLICATIONS_TITLE });
     },
   };
 </script>
@@ -63,6 +83,7 @@
     min-width: 320px;
     display: flex;
     flex-direction: column;
+    color: #4e4e4e;
 
     .cc-overview {
       display: block;

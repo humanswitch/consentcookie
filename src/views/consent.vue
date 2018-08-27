@@ -18,56 +18,36 @@
 <template>
   <div class="cc-consent">
     <cc-content-box>
-      <div class="ccText" v-html="consentText"/>
+      <div class="ccText" v-html="$t(configKeyConsentText)"/>
       <div class="cc-consentActions">
-        <cc-button size="large" @click="accept" v-theme="{background:'primary',color:'secondary'}">{{ consentButtonText }}</cc-button>
-        <a :href="consentInfoLink" class="cc-info-link" target="_blank">Meer informatie</a>
+        <cc-button size="large" @click="accept" v-theme="{background:'primary',color:'secondary'}">{{$t(configKeyConsentButtonText)}}</cc-button>
+        <a :href="$t(configKeyConsentInfoLink)" class="cc-info-link" target="_blank">{{ $t('general.moreInfo')}}</a>
       </div>
     </cc-content-box>
   </div>
 </template>
 <script>
 
-  // Components
-  const ccContentBox = require('components/general/ccContentBox.vue');
-  const ccButton = require('components/general/ccButton.vue');
+  import * as constants from 'base/constants';
+  import ccContentBox from 'components/general/ccContentBox';
+  import ccButton from 'components/general/ccButton';
 
-  // Defaults
-  const DEFAULT_CONFIG_KEY_CONSENTWALL_BLOCKPAGE = 'general.consent.blockpage';
-
-  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TITLE = 'resources.nl.consent.title';
-  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TEXT = 'resources.nl.consent.text';
-  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_BUTTONTEXT = 'resources.nl.consent.button';
-  const DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_LINK = 'resources.nl.consent.infolink';
-
-  const DEFAULT_CONSENTWALL_BLOCKPAGE = false;
-  const DEFAULT_CONSENTWALL_CONSENT_TITLE = 'ConsentCookie';
-  const DEFAULT_CONSENTWALL_CONSENT_TEXT = '<div>Deze website maakt gebruik van <a href="https://www.consentcookie.nl/"><u>ConsentCookie</u></a> om je cookies en privacy toestemmingen op deze website te beheren.</div>';
-  const DEFAULT_CONSENTWALL_CONSENT_BUTTONTEXT = 'Ok!';
-  const DEFAULT_CONSENTWALL_CONSENT_INFOLINK = 'https://www.consentcookie.nl/';
-
-  // Public functions
-  module.exports = {
+  export default {
     name: 'consentView',
     components: {
       ccContentBox,
       ccButton,
     },
     data() {
-      return {};
+      return {
+        configKeyConsentText: constants.CONFIG_KEY_RESOURCES_CONSENT_TEXT,
+        configKeyConsentButtonText: constants.CONFIG_KEY_RESOURCES_CONSENT_BUTTON,
+        configKeyConsentInfoLink: constants.CONFIG_KEY_RESOURCES_CONSENT_INFOLINK,
+      };
     },
     computed: {
-      consentText() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TEXT, DEFAULT_CONSENTWALL_CONSENT_TEXT);
-      },
-      consentButtonText() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_BUTTONTEXT, DEFAULT_CONSENTWALL_CONSENT_BUTTONTEXT);
-      },
-      consentInfoLink() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_LINK, DEFAULT_CONSENTWALL_CONSENT_INFOLINK);
-      },
       blockPage() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_CONSENTWALL_BLOCKPAGE, DEFAULT_CONSENTWALL_BLOCKPAGE);
+        return this.$services.config.get(constants.CONFIG_KEY_GENERAL_CONSENTWALL_BLOCKPAGE, constants.DEFAULT_GENERAL_CONSENTWALL_BLOCKPAGE);
       },
     },
     methods: {
@@ -79,8 +59,7 @@
 
     },
     beforeMount() {
-      const viewTitle = this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_CONSENTWALL_CONSENT_TITLE, DEFAULT_CONSENTWALL_CONSENT_TITLE);
-      this.$store.commit('updateView', { title: viewTitle });
+      this.$store.commit('updateView', { title: constants.CONFIG_KEY_RESOURCES_CONSENT_TITLE });
     },
   };
 

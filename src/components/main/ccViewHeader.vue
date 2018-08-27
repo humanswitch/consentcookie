@@ -18,7 +18,7 @@
 <template>
   <div v-theme="{background:'primary'}" :style="componentCss" class="cc-view-header">
     <div>
-      <div v-theme="{color:'secondary'}" class="cc-title">{{ title }}</div>
+      <div v-theme="{color:'secondary'}" class="cc-title" v-t="title"/>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@
   const DEFAULT_HEADER_HEIGHT = '60';
 
   // Vue module
-  module.exports = {
+  export default {
     name: 'ccViewHeader',
     props: {
       height: {

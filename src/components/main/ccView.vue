@@ -33,11 +33,11 @@
 <script>
 
   // Dependencies
-  const _ = require('underscore');
+  import _ from 'underscore';
 
   // Components
-  const ccViewHeader = require('components/main/ccViewHeader.vue');
-  const ccViewContent = require('components/main/ccViewContent.vue');
+  import ccViewHeader from 'components/main/ccViewHeader';
+  import ccViewContent from 'components/main/ccViewContent';
 
   // Defaults
   const DEFAULT_VIEW_TOP_MARGIN = 30;
@@ -70,7 +70,7 @@
 
   function calcMaxHeight() {
     if (!viewElement) {
-      return false;
+      return;
     }
 
     // calculate the max height
@@ -80,7 +80,7 @@
 
   function calHeight(height) {
     if (!_.isNumber(height)) {
-      return false;
+      return;
     }
 
     const maxHeight = getMaxHeight();
@@ -102,7 +102,7 @@
   }
 
   /* VUE */
-  module.exports = {
+  export default {
     name: 'ccView',
     components: {
       ccViewHeader,
@@ -143,7 +143,7 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
   @import '../../assets/scss/general-variables';
 

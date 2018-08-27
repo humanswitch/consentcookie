@@ -12,32 +12,34 @@
   - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   - See the License for the specific language governing permissions and
   - limitations under the License.
-  -
   -->
 
 <template>
-  <div class="cc-application-summary">
-    <cc-toggle v-model="showInfo" class="cc-toggle-text">
-      <cc-img :img="logo" :size="15" :unit="'px'"/>
-      <span>{{ application.name }}</span>
+  <div class="cc-application-group-summary">
+    <cc-toggle v-model="showGroup" class="cc-toggle-text">
+      <cc-img :img="groupIcon" :size="25" :unit="'px'" class="cc-group-icon"/>
+      <div class="cc-group-info">
+        <div class="cc-group-title">{{ title }}</div>
+        <div class="cc-group-stats">{{group.getTotalCount()}} applicaties</div>
+      </div>
     </cc-toggle>
-    <slot name="content">
-      <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo"
-                      :disabled="!hasPlugin" :size="20"/>
-      <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
-    </slot>
+    <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
   </div>
 </template>
 
 <script>
+
+  import _ from 'underscore';
+  import * as constants from 'base/constants';
 
   import ccImg from 'components/general/ccImg';
   import ccToggle from 'components/general/ccToggle';
   import ccToggleIcon from 'components/general/ccToggleIcon';
   import ccSwitch from 'components/general/ccSwitch';
 
+  // Public functions
   export default {
-    name: 'cc-application-summary',
+    name: 'cc-application-group-summary',
     components: {
       ccImg,
       ccToggle,
@@ -45,48 +47,50 @@
       ccSwitch,
     },
     props: {
-      application: {
+      group: {
         type: Object,
         required: true,
       },
       state: {
         type: Object,
-        default: () => Object(),
+        default: () => {
+        },
       },
     },
     data() {
       return {};
     },
     computed: {
-      showInfo: {
+      showGroup: {
         get() {
-          return this.state.showInfo;
+          return this.state.showGroup;
         },
         set($newVal) {
-          this.state.showInfo = $newVal;
+          this.state.showGroup = $newVal;
         },
+      },
+      groupIcon() {
+        return this.$services.applications.getGroupIcon(this.group.definition);
+      },
+      title() {
+        return this.group.definition.name;
+      },
+      activeCount() {
+        return !this.group ? null : _.chain(this.group.items)
+          .map($application => this.$services.applications.isEnabled($application))
+          .filter()
+          .value().length;
       },
       accepted: {
         get() {
-          return this.$services.applications.isEnabled(this.application);
+          return this.$services.applications.isEnabled(this.group.definition);
         },
         set($newVal) {
-          this.$services.applications.setAccepted(this.application, $newVal);
+          this.$services.applications.setGroupAccepted(this.group, $newVal);
         },
       },
       disabled() {
-        return this.$services.applications.isAlwaysOn(this.application);
-      },
-      logo() {
-        return this.$services.applications.getLogo(this.application);
-      },
-    },
-    asyncComputed: {
-      hasPlugin: {
-        get() {
-          return this.$services.applications.hasPlugin(this.application);
-        },
-        default: false,
+        return this.$services.applications.isAlwaysOn(this.group.definition);
       },
     },
   };
@@ -96,7 +100,7 @@
 
   @import '../../assets/scss/general-variables';
 
-  .cc-application-summary {
+  .cc-application-group-summary {
 
     display: flex;
     align-items: center;
@@ -106,6 +110,11 @@
 
     @include default-clearfix();
 
+    .cc-group-icon {
+      object-fit: contain;
+      filter: opacity(0.6);
+    }
+
     .cc-toggle-text {
       display: flex;
       align-items: center;
@@ -114,8 +123,15 @@
       font-weight: 600;
       margin-left: 10px;
 
-      span {
-        margin-left: 5px;
+      .cc-group-info {
+        margin-left: 10px;
+      }
+
+      .cc-group-stats {
+        font-weight: 200;
+        font-size: 11px;
+        margin: 2px 0px;
+        text-decoration: underline;
       }
     }
 
@@ -131,7 +147,7 @@
       }
     }
 
-    .cc-switch {
+    /deep/ .cc-switch {
       margin: 15px 10px;
       display: inline-block;
       float: right;

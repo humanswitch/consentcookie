@@ -15,13 +15,19 @@
  *
  */
 
-'use strict';
+import VueI18n from 'vue-i18n';
 
-require('eventsource-polyfill');
-const hotClient = require('webpack-hot-middleware/client?noInfo=true&reload=true');
+import * as constants from 'base/constants';
+import utils from 'base/utils';
 
-hotClient.subscribe(function (event) {
-  if (event.action === 'reload') {
-    window.location.reload();
-  }
-});
+function configI18n(vue) {
+  vue.use(VueI18n);
+
+  return new VueI18n({
+    locale: constants.DEFAULT_RESOURCE_LANGUAGE, // set locale
+    fallbackLocale: constants.DEFAULT_RESOURCE_LANGUAGE,
+    messages: utils.getObjectValue(constants.DEFAULT_CONFIG, constants.CONFIG_KEY_RESOURCES, {}),
+  });
+}
+
+export default configI18n;

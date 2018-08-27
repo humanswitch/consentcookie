@@ -16,7 +16,7 @@
  */
 
 // Depencencies
-const utils = require('base/utils.js');
+import utils from 'base/utils';
 
 let vue; // eslint-disable-line no-unused-vars
 let config;
@@ -36,7 +36,7 @@ function get($namespace, $default) {
   return config;
 }
 
-module.exports = {
+export default {
   init,
   load,
   get,

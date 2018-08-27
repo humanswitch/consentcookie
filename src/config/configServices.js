@@ -15,13 +15,22 @@
  *
  */
 
+import VueServices from 'plugins/vueServices';
+import mainService from 'services/mainService';
+import configService from 'services/configService';
+import viewService from 'services/viewService';
+import consentService from 'services/consentService';
+import applicationsService from 'services/applicationsService';
+import pluginService from 'services/pluginService';
+import scriptService from 'services/scriptService';
+import translateService from '../services/translateService';
+
 /**
  *
  * @param vue
  */
 function configVueServices(vue) {
   // Dependencies
-  const VueServices = require('plugins/vueServices.js');
 
   // Init service loader
   vue.use(VueServices);
@@ -31,28 +40,31 @@ function configVueServices(vue) {
   // If a service depends on another, define it later in the order.
   const services = [{
     name: 'main',
-    service: require('services/mainService.js'),
+    service: mainService,
   }, {
     name: 'config',
-    service: require('services/configService.js'),
+    service: configService,
   }, {
     name: 'view',
-    service: require('services/viewService.js'),
+    service: viewService,
   }, {
     name: 'consent',
-    service: require('services/consentService.js'),
+    service: consentService,
   }, {
     name: 'applications',
-    service: require('services/applicationsService.js'),
+    service: applicationsService,
   }, {
     name: 'plugin',
-    service: require('services/pluginService.js'),
+    service: pluginService,
   }, {
     name: 'script',
-    service: require('services/scriptService.js'),
+    service: scriptService,
+  }, {
+    name: 'translate',
+    service: translateService,
   }];
 
   return new VueServices(services);
 }
 
-module.exports = configVueServices;
+export default configVueServices;

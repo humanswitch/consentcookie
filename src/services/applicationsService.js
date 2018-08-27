@@ -16,81 +16,215 @@
  */
 
 // Dependencies
-const _ = require('underscore');
-const jsCookie = require('js-cookie');
+import _ from 'underscore';
+import jsCookie from 'js-cookie';
 
-// Helpers
-const utils = require('base/utils');
+import utils from 'base/utils';
+import * as constants from 'base/constants';
 
-const DEFAULT_APPS_ENDPOINT = 'https://cdn.humanswitch.services/cc/consentcookie/consentcookie.json';
-const DEFAULT_URL_PARAM_APPLICATION_ID = "ccid";
-
-const DEFAULT_CONFIG_KEY_APPS_ENDPOINT = 'apps.endpoint';
-const DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK = 'general.gdpr.contact';
+const DEFAULT_PURPOSE_UNDEFINED = {
+  id: 'ccp-ot',
+  name: 'Other',
+};
 
 let vue;
-let applications;
-let activeApplications;
+let applicationListAsync;
+
+class ApplicationGroup {
+
+  constructor($groupDefinition, $items) {
+    this.definition = $groupDefinition;
+    this.items = _.isArray($items) ? $items : [];
+  }
+
+  getTotalCount() {
+    return this.items.length;
+  }
+
+}
+
+class ApplicationList {
+
+  constructor($remoteApps, $staticApps, $consentConfigs) {
+    this.remoteApps = _.map($remoteApps, $app => new Application($app));
+    this.staticApps = _.map($staticApps, $app => new Application($app));
+    this.consentConfigs = $consentConfigs;
+
+    this.remoteAppsMap = _.indexBy(this.remoteApps, $app => $app.id);
+    this.staticAppsMap = _.indexBy(this.staticApps, $app => $app.id);
+  }
+
+  get($id) {
+    return utils.getObjectValue(this.staticApps, $id, utils.getObjectValue(this.remoteAppsMap, $id, null));
+  }
+
+  getConfigureUniquePurposes($id) {
+    const app = this.get($id);
+
+    if (!(app instanceof Application)) {
+      return [];
+    }
+    const selectedDataProcessings = this.getConfiguredDataProcessings($id);
+    return _.chain(app.dataProcessings)
+      .filter($dataProcessing => (_.isEmpty(selectedDataProcessings) ? true : _.contains(selectedDataProcessings, $dataProcessing.id)))
+      .map($dataProcessing => $dataProcessing.purposes)
+      .flatten()
+      .unique(false, $purpose => $purpose.id)
+      .value();
+  }
+
+  getConfiguredDataProcessings($id) {
+    return utils.getObjectValue(this.consentConfigs, $id + '.dataProcessings', []);
+  }
+
+  getMerged = utils.cacheResult(() => _.chain(this.remoteApps)
+    .filter($app => !(_.isObject(this.staticAppsMap[$app.id])))
+    .union(this.staticApps)
+    .sortBy($app => $app.id)
+    .value());
+
+  getActive = utils.cacheResult(() => _.chain(this.getMerged())
+    .filter(($app => $app && $app.id && this.consentConfigs[$app.id]))
+    .value());
+
+  getActiveGroupedByPurpose = utils.cacheResult(() => _.chain(this.getActive())
+    .reduce(($memo, $app) => {
+      const uniquePurposes = this.getConfigureUniquePurposes($app.id);
+      if (_.isEmpty(uniquePurposes)) {
+        utils.getOrCreateAndReturn($memo, DEFAULT_PURPOSE_UNDEFINED.id, new ApplicationGroup(DEFAULT_PURPOSE_UNDEFINED))
+          .items
+          .push($app);
+      } else {
+        _.each(uniquePurposes, ($purpose) => {
+          utils.getOrCreateAndReturn($memo, $purpose.id, new ApplicationGroup($purpose))
+            .items
+            .push($app);
+        });
+      }
+      return $memo;
+    }, {})
+    .map($group => $group)
+    .sortBy($group => $group.definition.name)
+    .value());
+
+
+  getPurposes = utils.cacheResult(() => _.chain(this.getGroupedByPurpose())
+    .map($group => $group.definition)
+    .value());
+
+}
+
+class Application {
+
+  constructor($application) {
+    // Not using setPrototype because its not supported by IE9
+    _.extend(this, $application);
+  }
+
+  getCookiePatterns() {
+    return _.chain(this.dataProcessings)
+      .map($dataProcessing => $dataProcessing.identifications)
+      .flatten()
+      .filter($identification => $identification.fileSystem && $identification.fileSystem.id === 'persistent-cookie')
+      .map($identification => $identification.pattern)
+      .compact()
+      .value();
+  }
+
+  // Todo workaround for https://github.com/humanswitch/consentcookie/issues/73
+  getPluginPath() {
+    return _.chain(this.plugins)
+      .map($plugin => $plugin.url)
+      .first()
+      .value();
+  }
+
+}
 
 function init(vueServices) {
   vue = vueServices.getVueInstance();
 }
 
-function loadApplications() {
-  if (!applications) {
-    const applicationsUrl = vue.$services.config.get(DEFAULT_CONFIG_KEY_APPS_ENDPOINT, DEFAULT_APPS_ENDPOINT);
-    applications = vue.$http.get(applicationsUrl)
-      .then($request => ($request.status === 200 ? $request.body : []));
+function getApplicationListAsync() {
+  if (!applicationListAsync) {
+    const applicationsEndPoint = getApplicationEndPoint();
+    const emptyResult = [];
+    if (applicationsEndPoint === null) {
+      applicationListAsync = new Promise($resolve => $resolve(new ApplicationList(emptyResult, getStaticApplications(), getApplicationsConfig())));
+    } else {
+      applicationListAsync = vue.$http.get(applicationsEndPoint)
+        .then($request => ($request.status === 200 ? new ApplicationList($request.body, getStaticApplications(), getApplicationsConfig()) :
+          new ApplicationList(emptyResult, getStaticApplications(), getApplicationsConfig())));
+    }
   }
-  return applications;
+  return applicationListAsync;
 }
 
-function getActive() {
-  if (!activeApplications) {
-    activeApplications = loadApplications()
-      .then(($applications) => {
-        const consentConfig = vue.$services.config.get('apps.consent');
-        const active = [];
-        const map = _.reduce($applications, ($memo, $application) => {
-          $memo[$application.id] = $application;
-          return $memo;
-        }, {});
+function getStaticApplications() {
+  const emptyResult = [];
+  const staticApplications = vue.$services.config.get(constants.CONFIG_KEY_APPS_STATIC, null);
 
-        _.each(consentConfig, ($consent, $id) => {
-          const application = map[$id];
-
-          if (application) {
-            active.push(application);
-          }
-        });
-        return active;
-      });
+  if (_.isArray(staticApplications)) {
+    return staticApplications;
+  } else if (_.isObject(staticApplications)) {
+    const language = vue.$services.translate.getLanguage();
+    return _.isArray(staticApplications[language]) ? staticApplications[language] : emptyResult;
   }
-  return activeApplications;
+  return emptyResult;
 }
 
-function isEnabled($application){
+function getApplicationsConfig() {
+  return vue.$services.config.get(constants.CONFIG_KEY_APPS_CONSENT);
+}
+
+function getApplicationEndPoint() {
+  const endpoint = vue.$services.config.get(constants.CONFIG_KEY_APPS_ENDPOINT);
+
+  if (!(_.isEmpty(_.trim(endpoint)))) {
+    return endpoint;
+  }
+  if (_.isObject(endpoint)) {
+    const language = vue.$services.translate.getLanguage();
+    if (endpoint[language]) {
+      return endpoint[language];
+    }
+  }
+  if (endpoint === false) {
+    return null;
+  }
+  return getDefaultApplicationEndPoint();
+}
+
+function getDefaultApplicationEndPoint() {
+  return constants.DEFAULT_CONSENTCOOKIE_APPLICATION_RESOURCE_LOCATION;
+}
+
+function isEnabled($application) {
   return vue.$services.consent.getConsent($application.id)
     .isEnabled();
 }
 
-function isAccepted($application) {
-  return vue.$services.consent.getConsent($application.id)
+function isAccepted($item) {
+  return vue.$services.consent.getConsent($item.id)
     .isAccepted();
 }
 
-function isAlwaysOn($application) {
-  return vue.$services.consent.getConsent($application.id)
-    .isAlwaysOn();
+function isAlwaysOn($item) {
+  return vue.$services.consent.getConsent($item.id).isAlwaysOn();
 }
 
-function setAccepted($application, $isAccepted) {
+function setAccepted($item, $isAccepted) {
   if ($isAccepted === true) {
-    vue.$services.consent.accept($application.id);
+    vue.$services.consent.accept($item.id);
   } else {
-    vue.$services.consent.reject($application.id);
-    removeApplicationClientData($application);
+    vue.$services.consent.reject($item.id);
+    removeApplicationClientData($item);
   }
+}
+
+function setGroupAccepted($group, $isAccepted) {
+  setAccepted($group.definition, $isAccepted);
+  _.each($group.items, $application => removeApplicationClientData($application));
 }
 
 function removeApplicationData($application) {
@@ -98,13 +232,11 @@ function removeApplicationData($application) {
   return removeApplicationProfile($application);
 }
 
-function removeApplicationClientData($application) {
-  const cookiePatterns = _.chain($application.dataProcessing)
-    .map(($dataProcessing) => ($dataProcessing.dataIds && _.isArray($dataProcessing.dataIds.cookies)) ? $dataProcessing.dataIds.cookies : null)
-    .flatten()
-    .compact()
-    .value();
-
+function removeApplicationClientData($item) {
+  if (!$item || !_.isFunction($item.getCookiePatterns)) {
+    return;
+  }
+  const cookiePatterns = $item.getCookiePatterns();
   if (_.isEmpty(cookiePatterns)) {
     return;
   }
@@ -141,10 +273,16 @@ function getPlugin($application) {
           return $resolve($plugin);
         }
         return $reject($reject);
-      }, ($error) => {
-        return $reject($error);
-      });
+      }, $error => $reject($error));
   });
+}
+
+function getPluginSrc($application) {
+  if (!$application || !$application.id) {
+    return null;
+  }
+  const consentConfigKey = _.template(constants.DEFAULT_CONSENTCOOKIE_APPLICATION_CONSENT_PREFIX_TEMPLATE)({ applicationId: $application.id }) + constants.CONFIG_KEY_APPS_CONSENT_PLUGIN;
+  return vue.$services.config.get(consentConfigKey, $application.getPluginPath());
 }
 
 function getApplicationProfile($application) {
@@ -168,48 +306,60 @@ function removeApplicationProfile($application) {
   });
 }
 
-function enabledApplication($application) {
-  return setAccepted($application, true);
-}
-
-function disableApplication($application) {
-  return setAccepted($application, false);
-}
-
 function downloadApplicationProfile($application) {
   return new Promise(($resolve, $reject) => {
     getApplicationProfile($application)
       .then(($profile) => {
-        utils.download(JSON.stringify($profile, null, 3), 'application/json', $application.id + '-profile.json');
+        utils.download(JSON.stringify($profile, null, 3), 'application/json', $application.id + constants.DEFAULT_CONSENTCOOKIE_PROFILE_EXPORT_SUFFIX);
         return $resolve(true);
       }, $error => $reject($error));
   });
 }
 
 function getGDPRLink($application) {
-  const gdprContactLink = vue.$services.config.get(DEFAULT_CONFIG_KEY_GDPR_CONTACNT_LINK);
+  const gdprContactLink = vue.$services.config.get(constants.CONFIG_KEY_GENERAL_GDPR_CONTACTLINK);
   if (!gdprContactLink) {
     return null;
   }
-  return gdprContactLink + '?' + DEFAULT_URL_PARAM_APPLICATION_ID +'=' + $application.id;
+  return gdprContactLink + '?' + constants.DEFAULT_CONSENTCOOKIE_APPLICATION_ID_URL_PARAM + '=' + $application.id;
 }
 
-module.exports = {
+function getLogo($application) {
+  return $application.urlIcon ? $application.urlIcon : constants.DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_LOCATION +
+    $application.id + constants.DEFAULT_IMAGE_EXTENSION;
+}
+
+function getGroupIcon($group, $groupType) {
+  return $group.urlIcon ? $group.urlIcon : constants.DEFAULT_CONSENTCOOKIE_APPLICATION_GROUP_ICON_LOCATION +
+    $group.id + constants.DEFAULT_IMAGE_EXTENSION;
+}
+
+function isGroupEnabled($group) {
+  if (_.isEmpty($group)) {
+    return false;
+  }
+  return $group === vue.$services.config.get(constants.CONFIG_KEY_GENERAL_CONSENT_TYPE, null);
+}
+
+export default {
   init,
   hasPlugin,
   getPlugin,
-  getActive,
+  getPluginSrc,
+  getApplicationListAsync,
   getApplicationProfile,
   getApplicationProfileInfo,
   isEnabled,
   isAlwaysOn,
   isAccepted,
+  isGroupEnabled,
   setAccepted,
+  setGroupAccepted,
   removeApplicationData,
   removeApplicationClientData,
   removeApplicationProfile,
-  enabledApplication,
-  disableApplication,
   downloadApplicationProfile,
   getGDPRLink,
+  getLogo,
+  getGroupIcon,
 };

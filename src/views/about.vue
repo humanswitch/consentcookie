@@ -18,56 +18,27 @@
 <template>
   <div class="cc-about">
     <cc-content-box>
-      <div class="ccText" v-show="about" v-html="about"/>
-      <div v-show="!about">
-        <div class="ccText cc-intro">
-          Baas over eigen data, dat vinden wij heel normaal. Niet alleen vanwege de AVG, maar omdat wij geloven in
-          transparantie en fatsoen. Daarom gebruiken wij ConsentCookie.
-        </div>
-        <div class="ccText cc-text1">
-          ConsentCookie laat jou zien welke data we van jou verzamelen en waarom we dat doen.
-          Ga naar
-          <router-link :to="{path: 'applications' }">Jouw instellingen</router-link>
-          om jouw persoonlijke voorkeuren vast te leggen.
-          Ze zijn daarna direct van kracht en kunnen op elk moment worden aangepast.
-        </div>
-        <div class="ccText cc-text2">
-          <i>ConsentCookie op jouw eigen website gebruiken?</i>
-          <div class="cc-sub">Voor meer informatie:<a href="https://www.consentcookie.nl" target="_blank ">www.consentcookie.nl</a>
-          </div>
-        </div>
-      </div>
+      <div class="ccText" v-html="$t(configKeyAboutText)"/>
     </cc-content-box>
   </div>
 </template>
 <script>
 
-  // Components
-  const ccContentBox = require('components/general/ccContentBox.vue');
+  import * as constants from 'base/constants';
+  import ccContentBox from 'components/general/ccContentBox';
 
-  // Defaults
-  const DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TITLE = 'resources.nl.about.title';
-  const DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TEXT = 'resources.nl.about.text';
-
-  const DEFAULT_VIEW_TITLE = 'Over ConsentCookie';
-
-  // Public functions
-  module.exports = {
-    name: 'about',
+  export default {
+    name: 'AboutView',
     components: {
       ccContentBox,
     },
-    computed: {
-      title() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TITLE, DEFAULT_VIEW_TITLE);
-      },
-      about() {
-        return this.$services.config.get(DEFAULT_CONFIG_KEY_RESOURCES_NL_ABOUT_TEXT);
-      },
+    data() {
+      return {
+        configKeyAboutText: constants.CONFIG_KEY_RESOURCES_ABOUT_TEXT,
+      };
     },
-    methods: {},
     beforeMount() {
-      this.$store.commit('updateView', { title: this.title });
+      this.$store.commit('updateView', { title: constants.CONFIG_KEY_RESOURCES_ABOUT_TITLE });
     },
   };
 </script>

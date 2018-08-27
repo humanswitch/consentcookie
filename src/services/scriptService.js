@@ -16,8 +16,8 @@
  */
 
 // Depencencies
-const utils = require('base/utils.js');
-const _ = require('underscore');
+import utils from 'base/utils';
+import _ from 'underscore';
 
 // Defaults
 const SCRIPT_ELEMENT_ATTRIBUTE_CC_ID = 'cc-id';
@@ -76,7 +76,7 @@ function executeScript($element) {
   const script = (_.isString($element.innerHTML) && !(_.isEmpty($element.innerHTML.trim()))) ? $element.innerHTML.trim() : '';
   try {
     (window.execScript || function ($script) {
-      window['eval'].call(window, $script);
+      window.eval.call(window, $script);
     })(script);
   } catch ($e) {
     console.error($e);
@@ -100,20 +100,20 @@ function cleanupScriptElement($id) {
 
 function enableScripts($consentId) {
   const consentScriptElements = getScriptElements($consentId);
-  consentScriptElements.forEach($element => {
+  consentScriptElements.forEach(($element) => {
     enableScript($element);
   });
 }
 
 function enableOptOutScripts() {
   const optOutConsentIds = _.map(vue.$services.consent.getConsents()
-    .getAccepted(), ($consent) => $consent.id);
+    .getAccepted(), $consent => $consent.id);
   enableScripts(optOutConsentIds);
 }
 
 function enableAlwaysOnScripts() {
   const alwaysOnConsentIds = _.map(vue.$services.consent.getConsents()
-    .getAlwaysOn(), ($consent) => $consent.id);
+    .getAlwaysOn(), $consent => $consent.id);
   enableScripts(alwaysOnConsentIds);
 }
 
@@ -124,11 +124,11 @@ function enableEnabledScripts() {
   }
 }
 
-function createScriptElement($uniqueId, $path, $callback, $async) {
+function createScriptElement($uniqueId, $src, $callback, $async) {
   const self = this;
   const scriptTag = window.document.createElement('script');
   scriptTag.id = $uniqueId;
-  scriptTag.src = $path;
+  scriptTag.src = $src;
   if ($async === true) {
     scriptTag.async = 'true';
   }
@@ -141,7 +141,7 @@ function createScriptElement($uniqueId, $path, $callback, $async) {
   return scriptTag;
 }
 
-module.exports = {
+export default {
   init,
   enableScripts,
   enableOptOutScripts,
