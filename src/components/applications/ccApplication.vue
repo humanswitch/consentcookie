@@ -60,8 +60,7 @@
 
   .cc-application {
 
-    @include default-content-border();
-    margin: 10px;
+    margin: 10px 0px;
   }
 
 </style>

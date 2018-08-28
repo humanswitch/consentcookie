@@ -80,7 +80,7 @@
   .cc-application-group-detail {
 
     .cc-group-info {
-      padding: 0px 10px;
+      padding-top: 10px;
 
       .cc-divider {
         position: relative;
@@ -106,7 +106,6 @@
 
       /deep/ .cc-application-summary {
         padding: 10px;
-        flex-direction: column;
         height: auto;
         min-height: 40px;
 

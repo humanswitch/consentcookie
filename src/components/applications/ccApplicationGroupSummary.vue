@@ -150,7 +150,6 @@
     /deep/ .cc-switch {
       margin: 15px 10px;
       display: inline-block;
-      float: right;
     }
   }
 </style>
