@@ -157,6 +157,7 @@ export const DEFAULT_CONFIG = {
         detail: {
           moreInfo: 'Meer informatie over',
           gdprInfo: 'Contact over jouw AVG rechten',
+          dataProcessing: 'Dataverwerking',
         },
         profile: {
           title: 'Jouw profiel',

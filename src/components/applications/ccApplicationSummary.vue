@@ -24,7 +24,7 @@
     <slot name="content">
       <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo"
                       :disabled="!hasPlugin" :size="20"/>
-      <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
+      <cc-switch v-if="showSwitch" v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')" />
     </slot>
   </div>
 </template>
@@ -52,6 +52,10 @@
       state: {
         type: Object,
         default: () => Object(),
+      },
+      showSwitch: {
+        type: Boolean,
+        default: true
       },
     },
     data() {
@@ -110,11 +114,11 @@
       display: flex;
       align-items: center;
       flex: 1;
-      font-size: 13px;
       font-weight: 600;
       margin-left: 10px;
 
       span {
+        font-size: 14px;
         margin-left: 5px;
       }
     }
@@ -134,7 +138,6 @@
     .cc-switch {
       margin: 15px 10px;
       display: inline-block;
-      float: right;
     }
   }
 </style>

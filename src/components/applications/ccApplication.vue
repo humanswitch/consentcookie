@@ -17,7 +17,7 @@
 
 <template>
   <div class="cc-application">
-    <cc-application-summary :application="application" :state="state"/>
+    <cc-application-summary :application="application" :state="state" :show-switch="showSwitch" />
     <cc-application-detail :application="application" :state="state"/>
   </div>
 </template>
@@ -39,6 +39,10 @@
         type: Object,
         required: true,
       },
+      showSwitch: {
+        type: Boolean,
+        default: true
+      },      
     },
     data() {
       return {
