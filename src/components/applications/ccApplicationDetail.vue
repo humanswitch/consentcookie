@@ -29,12 +29,12 @@
         </div>
         <div class="cc-application-info">
           <div class="cc-description" v-html="application.description"/>
-          <div class="cc-dataprocessings">
+          <div v-if="dataProcessings.length" class="cc-dataprocessings">
             <div class="cc-title">
               <span v-t="'applications.detail.dataProcessing'" />
             </div>
-            <ul class="cc-application-purposes" slot="content" v-bind:application="application">
-              <li v-for="dataProcessing in getDataProcessings(application)" :key="dataProcessing.id" v-html="dataProcessing.description" class="cc-purpose"></li>
+            <ul class="cc-application-purposes" v-bind:application="application">
+              <li v-for="dataProcessing in dataProcessings" :key="dataProcessing.id" v-html="dataProcessing.description" class="cc-purpose"></li>
             </ul>
           </div>
           <cc-application-profile :application="application" :state="state"/>
@@ -87,17 +87,15 @@
       gdprLink() {
         return this.$services.applications.getGDPRLink(this.application);
       },
-    },
-    methods: {
-      getDataProcessings($application) {
-        if (!$application) {
+      dataProcessings() {
+        if (!this.application) {
           return [];
         }
-        return _.chain($application.dataProcessings).
+        return _.chain(this.application.dataProcessings).
           filter($dataProcessing => !(_.isEmpty($dataProcessing.description))).
           filter($dataProcessing => _.isObject(_.find($dataProcessing.purposes, $purpose => !this.group || $purpose.id === this.group.definition.id))).value();
       },
-    },    
+    },
   };
 </script>
 
