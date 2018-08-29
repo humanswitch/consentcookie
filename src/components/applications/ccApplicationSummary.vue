@@ -18,19 +18,23 @@
 <template>
   <div class="cc-application-summary">
     <cc-toggle v-model="showInfo" class="cc-toggle-text">
-      <cc-img :img="logo" :size="15" :unit="'px'"/>
-      <span>{{ application.name }}</span>
+      <cc-img :img="logo" :size="20" :unit="'px'"/>
+      <div>
+        <div><span>{{ application.name }}</span></div>
+        <div class="cc-app-stats">
+          <span v-if="dataProcessings.length">{{dataProcessings.length}} {{ $t('applications.' + (dataProcessings.length > 1 ? 'dataprocessings' : 'dataprocessing')) }}</span>
+          <span v-if="!dataProcessings.length" v-t="'applications.no_dataprocessings_available'" />
+        </div>
+      </div>
     </cc-toggle>
     <slot name="content">
-      <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo"
-                      :disabled="!hasPlugin" :size="20"/>
+      <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
       <cc-switch v-if="showSwitch" v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')" />
     </slot>
   </div>
 </template>
 
 <script>
-
   import ccImg from 'components/general/ccImg';
   import ccToggle from 'components/general/ccToggle';
   import ccToggleIcon from 'components/general/ccToggleIcon';
@@ -48,6 +52,10 @@
       application: {
         type: Object,
         required: true,
+      },
+      group: {
+        type: Object,
+        required: false,
       },
       state: {
         type: Object,
@@ -84,6 +92,9 @@
       logo() {
         return this.$services.applications.getLogo(this.application);
       },
+      dataProcessings() {
+        return this.$services.applications.getDataProcessings(this.application, this.group ? this.group.definition.id : undefined);
+      },      
     },
     asyncComputed: {
       hasPlugin: {
@@ -121,6 +132,14 @@
         font-size: 14px;
         margin-left: 5px;
       }
+
+      .cc-app-stats span {
+        font-weight: 200;
+        font-size: 11px;
+        margin-left: 5px;
+        text-decoration: underline;
+      }
+
     }
 
     .cc-toggle-icon {

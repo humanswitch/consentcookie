@@ -50,9 +50,6 @@
 </template>
 
 <script>
-
-  import _ from 'underscore';
-
   import ccToggleBox from 'components/general/ccToggleBox';
   import ccApplicationProfile from 'components/applications/ccApplicationProfile';
 
@@ -88,12 +85,7 @@
         return this.$services.applications.getGDPRLink(this.application);
       },
       dataProcessings() {
-        if (!this.application) {
-          return [];
-        }
-        return _.chain(this.application.dataProcessings).
-          filter($dataProcessing => !(_.isEmpty($dataProcessing.description))).
-          filter($dataProcessing => _.isObject(_.find($dataProcessing.purposes, $purpose => !this.group || $purpose.id === this.group.definition.id))).value();
+        return this.$services.applications.getDataProcessings(this.application, this.group ? this.group.definition.id : undefined);
       },
     },
   };

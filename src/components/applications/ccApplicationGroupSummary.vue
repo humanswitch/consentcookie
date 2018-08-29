@@ -20,7 +20,10 @@
       <cc-img :img="groupIcon" :size="25" :unit="'px'" class="cc-group-icon"/>
       <div class="cc-group-info">
         <div class="cc-group-title">{{ title }}</div>
-        <div class="cc-group-stats">{{group.getTotalCount()}} applicaties</div>
+        <div class="cc-group-stats">
+          <span>{{group.getTotalCount()}} </span>
+          <span v-if="group.getTotalCount() > 1" v-t="'applications.applications'" /><span v-if="group.getTotalCount() === 1" v-t="'applications.application'" />
+        </div>
       </div>
     </cc-toggle>
     <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
@@ -127,7 +130,7 @@
         margin-left: 10px;
       }
 
-      .cc-group-stats {
+      .cc-group-stats span {
         font-weight: 200;
         font-size: 11px;
         margin: 2px 0px;

@@ -73,6 +73,22 @@
   };
 </script>
 
+<style lang="scss">
+  .cc-application-group-detail {
+    .cc-group-applications {
+      .cc-applications-list {
+        .cc-application {
+          .cc-application-detail {
+            .cc-wrapper {
+              padding: 0px 0px 10px 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+
 <style lang="scss" scoped>
 
   @import '../../assets/scss/general-variables';

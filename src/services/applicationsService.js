@@ -341,6 +341,17 @@ function isGroupEnabled($group) {
   return $group === vue.$services.config.get(constants.CONFIG_KEY_GENERAL_CONSENT_TYPE, null);
 }
 
+function getDataProcessings($application, purposeId) {
+  if (!$application) {
+    return [];
+  }
+  return _.chain($application.dataProcessings)
+    .filter($dataProcessing => !(_.isEmpty($dataProcessing.description)))
+    .filter($dataProcessing =>
+      _.isObject(_.find($dataProcessing.purposes, $purpose => !purposeId || $purpose.id === purposeId)))
+    .value();
+}
+
 export default {
   init,
   hasPlugin,
@@ -362,4 +373,5 @@ export default {
   getGDPRLink,
   getLogo,
   getGroupIcon,
+  getDataProcessings,
 };
