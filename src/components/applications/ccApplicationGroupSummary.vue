@@ -17,7 +17,7 @@
 <template>
   <div class="cc-application-group-summary">
     <cc-toggle v-model="showGroup" class="cc-toggle-text">
-      <cc-img :img="groupIcon" :size="25" :unit="'px'" class="cc-group-icon"/>
+      <cc-img class="cc-group-icon" :img="groupIcon" />
       <div class="cc-group-info">
         <div class="cc-group-title">{{ title }}</div>
         <div class="cc-group-stats">
@@ -26,7 +26,7 @@
         </div>
       </div>
     </cc-toggle>
-    <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
+    <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')" :disabled-text-on="$t('groups.groupDisabledOn')"/>
   </div>
 </template>
 
@@ -126,8 +126,17 @@
       font-weight: 600;
       margin-left: 10px;
 
+      .cc-group-icon {
+        width: 25px;
+        height: 25px;
+      }
+
       .cc-group-info {
         margin-left: 10px;
+
+        .cc-group-title {
+          font-size: 14px;
+        }
       }
 
       .cc-group-stats span {

@@ -17,19 +17,19 @@
 
 <template>
   <div class="cc-application-summary">
-    <cc-toggle v-model="showInfo" class="cc-toggle-text">
-      <cc-img :img="logo" :size="20" :unit="'px'"/>
-      <div>
-        <div><span>{{ application.name }}</span></div>
+    <cc-toggle class="cc-toggle-text" v-model="showInfo">
+      <cc-img class="cc-app-logo" :img="logo" />
+      <div class="cc-app-head">
+        <span>{{ application.name }}</span>
         <div class="cc-app-stats">
           <span v-if="dataProcessings.length">{{dataProcessings.length}} {{ $t('applications.' + (dataProcessings.length > 1 ? 'dataprocessings' : 'dataprocessing')) }}</span>
-          <span v-if="!dataProcessings.length" v-t="'applications.no_dataprocessings_available'" />
+          <span v-if="!dataProcessings.length" v-t="'applications.noDataprocessingsAvailable'" />
         </div>
       </div>
     </cc-toggle>
     <slot name="content">
       <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
-      <cc-switch v-if="showSwitch" v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')" />
+      <cc-switch v-if="showSwitch" v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')" :disabled-text-on="$t('applications.applicationDisabledOn')" />
     </slot>
   </div>
 </template>
@@ -128,15 +128,22 @@
       font-weight: 600;
       margin-left: 10px;
 
+      .cc-app-logo {
+        width: 20px;
+        height: 20px;
+      }
+
+      .cc-app-head {
+        margin-left: 10px;
+      }
+
       span {
         font-size: 14px;
-        margin-left: 5px;
       }
 
       .cc-app-stats span {
         font-weight: 200;
         font-size: 11px;
-        margin-left: 5px;
         text-decoration: underline;
       }
 

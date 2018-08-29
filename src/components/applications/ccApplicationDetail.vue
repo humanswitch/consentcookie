@@ -28,7 +28,10 @@
           </div>
         </div>
         <div class="cc-application-info">
-          <div class="cc-description" v-html="application.description"/>
+          <div class="cc-description">
+            <span v-html="application.description" />
+            <span><a class="cc-more-info" :href="application.urlSite" target="_blank"> {{ $t('applications.detail.moreInfo') + " " + application.name}}</a></span>
+          </div>
           <div v-if="dataProcessings.length" class="cc-dataprocessings">
             <div class="cc-title">
               <span v-t="'applications.detail.dataProcessing'" />
@@ -39,7 +42,6 @@
           </div>
           <cc-application-profile :application="application" :state="state"/>
           <div class="cc-links">
-            <a class="cc-more-info" :href="application.urlSite" target="_blank">{{ $t('applications.detail.moreInfo') + " " + application.name}}</a>
             <a class="cc-gdpr" v-if="gdprLink" :href="gdprLink"
                target="_blank" v-t="'applications.detail.gdprInfo'"/>
           </div>
@@ -99,10 +101,9 @@
         @include default-clearfix();
 
         span {
+          margin-top: 10px;
           display: inline-block;
           font-weight: 600;
-          height: 30px;
-          line-height: 30px;
         }
 
         button {
@@ -150,7 +151,7 @@
 
         .cc-pointer {
           display: block;
-          left: 8px !important;
+          left: 10px !important;
           position: absolute;
           text-align: center;
           transition: all 0.4s ease;
@@ -175,7 +176,7 @@
 
       a {
         display: block;
-        font-size: 12px;
+        font-size: 11px;
 
         &.cc-gdpr{
           margin-top: 7px;

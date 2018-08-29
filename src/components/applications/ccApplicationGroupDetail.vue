@@ -76,15 +76,33 @@
 <style lang="scss">
   .cc-application-group-detail {
     .cc-group-applications {
+
       .cc-applications-list {
         .cc-application {
+
+          .cc-application-summary {
+            height: auto;
+            min-height: 40px;
+
+            > * {
+              align-self: flex-start;
+            }
+
+            .cc-toggle-text {
+              margin: 0px;
+            }
+
+          }
+
           .cc-application-detail {
             .cc-wrapper {
-              padding: 0px 0px 10px 10px;
+              padding: 0px 0px 10px 0px;
             }
+
           }
         }
       }
+
     }
   }
 </style>
@@ -120,20 +138,6 @@
         font-weight: 600;
       }
 
-      /deep/ .cc-application-summary {
-        padding: 10px;
-        height: auto;
-        min-height: 40px;
-
-        > * {
-          align-self: flex-start;
-        }
-
-        /deep/ .cc-toggle-text {
-          margin: 0px;
-        }
-
-      }
     }
   }
 </style>

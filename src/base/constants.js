@@ -152,18 +152,19 @@ export const DEFAULT_CONFIG = {
       applications: {
         application: 'applicatie',
         applications: 'applicaties',
-        no_dataprocessings_available: 'Geen dataverwerkingen beschikbaar',
+        applicationDisabledOn: 'Deze applicatie is vereist bij het gebruik van deze website.',
+        noDataprocessingsAvailable: 'Geen dataverwerkingen beschikbaar',
         dataprocessing: 'dataverwerking',
         dataprocessings: 'dataverwerkingen',
         title: 'Jouw instellingen',
-        moreInfo: 'Meer informatie over deze applicaties',
+        moreInfo: 'Meer informatie over ConsentCookie',
         moreInfoLink: 'https://www.consentcookie.nl',
         actions: {
           gdpr: 'Recht op...',
         },
         detail: {
           moreInfo: 'Meer informatie over',
-          gdprInfo: 'Contact over jouw AVG rechten',
+          gdprInfo: 'Vragen over jouw data?',
           dataProcessing: 'Dataverwerking',
         },
         profile: {
@@ -172,6 +173,9 @@ export const DEFAULT_CONFIG = {
           noPlugin: 'Deze applicatie heeft geen publiek profiel beschikbaar',
           noProfile: 'Geen profiel beschikbaar',
         },
+      },
+      groups: {
+        groupDisabledOn: 'Deze groep bevat applicaties die vereist zijn bij het gebruik van deze website.',
       },
       about: {
         title: 'Over ConsentCookie',
