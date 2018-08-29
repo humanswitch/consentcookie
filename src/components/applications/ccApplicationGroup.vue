@@ -58,8 +58,10 @@
 
   .cc-application-group {
 
-    @include default-content-border();
-    margin: 10px;
+      @include default-content-border();
+      margin: 10px 0px;
+      padding: 0px 10px;
+
   }
 
 </style>

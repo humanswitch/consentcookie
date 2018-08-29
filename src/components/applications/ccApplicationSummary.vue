@@ -17,20 +17,24 @@
 
 <template>
   <div class="cc-application-summary">
-    <cc-toggle v-model="showInfo" class="cc-toggle-text">
-      <cc-img :img="logo" :size="15" :unit="'px'"/>
-      <span>{{ application.name }}</span>
+    <cc-toggle class="cc-toggle-text" v-model="showInfo">
+      <cc-img class="cc-app-logo" :img="logo" />
+      <div class="cc-app-head">
+        <span>{{ application.name }}</span>
+        <div class="cc-app-stats">
+          <span v-if="dataProcessings.length">{{dataProcessings.length}} {{ $t('applications.' + (dataProcessings.length > 1 ? 'dataprocessings' : 'dataprocessing')) }}</span>
+          <span v-if="!dataProcessings.length" v-t="'applications.noDataprocessingsAvailable'" />
+        </div>
+      </div>
     </cc-toggle>
     <slot name="content">
-      <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo"
-                      :disabled="!hasPlugin" :size="20"/>
-      <cc-switch v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')"/>
+      <cc-toggle-icon v-theme="{color:'primary'}" :icon="'cc-user'" v-model="showInfo" :disabled="!hasPlugin" :size="20"/>
+      <cc-switch v-if="showSwitch" v-model="accepted" :disabled="disabled" :on-title="$t('general.on')" :off-title="$t('general.off')" :disabled-text-on="$t('applications.applicationDisabledOn')" />
     </slot>
   </div>
 </template>
 
 <script>
-
   import ccImg from 'components/general/ccImg';
   import ccToggle from 'components/general/ccToggle';
   import ccToggleIcon from 'components/general/ccToggleIcon';
@@ -49,9 +53,17 @@
         type: Object,
         required: true,
       },
+      group: {
+        type: Object,
+        required: false,
+      },
       state: {
         type: Object,
         default: () => Object(),
+      },
+      showSwitch: {
+        type: Boolean,
+        default: true
       },
     },
     data() {
@@ -80,6 +92,9 @@
       logo() {
         return this.$services.applications.getLogo(this.application);
       },
+      dataProcessings() {
+        return this.$services.applications.getDataProcessings(this.application, this.group ? this.group.definition.id : undefined);
+      },      
     },
     asyncComputed: {
       hasPlugin: {
@@ -110,13 +125,28 @@
       display: flex;
       align-items: center;
       flex: 1;
-      font-size: 13px;
       font-weight: 600;
       margin-left: 10px;
 
-      span {
-        margin-left: 5px;
+      .cc-app-logo {
+        width: 20px;
+        height: 20px;
       }
+
+      .cc-app-head {
+        margin-left: 10px;
+      }
+
+      span {
+        font-size: 14px;
+      }
+
+      .cc-app-stats span {
+        font-weight: 200;
+        font-size: 11px;
+        text-decoration: underline;
+      }
+
     }
 
     .cc-toggle-icon {
@@ -134,7 +164,6 @@
     .cc-switch {
       margin: 15px 10px;
       display: inline-block;
-      float: right;
     }
   }
 </style>

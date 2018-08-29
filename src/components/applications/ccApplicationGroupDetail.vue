@@ -23,11 +23,7 @@
     </div>
     <div class="cc-group-applications">
       <div class="cc-applications-list">
-        <cc-application-summary v-for="application in group.items" :key="application.id" :application="application">
-          <ul class="cc-application-purposes" slot="content" v-bind:application="application">
-            <li v-for="dataProcessing in getDataProcessings(application)" :key="dataProcessing.id" v-html="dataProcessing.description" class="cc-purpose"></li>
-          </ul>
-        </cc-application-summary>
+        <cc-application v-for="application in group.items" :key="application.id" :application="application" :group="group" :show-switch="false"/>
       </div>
     </div>
   </div>
@@ -39,6 +35,8 @@
   import ccToggleBox from 'components/general/ccToggleBox';
 
   import ccApplicationSummary from 'components/applications/ccApplicationSummary';
+  import ccApplicationDetail from 'components/applications/ccApplicationDetail';
+  import ccApplication from 'components/applications/ccApplication';
 
   // Vue module
   export default {
@@ -46,6 +44,8 @@
     components: {
       ccToggleBox,
       ccApplicationSummary,
+      ccApplicationDetail,
+      ccApplication
     },
     props: {
       group: {
@@ -73,6 +73,40 @@
   };
 </script>
 
+<style lang="scss">
+  .cc-application-group-detail {
+    .cc-group-applications {
+
+      .cc-applications-list {
+        .cc-application {
+
+          .cc-application-summary {
+            height: auto;
+            min-height: 40px;
+
+            > * {
+              align-self: flex-start;
+            }
+
+            .cc-toggle-text {
+              margin: 0px;
+            }
+
+          }
+
+          .cc-application-detail {
+            .cc-wrapper {
+              padding: 0px 0px 10px 0px;
+            }
+
+          }
+        }
+      }
+
+    }
+  }
+</style>
+
 <style lang="scss" scoped>
 
   @import '../../assets/scss/general-variables';
@@ -80,7 +114,7 @@
   .cc-application-group-detail {
 
     .cc-group-info {
-      padding: 0px 10px;
+      padding-top: 10px;
 
       .cc-divider {
         position: relative;
@@ -104,31 +138,6 @@
         font-weight: 600;
       }
 
-      /deep/ .cc-application-summary {
-        border-top: 1px solid #e7e8e1;
-        padding: 10px;
-        flex-direction: column;
-        height: auto;
-        min-height: 40px;
-
-        > * {
-          align-self: flex-start;
-        }
-
-        /deep/ .cc-toggle-text {
-          margin: 0px;
-        }
-
-        .cc-application-purposes {
-          align-self: flex-start;
-          margin: 5px 0px 0px 20px;
-
-          .cc-purpose {
-            margin: 2px 0px;
-
-          }
-        }
-      }
     }
   }
 </style>

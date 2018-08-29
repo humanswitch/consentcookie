@@ -89,11 +89,13 @@ export const DEFAULT_CONSENT_STATE_LABEL_ALWAYSON = 'alwayson';
 
 export const DEFAULT_CONSENTCOOKIE_HOST_LOCATION = 'https://cdn.humanswitch.services/cc/consentcookie/';
 export const DEFAULT_CONSENTCOOKIE_MEDIA_LOCATION = 'https://cdn.humanswitch.services/cc/media/';
-export const DEFAULT_CONSENTCOOKIE_APPLICATION_RESOURCE_LOCATION = DEFAULT_CONSENTCOOKIE_HOST_LOCATION + 'consentcookie-v1.json';
+export const DEFAULT_CONSENTCOOKIE_APPLICATION_RESOURCE_LOCATION =
+  DEFAULT_CONSENTCOOKIE_HOST_LOCATION + 'consentcookie-v1.json';
 export const DEFAULT_CONSENTCOOKIE_APPLICATION_LOGO_LOCATION = DEFAULT_CONSENTCOOKIE_MEDIA_LOCATION + 'logo/';
 export const DEFAULT_CONSENTCOOKIE_APPLICATION_GROUP_ICON_LOCATION = DEFAULT_CONSENTCOOKIE_MEDIA_LOCATION + 'purpose/';
 export const DEFAULT_CONSENTCOOKIE_APPLICATION_ID_URL_PARAM = 'ccid';
-export const DEFAULT_CONSENTCOOKIE_APPLICATION_CONSENT_PREFIX_TEMPLATE = CONFIG_KEY_APPS_CONSENT + '.<%= applicationId %>';
+export const DEFAULT_CONSENTCOOKIE_APPLICATION_CONSENT_PREFIX_TEMPLATE =
+  CONFIG_KEY_APPS_CONSENT + '.<%= applicationId %>';
 export const DEFAULT_CONSENTCOOKIE_PROFILE_EXPORT_SUFFIX = '-profile.json';
 
 export const DEFAULT_RESOURCE_LANGUAGE = 'nl';
@@ -148,15 +150,22 @@ export const DEFAULT_CONFIG = {
         disabled: 'accepteer eerst',
       },
       applications: {
+        application: 'applicatie',
+        applications: 'applicaties',
+        applicationDisabledOn: 'Deze applicatie is vereist bij het gebruik van deze website.',
+        noDataprocessingsAvailable: 'Geen dataverwerkingen beschikbaar',
+        dataprocessing: 'dataverwerking',
+        dataprocessings: 'dataverwerkingen',
         title: 'Jouw instellingen',
-        moreInfo: 'Meer informatie over deze applicaties',
+        moreInfo: 'Meer informatie over ConsentCookie',
         moreInfoLink: 'https://www.consentcookie.nl',
         actions: {
           gdpr: 'Recht op...',
         },
         detail: {
           moreInfo: 'Meer informatie over',
-          gdprInfo: 'Contact over jouw AVG rechten',
+          gdprInfo: 'Vragen over jouw data?',
+          dataProcessing: 'Dataverwerking',
         },
         profile: {
           title: 'Jouw profiel',
@@ -164,6 +173,9 @@ export const DEFAULT_CONFIG = {
           noPlugin: 'Deze applicatie heeft geen publiek profiel beschikbaar',
           noProfile: 'Geen profiel beschikbaar',
         },
+      },
+      groups: {
+        groupDisabledOn: 'Deze groep bevat applicaties die vereist zijn bij het gebruik van deze website.',
       },
       about: {
         title: 'Over ConsentCookie',

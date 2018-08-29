@@ -75,8 +75,19 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  @import '../assets/scss/general-variables';
 
+  .cc-applications {
+    .cc-overview {
+        .cc-application {
+          @include default-content-border();    
+        }
+    }
+  }
+</style>
+
+<style lang="scss" scoped>
   @import '../assets/scss/general-variables';
 
   .cc-applications {
@@ -86,13 +97,18 @@
     color: #4e4e4e;
 
     .cc-overview {
+      padding: 0px 10px;
       display: block;
       flex: 1;
+    }
+    
+    .cc-overview-purpose {
+      padding: 0px 10px;
     }
 
     .cc-more-info {
       text-align: right;
-      padding: 5px 0px;
+      padding: 5px 10px;
 
       a {
         color: $cc-color-black !important;
