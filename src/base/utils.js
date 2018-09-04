@@ -123,18 +123,6 @@ function getDomainTree() {
   return domainTree;
 }
 
-function cacheResult($fn, $new) {
-  const context = this;
-  let result = undefined;
-
-  return () => {
-    if (typeof result === 'undefined' || $new === true) {
-      result = $fn.apply(context, [].slice.call(arguments));
-    }
-    return result;
-  };
-}
-
 function getOrCreateAndReturn($object, $name, $value) {
   if ((typeof $object === 'undefined' || $object === null) || typeof $name !== 'string') {
     throw new Error('Invalid arguments. Unable to get or create and return');
@@ -152,6 +140,5 @@ export default {
   getElementsByTagName,
   getDomainTree,
   uuidv4,
-  cacheResult,
   getOrCreateAndReturn,
 };

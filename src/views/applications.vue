@@ -22,7 +22,7 @@
                       :application="application"/>
     </div>
     <div class="cc-overview-purpose" v-if="applicationList && isGroupedByPurpose">
-      <cc-application-group v-for="group in applicationList.getActiveGroupedByPurpose()" :key="group.id"
+      <cc-application-group v-for="group in applicationList.memoizedGetActiveGroupedByPurpose()" :key="group.id"
                             :group="group"/>
     </div>
     <div class="cc-more-info">

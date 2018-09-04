@@ -56,6 +56,11 @@ class ApplicationList {
 
     this.remoteAppsMap = _.indexBy(this.remoteApps, $app => $app.id);
     this.staticAppsMap = _.indexBy(this.staticApps, $app => $app.id);
+
+    this.memoizedGetMerged = _.memoize(this.getMerged);
+    this.memoizedGetActive = _.memoize(this.getActive);
+    this.memoizedGetActiveGroupedByPurpose = _.memoize(this.getActiveGroupedByPurpose);
+    this.memoizedGetPurposes = _.memoize(this.getPurposes);
   }
 
   get($id) {
@@ -81,40 +86,41 @@ class ApplicationList {
     return utils.getObjectValue(this.consentConfigs, $id + '.dataProcessings', []);
   }
 
-  getMerged = utils.cacheResult(() => _.chain(this.remoteApps)
-    .filter($app => !(_.isObject(this.staticAppsMap[$app.id])))
-    .union(this.staticApps)
-    .sortBy($app => $app.id)
-    .value());
+  getMerged() {
+    return _.chain(this.remoteApps)
+      .filter($app => !(_.isObject(this.staticAppsMap[$app.id])))
+      .union(this.staticApps)
+      .sortBy($app => $app.id)
+      .value();
+  }
 
-  getActive = utils.cacheResult(() => _.chain(this.getMerged())
-    .filter(($app => $app && $app.id && this.consentConfigs[$app.id]))
-    .value());
+  getActive() {
+    return _.chain(this.memoizedGetMerged())
+      .filter(($app => $app && $app.id && this.consentConfigs[$app.id]))
+      .value();
+  }
 
-  getActiveGroupedByPurpose = utils.cacheResult(() => _.chain(this.getActive())
-    .reduce(($memo, $app) => {
-      const uniquePurposes = this.getConfigureUniquePurposes($app.id);
-      if (_.isEmpty(uniquePurposes)) {
-        utils.getOrCreateAndReturn($memo, DEFAULT_PURPOSE_UNDEFINED.id, new ApplicationGroup(DEFAULT_PURPOSE_UNDEFINED))
-          .items
-          .push($app);
-      } else {
-        _.each(uniquePurposes, ($purpose) => {
-          utils.getOrCreateAndReturn($memo, $purpose.id, new ApplicationGroup($purpose))
+  getActiveGroupedByPurpose() {
+    return _.chain(this.memoizedGetActive())
+      .reduce(($memo, $app) => {
+        const uniquePurposes = this.getConfigureUniquePurposes($app.id);
+        if (_.isEmpty(uniquePurposes)) {
+          utils.getOrCreateAndReturn($memo, DEFAULT_PURPOSE_UNDEFINED.id, new ApplicationGroup(DEFAULT_PURPOSE_UNDEFINED))
             .items
             .push($app);
-        });
-      }
-      return $memo;
-    }, {})
-    .map($group => $group)
-    .sortBy($group => $group.definition.name)
-    .value());
-
-
-  getPurposes = utils.cacheResult(() => _.chain(this.getGroupedByPurpose())
-    .map($group => $group.definition)
-    .value());
+        } else {
+          _.each(uniquePurposes, ($purpose) => {
+            utils.getOrCreateAndReturn($memo, $purpose.id, new ApplicationGroup($purpose))
+              .items
+              .push($app);
+          });
+        }
+        return $memo;
+      }, {})
+      .map($group => $group)
+      .sortBy($group => $group.definition.name)
+      .value();
+  }
 
 }
 
