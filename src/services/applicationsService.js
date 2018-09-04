@@ -61,6 +61,8 @@ class ApplicationList {
     this.memoizedGetActive = _.memoize(this.getActive);
     this.memoizedGetActiveGroupedByPurpose = _.memoize(this.getActiveGroupedByPurpose);
     this.memoizedGetPurposes = _.memoize(this.getPurposes);
+
+    this.memoizedGetActive().forEach(application => hasPlugin(application));
   }
 
   get($id) {
