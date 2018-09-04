@@ -41,6 +41,10 @@ class ApplicationGroup {
     return this.items.length;
   }
 
+  getItems(id) {
+    return this.items.filter($application => ($application.id === id));
+  }
+
 }
 
 class ApplicationList {
@@ -215,15 +219,20 @@ function isAlwaysOn($item) {
 
 function setAccepted($item, $isAccepted) {
   if ($isAccepted === true) {
-    vue.$services.consent.accept($item.id);
+    vue.$services.consent.accept($item.id, $item);
   } else {
-    vue.$services.consent.reject($item.id);
+    vue.$services.consent.reject($item.id, $item);
     removeApplicationClientData($item);
   }
 }
 
 function setGroupAccepted($group, $isAccepted) {
-  setAccepted($group.definition, $isAccepted);
+  if ($isAccepted === true) {
+    vue.$services.consent.accept($group.definition.id, $group);
+  } else {
+    vue.$services.consent.reject($group.definition.id, $group);
+    removeApplicationClientData($group.definition.id);
+  }
   _.each($group.items, $application => removeApplicationClientData($application));
 }
 

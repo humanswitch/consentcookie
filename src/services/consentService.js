@@ -186,7 +186,7 @@ function load() {
   }
 }
 
-function update($id, $flag) {
+function update($id, $flag, $item) {
   if (consents.get($id)) {
     consents.get($id).flag = $flag;
   } else {
@@ -197,6 +197,7 @@ function update($id, $flag) {
   vue.$events.$emit(constants.DEFAULT_EVENT_NAME_CONSENT, {
     id: $id,
     state: getState($flag),
+    item: $item,
   });
 }
 
@@ -220,13 +221,13 @@ function isRejected($id) {
   return getFlag($id) === constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_REJECTED;
 }
 
-function accept($id) {
-  update($id, constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_ACCEPTED);
+function accept($id, $item) {
+  update($id, constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_ACCEPTED, $item);
   vue.$services.script.enableScripts($id);
 }
 
-function reject($id) {
-  update($id, constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_REJECTED);
+function reject($id, $item) {
+  update($id, constants.DEFAULT_CONSENTCOOKIE_COOKIE_VAL_REJECTED, $item);
 }
 
 function getState($flag) {
