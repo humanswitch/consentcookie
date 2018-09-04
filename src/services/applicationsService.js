@@ -64,7 +64,7 @@ class ApplicationList {
   }
 
   get($id) {
-    return utils.getObjectValue(this.staticApps, $id, utils.getObjectValue(this.remoteAppsMap, $id, null));
+    return utils.getObjectValue(this.staticAppsMap, $id, utils.getObjectValue(this.remoteAppsMap, $id, null));
   }
 
   getConfigureUniquePurposes($id) {
