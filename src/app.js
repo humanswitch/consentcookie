@@ -164,11 +164,6 @@ function getConsents() {
   return mainInstance.$services.consent.getConsents();
 }
 
-function createMockPlugin($pluginId) {
-  validate();
-  return mainInstance.$services.plugin.createMock($pluginId);
-}
-
 function registerPlugin($plugin) {
   validate();
   return mainInstance.$services.plugin.register($plugin);
@@ -199,7 +194,6 @@ export default (function () {
     get,
     getConsent,
     getConsents,
-    createMockPlugin,
     registerPlugin,
     setLanguage,
     addLanguage,
