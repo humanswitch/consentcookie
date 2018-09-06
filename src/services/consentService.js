@@ -39,6 +39,10 @@ class Consents {
     return _.filter(this.get(), ($consent => $consent.isAlwaysOn()));
   }
 
+  getEnabled() {
+    return _.filter(this.get(), ($consent => $consent.isEnabled()));
+  }
+
   add($consent) {
     if ($consent instanceof Consent) {
       this.getConsentMap()[$consent.id] = $consent;
