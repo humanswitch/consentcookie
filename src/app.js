@@ -49,6 +49,13 @@ const DEFAULT_APP_NAME = 'ConsentCookie';
 // Instance variables
 let mainInstance;
 
+function validate() {
+  if (!mainInstance) {
+    return utils.logErrorOrThrowException('ConsentCookie is not yet initialized. Call failed.');
+  }
+  return true;
+}
+
 function init($config) {
   if (typeof $config !== 'object') {
     return utils.logErrorOrThrowException('Unable to initialize ConsentCookie.' +
@@ -120,16 +127,12 @@ function enableScriptsOnReady() {
 }
 
 function off($event, $callback) {
-  if (!mainInstance) {
-    return utils.logErrorOrThrowException('Unable to unregister event. ConsentCookie is not yet initialized.');
-  }
+  validate();
   return mainInstance.$events.$off($event, $callback);
 }
 
 function on($event, $callback) {
-  if (!mainInstance) {
-    return utils.logErrorOrThrowException('Unable to register event. ConsentCookie is not yet initialized.');
-  }
+  validate();
   return mainInstance.$events.$on($event, $callback);
 }
 
@@ -152,38 +155,27 @@ function get($id) {
 }
 
 function getConsent($id) {
-  if (!mainInstance) {
-    return utils.logErrorOrThrowException('Unable to get Consent. ConsentCookie is not yet initialized.');
-  }
-
+  validate();
   return mainInstance.$services.consent.getConsent($id);
 }
 
 function getConsents() {
-  if (!mainInstance) {
-    return utils.logErrorOrThrowException('Unable to get Consents. ConsentCookie is not yet initialized.');
-  }
+  validate();
   return mainInstance.$services.consent.getConsents();
 }
 
 function registerPlugin($plugin) {
-  if (!mainInstance) {
-    return utils.logErrorOrThrowException('Unable to register plugin. ConsentCookie is not yet initialized.');
-  }
+  validate();
   return mainInstance.$services.plugin.register($plugin);
 }
 
 function setLanguage($lang, $force) {
-  if (!mainInstance) {
-    return utils.logErrorOrThrowException('Unable to setLanguage. ConsentCookie is not yet initialized.');
-  }
+  validate();
   return mainInstance.$services.translate.setLanguage($lang, $force);
 }
 
 function addLanguage($lang, $resource) {
-  if (!mainInstance) {
-    return utils.logErrorOrThrowException('Unable to addLanguage. ConsentCookie is not yet initialized.');
-  }
+  validate();
   return mainInstance.$services.translate.addLanguage($lang, $resource);
 }
 
