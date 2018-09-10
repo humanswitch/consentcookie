@@ -74,25 +74,6 @@ function init(vueServices) {
   vue = vueServices.getVueInstance();
 }
 
-function createAsyncScriptTag($uniqueId, $path, $callback) {
-  const scriptTag = window.document.createElement('script');
-  scriptTag.id = $uniqueId;
-  scriptTag.src = $path;
-  scriptTag.async = 'true';
-  scriptTag.addEventListener('load', function () {
-    $callback(this);
-  });
-  return scriptTag;
-}
-
-function cleanupScriptTag($id) {
-  const scriptTag = window.document.getElementById($id);
-  if (scriptTag && scriptTag.remove) {
-    // No support for IE. Its nice to have
-    scriptTag.remove();
-  }
-}
-
 function loadPlugin($id, $src) {
   return new Promise(($resolve, $reject) => {
     const uniqueId = ($id + '_' + new Date().getTime());

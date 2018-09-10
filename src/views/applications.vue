@@ -17,8 +17,13 @@
 
 <template>
   <div class="cc-applications">
-    <div class="cc-overview">
-      <cc-application v-for="application in applications" :key="application.id" :application="application"/>
+    <div class="cc-overview" v-if="applicationList && !isGroupedByPurpose">
+      <cc-application v-for="application in applicationList.getActive()" :key="application.id"
+                      :application="application"/>
+    </div>
+    <div class="cc-overview-purpose" v-if="applicationList && isGroupedByPurpose">
+      <cc-application-group v-for="group in applicationList.memoizedGetActiveGroupedByPurpose()" :key="group.id"
+                            :group="group"/>
     </div>
     <div class="cc-more-info">
       <a v-if="hasMoreInfoLink" :href="$t(configKeyMoreInfoLink)">{{ $t(configKeyMoreInfo) }}</a>
@@ -28,13 +33,15 @@
 <script>
 
   import _ from 'underscore';
-  import * as constants from 'base/constants.js';
-  import ccApplication from 'components/applications/ccApplication.vue';
+  import * as constants from 'base/constants';
+  import ccApplication from 'components/applications/ccApplication';
+  import ccApplicationGroup from 'components/applications/ccApplicationGroup';
 
   export default {
     name: 'applications',
     components: {
       ccApplication,
+      ccApplicationGroup,
     },
     data() {
       return {
@@ -49,11 +56,17 @@
       hasMoreInfoLink() {
         return this.$services.config.get(this.configKeyResourceMoreInfoLink, null) !== null
           || constants.DEFAULT_RESOURCE_LANGUAGE === this.$i18n.locale;
-      }
+      },
+      isGroupedByPurpose() {
+        return this.$services.applications.isGroupEnabled('purpose');
+      },
     },
     asyncComputed: {
-      applications() {
-        return this.$services.applications.getActive();
+      applicationList: {
+        get() {
+          return this.$services.applications.getApplicationListAsync();
+        },
+        default: null,
       },
     },
     beforeMount() {
@@ -62,23 +75,40 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  @import '../assets/scss/general-variables';
 
+  .cc-applications {
+    .cc-overview {
+        .cc-application {
+          @include default-content-border();    
+        }
+    }
+  }
+</style>
+
+<style lang="scss" scoped>
   @import '../assets/scss/general-variables';
 
   .cc-applications {
     min-width: 320px;
     display: flex;
     flex-direction: column;
+    color: #4e4e4e;
 
     .cc-overview {
+      padding: 0px 10px;
       display: block;
       flex: 1;
+    }
+    
+    .cc-overview-purpose {
+      padding: 0px 10px;
     }
 
     .cc-more-info {
       text-align: right;
-      padding: 5px 0px;
+      padding: 5px 10px;
 
       a {
         color: $cc-color-black !important;

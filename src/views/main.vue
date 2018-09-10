@@ -16,7 +16,8 @@
   -->
 
 <template>
-  <div id="ConsentCookie" :class="['ConsentCookie',isLeft ? 'cc-left' : 'cc-right',{'cc-phone':isPhone,'cc-portrait':isPortrait}]">
+  <div id="ConsentCookie"
+       :class="['ConsentCookie',isLeft ? 'cc-left' : 'cc-right',{'cc-phone':isPhone,'cc-portrait':isPortrait}]">
     <cc-view/>
     <cc-menu/>
   </div>
@@ -24,20 +25,20 @@
 
 <script>
 
-  // Defaults
-  const DEFAULT_CONFIG_DESIGN_LAYOUT_POSITION_LEFT_VAL = 'left';
-
   // Components
   import ccMenu from 'components/main/ccMenu';
   import ccView from 'components/main/ccView';
 
+  // Defaults
+  const DEFAULT_CONFIG_DESIGN_LAYOUT_POSITION_LEFT_VAL = 'left';
+
   export default {
-    name: 'mainView', // main is a reserved word
-    props: ['id', 'config'],
+    name: 'MainView',
     components: {
       ccMenu,
       ccView,
     },
+    props: ['id', 'config'],
     data() {
       return {};
     },

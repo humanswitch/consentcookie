@@ -41,7 +41,7 @@
       marginRight: -DEFAULT_SCROLLBAR_WIDTH + 'px',
     },
     scrollContentCSS: {
-      /* to align content properly, undo the negagive margin */
+      /* to align content properly, undo the negative margin */
       marginRight: DEFAULT_SCROLLBAR_WIDTH + 'px',
     },
   };

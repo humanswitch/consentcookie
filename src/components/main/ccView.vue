@@ -36,8 +36,8 @@
   import _ from 'underscore';
 
   // Components
-  import ccViewHeader from 'components/main/ccViewHeader.vue';
-  import ccViewContent from 'components/main/ccViewContent.vue';
+  import ccViewHeader from 'components/main/ccViewHeader';
+  import ccViewContent from 'components/main/ccViewContent';
 
   // Defaults
   const DEFAULT_VIEW_TOP_MARGIN = 30;
@@ -70,7 +70,7 @@
 
   function calcMaxHeight() {
     if (!viewElement) {
-      return false;
+      return;
     }
 
     // calculate the max height
@@ -80,7 +80,7 @@
 
   function calHeight(height) {
     if (!_.isNumber(height)) {
-      return false;
+      return;
     }
 
     const maxHeight = getMaxHeight();
@@ -143,7 +143,7 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
   @import '../../assets/scss/general-variables';
 

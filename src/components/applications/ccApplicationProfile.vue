@@ -1,3 +1,4 @@
+
 <!--
   - Copyright 2018 Asknow Solutions B.V.
   -
@@ -47,15 +48,13 @@
 <script>
 
   // Libraries
-  import ccToggleBox from 'components/general/ccToggleBox.vue';
-  import ccApplicationActions from 'components/applications/ccApplicationActions.vue';
+  import ccToggleBox from 'components/general/ccToggleBox';
 
   // Vue module
   export default {
     name: 'cc-application-profile',
     components: {
       ccToggleBox,
-      ccApplicationActions,
     },
     props: {
       application: {
@@ -92,12 +91,12 @@
           }, () => {
             this.isLoading = false;
             this.profileInfo = null;
-          });
+        });
       },
       downloadProfile() {
         this.isDownloading = true;
         return this.$services.applications.downloadApplicationProfile(this.application)
-          .then(() => this.isDownloading = false);
+          .then(() => { this.isDownloading = false; });
       },
     },
     created() {
@@ -108,7 +107,7 @@
           self.loadProfile();
         }
       });
-    }
+    },
   };
 </script>
 
@@ -118,31 +117,6 @@
 
   .cc-profile-wrapper {
     margin: 10px 0px 10px;
-  }
-
-  .cc-title {
-    @include default-clearfix();
-
-    span {
-      display: inline-block;
-      float: left;
-      font-weight: 600;
-      height: 30px;
-      line-height: 30px;
-    }
-
-    button {
-      display: inline-block;
-      float: right;
-      background: none;
-      width: 36px;
-      text-align: center;
-      height: 30px;
-      line-height: 30px;
-      cursor: pointer;
-      border: none!important;
-      box-shadow: none!important;
-    }
   }
 
   .cc-no-profile {
@@ -165,7 +139,5 @@
       @include default-clearfix();
     }
 
-    .cc-box-content {
-    }
   }
 </style>

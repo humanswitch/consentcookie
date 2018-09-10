@@ -36,8 +36,7 @@
 <script>
 
   // Components
-  import ccMenuItem from 'components/main/ccMenuItem.vue';
-
+  import ccMenuItem from 'components/main/ccMenuItem';
   import ccSvgLogo from '../../assets/img/logo.svg';
   import ccSvgClose from '../../assets/img/close.svg';
 

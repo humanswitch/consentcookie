@@ -28,11 +28,22 @@
           </div>
         </div>
         <div class="cc-application-info">
-          <div class="cc-description" v-html="application.description.connection"/>
+          <div class="cc-description">
+            <span v-html="application.description" />
+            <span><a class="cc-more-info" :href="application.urlSite" target="_blank"> {{ $t('applications.detail.moreInfo') + " " + application.name}}</a></span>
+          </div>
+          <div v-if="dataProcessings.length" class="cc-dataprocessings">
+            <div class="cc-title">
+              <span v-t="'applications.detail.dataProcessing'" />
+            </div>
+            <ul class="cc-application-purposes" v-bind:application="application">
+              <li v-for="dataProcessing in dataProcessings" :key="dataProcessing.id" v-html="dataProcessing.description" class="cc-purpose"></li>
+            </ul>
+          </div>
           <cc-application-profile :application="application" :state="state"/>
           <div class="cc-links">
-            <a class="cc-more-info" :href="application.infolink.connection" target="_blank">{{ $t('applications.detail.moreInfo') + " " + application.name}}</a>
-            <a class="cc-gdpr" v-if="gdprLink" :href="gdprLink" target="_blank" v-t="'applications.detail.gdprInfo'"/>
+            <a class="cc-gdpr" v-if="gdprLink" :href="gdprLink"
+               target="_blank" v-t="'applications.detail.gdprInfo'"/>
           </div>
         </div>
       </div>
@@ -41,24 +52,24 @@
 </template>
 
 <script>
-
-  import ccToggleBox from 'components/general/ccToggleBox.vue';
-
-  import ccApplicationProfile from 'components/applications/ccApplicationProfile.vue';
-  import ccApplicationActions from 'components/applications/ccApplicationActions.vue';
+  import ccToggleBox from 'components/general/ccToggleBox';
+  import ccApplicationProfile from 'components/applications/ccApplicationProfile';
 
   // Vue module
   export default {
-    name: 'cc-application-summary',
+    name: 'cc-application-detail',
     components: {
       ccToggleBox,
       ccApplicationProfile,
-      ccApplicationActions,
     },
     props: {
       application: {
         type: Object,
         required: true,
+      },
+      group: {
+        type: Object,
+        required: false,
       },
       state: {
         type: Object,
@@ -72,12 +83,44 @@
       showInfo() {
         return this.state.showInfo === true;
       },
-      gdprLink(){
+      gdprLink() {
         return this.$services.applications.getGDPRLink(this.application);
-      }
-    }
+      },
+      dataProcessings() {
+        return this.$services.applications.getDataProcessings(this.application, this.group ? this.group.definition.id : undefined);
+      },
+    },
   };
 </script>
+
+<style lang="scss">
+  @import '../../assets/scss/general-variables';
+  .cc-application-detail {
+
+      .cc-title {
+        @include default-clearfix();
+
+        span {
+          margin-top: 10px;
+          display: inline-block;
+          font-weight: 600;
+        }
+
+        button {
+          display: inline-block;
+          background: none;
+          width: 36px;
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          cursor: pointer;
+          border: none!important;
+          box-shadow: none!important;
+        }
+      }
+
+  }
+</style>
 
 <style lang="scss" scoped>
 
@@ -87,6 +130,16 @@
 
     .cc-wrapper {
       padding: 0px 10px 10px;
+
+      .cc-application-purposes {
+        align-self: flex-start;
+        margin: 5px 0px 0px 20px;
+
+        .cc-purpose {
+          margin: 2px 0px;
+
+        }
+      }
 
       .cc-divider {
         position: relative;
@@ -98,7 +151,7 @@
 
         .cc-pointer {
           display: block;
-          left: 8px !important;
+          left: 10px !important;
           position: absolute;
           text-align: center;
           transition: all 0.4s ease;
@@ -121,9 +174,9 @@
     .cc-links{
       text-align: left;
 
-      a{
+      a {
         display: block;
-        font-size: 12px;
+        font-size: 11px;
 
         &.cc-gdpr{
           margin-top: 7px;

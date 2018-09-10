@@ -16,7 +16,7 @@
  */
 
 // Depencencies
-import utils from 'base/utils.js';
+import utils from 'base/utils';
 import _ from 'underscore';
 
 // Defaults
@@ -32,27 +32,28 @@ function init($vueServices) {
   vue = $vueServices.getVueInstance();
 }
 
-function findConsentScriptFilter($element, $consentId) {
+function isConsentScriptFilter($element, $consentId) {
   if (!($element instanceof Element) || !$consentId) {
     return false;
   }
-  const ccId = $element.getAttribute(SCRIPT_ELEMENT_ATTRIBUTE_CC_ID);
-
-  if (_.isEmpty(_.trim(ccId))) {
+  const ccIdElem = $element.getAttribute(SCRIPT_ELEMENT_ATTRIBUTE_CC_ID);
+  if (_.isEmpty(_.trim(ccIdElem))) {
     return false;
   }
 
+  const ccIds = ccIdElem.split(',').map(ccId => ccId.trim());
+
   if (_.isString($consentId)) {
-    return $consentId === ccId;
+    return _.contains(ccIds, $consentId);
   }
   if (_.isArray($consentId)) {
-    return _.contains($consentId, ccId);
+    return _.intersection($consentId, ccIds).length === ccIds.length;
   }
   return false;
 }
 
 function getScriptElements($consentId) {
-  return utils.getElementsByTagName('script', $element => findConsentScriptFilter($element, $consentId));
+  return utils.getElementsByTagName('script', $element => isConsentScriptFilter($element, $consentId));
 }
 
 function enableScript($element) {
@@ -76,7 +77,7 @@ function executeScript($element) {
   const script = (_.isString($element.innerHTML) && !(_.isEmpty($element.innerHTML.trim()))) ? $element.innerHTML.trim() : '';
   try {
     (window.execScript || function ($script) {
-      window['eval'].call(window, $script);
+      window.eval.call(window, $script);
     })(script);
   } catch ($e) {
     console.error($e);
@@ -100,20 +101,20 @@ function cleanupScriptElement($id) {
 
 function enableScripts($consentId) {
   const consentScriptElements = getScriptElements($consentId);
-  consentScriptElements.forEach($element => {
+  consentScriptElements.forEach(($element) => {
     enableScript($element);
   });
 }
 
 function enableOptOutScripts() {
-  const optOutConsentIds = _.map(vue.$services.consent.getConsents()
-    .getAccepted(), ($consent) => $consent.id);
-  enableScripts(optOutConsentIds);
+  const enabledConsentIds = _.map(vue.$services.consent.getConsents()
+    .getEnabled(), $consent => $consent.id);
+  enableScripts(enabledConsentIds);
 }
 
 function enableAlwaysOnScripts() {
   const alwaysOnConsentIds = _.map(vue.$services.consent.getConsents()
-    .getAlwaysOn(), ($consent) => $consent.id);
+    .getAlwaysOn(), $consent => $consent.id);
   enableScripts(alwaysOnConsentIds);
 }
 

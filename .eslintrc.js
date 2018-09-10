@@ -27,7 +27,7 @@ module.exports = {
   },
   // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
   // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-  extends: ['airbnb-base', 'plugin:vue/recommended'],
+  extends: ['airbnb-base', 'plugin:vue/essential'],
   // required to lint *.vue files
   plugins: [
     'vue'
@@ -49,7 +49,7 @@ module.exports = {
     }],
     // Max line length for this project is 120
     // Due to expected use of idea but still maintain cognitive readability
-    'max-len': ['error', { 'code': 120 }],
+    'max-len': [1, 120, 2, { ignoreComments: true }],
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions
     'no-param-reassign': ['error', {
@@ -85,7 +85,17 @@ module.exports = {
     // We do not require templating over string concatenation due to line requirement conflict
     'prefer-template': 'off',
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // allow plus plus in loops only
+    'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }],
+    // For of is more readable than pure functional
+    // https://github.com/airbnb/javascript/issues/1122
+    'no-restricted-syntax': [
+      'error',
+      'ForInStatement',
+      'LabeledStatement',
+      'WithStatement',
+    ]
   },
   'overrides': [
     {

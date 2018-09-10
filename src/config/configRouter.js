@@ -29,7 +29,6 @@ import applicationsView from 'views/applications';
  * @return {VueRouter}
  */
 function configRouter(vue) {
-
   // Defaults
   const DEFAULT_PATH_CONSENT = '/consent';
   const DEFAULT_RESET_PATH = { matched: [] };
