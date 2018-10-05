@@ -16,7 +16,7 @@
   -->
 
 <template>
-  <img :style="{width:imgWidth,height:imgHeight}" :src="img" class="cc-img">
+  <img :style="{width:imgWidth,height:imgHeight}" :src="img" :class="['cc-img',{'error':hasError}]" @error="onError">
 </template>
 
 <script>
@@ -45,6 +45,11 @@
         require: true,
       },
     },
+    data(){
+      return {
+        hasError:false,
+      }
+    },
     computed: {
       imgWidth() {
         return (this.size != null ? this.size : this.width) + this.unit;
@@ -53,5 +58,18 @@
         return (this.size != null ? this.size : this.height) + this.unit;
       },
     },
+    methods: {
+      onError(){
+        this.hasError = true;
+      }
+    }
   };
 </script>
+
+<style scoped>
+
+  img.error {
+    opacity: 0;
+  }
+
+</style>
