@@ -355,6 +355,11 @@ npm run build -- -r
 
 Using the ```-r``` option will create a singlefile minified version of ConsentCookie that is optimized for use on websites.
 
+### Building single file
+```
+npm run release
+```
+
 ## Built With
 
 * [VueJS](https://vuejs.org/v2/guide/) - The application framework used
